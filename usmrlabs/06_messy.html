@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Dealing with messy data</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Dealing with messy data</h1>
+
+</div>
+
+
+<!-- :::red -->
+<!-- **Preliminaries** -->
+<!-- - Be sure to check the [**solutions to last week's exercises**](05_covcor.html). You can still ask any questions about previous weeks' materials if things aren't clear!     -->
+<!-- - Open Rstudio, make sure you have the USMR project open, and create a new RMarkdown document (giving it a title for this week).   -->
+<!-- ::: -->
+<p>This week we’re going to take a little detour away from statistics to get some practice wrangling and cleaning data in R.<br />
+The solutions are available immediately as these exercises are more geared towards coding problems rather than conceptual statistics problems, so it may be that seeing some example code will be more helpful.<br />
+Don’t worry about the trying to remember all of the new R functions introduced this week - there are a lot. Use them as a means of learning about some of the different ways of doing things in R.</p>
+<div class="blue">
+<p><strong>The 80/20 Rule</strong><br />
+In many projects (both in academic research &amp; in other sectors), 80 percent of the time will be spent cleaning and organising data, and only 20% will be spent actually conducting statistical analyses<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+</div>
+<div id="the-data" class="section level1">
+<h1>The Data</h1>
+<p>The data we’re going to look at now is from an experiment on language comprehension, looking at whether people perceive blinking as a sign of lying.</p>
+<blockquote>
+<p><strong>Research Question:</strong> Is the rate of blinking during speech interpreted as a sign of dishonesty (in the context of a lie-detection game)?</p>
+</blockquote>
+<blockquote>
+<p>Participants were informed that they were going to take part in a lie-detection game. They were presented with audiovisual recordings of a speaker stating behind which of two objects (displayed on screen) there was hidden treasure. Utterances took the form of “The treasure is behind the [target name]”.<br />
+Over 20 trials, participants were tasked with using the mouse to click on the object <em>they believed</em> the treasure to be behind. They were told that the speaker in the video was attempting to mislead them, meaning that sometimes they told the truth, and sometimes they lied.
+Crucially, in the videos presented of the speaker producing the utterances, we manipulated the number of times the speaker blinked (from 1 to 10 times).
+Participants eyes were tracked for the duration of the experiment, with the time spent looking at either object taken as an implicit indication of perceiving a truthful utterance (in which the participant looks at and clicks on the ‘target object’ (the one identified by the speaker as hiding the treasure)) or a dishonest one (in which the participant would look at and click on the alternative ‘distractor’ object).</p>
+</blockquote>
+<div class="frame">
+<center>
+<strong>blink_setup.csv</strong>
+</center>
+The data from the experimental design are available at <a href="https://uoepsy.github.io/data/blink_setup.csv" class="uri">https://uoepsy.github.io/data/blink_setup.csv</a>.<br />
+In this data, each participant is a row, and the information about what video is presented in each trial are presented in separate columns for each trial. The first bit of the data looks like this:
+<table>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+subject_1
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_1.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinsk_8.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+subject_2
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_2.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_4.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+subject_3
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_4.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_5.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+subject_4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_4.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_7.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+subject_5
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_1.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_4.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+subject_6
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_2.mp4
+</td>
+<td style="text-align:left;">
+/files/vids/blinks_3.mp4
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<div class="frame">
+<center>
+<strong>blink_eyegaze.xlsx</strong>
+</center>
+The data from the eye-tracker, which has been processed to show the proportion of time spent looking at the distractor object in each trial, can be found at <a href="https://uoepsy.github.io/data/blink_eyegaze.xlsx" class="uri">https://uoepsy.github.io/data/blink_eyegaze.xlsx</a><br />
+In contrast to the blink_setup.csv data, in this data each trial is a row, so we have 20 rows per participant.<br />
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+variable_names
+</th>
+<th style="text-align:left;">
+description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+sub
+</td>
+<td style="text-align:left;">
+Participant number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+trial_no
+</td>
+<td style="text-align:left;">
+Trial number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+distractor_fix
+</td>
+<td style="text-align:left;">
+Time spent looking at distractor object (measured in milliseconds from onset of noun phrase)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rt
+</td>
+<td style="text-align:left;">
+Time taken to click on an object (measured in milliseconds from the onset of the noun phrase
+</td>
+</tr>
+</tbody>
+</table>
+The top of the data looks like this:
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+sub
+</th>
+<th style="text-align:left;">
+trial_no
+</th>
+<th style="text-align:left;">
+distractor_fix
+</th>
+<th style="text-align:left;">
+rt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+503.990657311976
+</td>
+<td style="text-align:left;">
+2812
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+2810.1367654
+</td>
+<td style="text-align:left;">
+2974
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+706.739099152984
+</td>
+<td style="text-align:left;">
+2257
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+223.327680772201
+</td>
+<td style="text-align:left;">
+4546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+<td style="text-align:left;">
+…
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="different-data-formats" class="section level1">
+<h1>Different Data Formats</h1>
+<p>Data can come in lots of different formats, meaning that we need lots of different ways to read data into R. Below is some information on some of the more common functions for reading and writing different types of data.</p>
+<p><strong>Text based files</strong></p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">filetype</th>
+<th align="left">description</th>
+<th align="right">reading</th>
+<th align="right">writing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">.csv</td>
+<td align="left">comma separated values</td>
+<td align="right">tidyverse - <code>read_csv()</code><br><code>read.csv()</code><br><code>read.table(..., sep = ",")</code></td>
+<td align="right">tidyverse - <code>write_csv()</code><br><code>write.csv()</code><br><code>write.table(..., sep=",")</code></td>
+</tr>
+<tr class="even">
+<td align="left">.tsv</td>
+<td align="left">tab separated values</td>
+<td align="right">tidyverse - <code>read_tsv()</code><br><code>read.table(..., sep = "\t")</code></td>
+<td align="right">tidyverse - <code>write_tsv()</code><br><code>write.table(..., sep = "\t")</code></td>
+</tr>
+<tr class="odd">
+<td align="left">.txt</td>
+<td align="left">anything-separated values!</td>
+<td align="right"><code>read.table(..., sep = ...)</code></td>
+<td align="right"><code>write.table(..., sep = ...)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>R files</strong></p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">filetype</th>
+<th align="left">description</th>
+<th align="right">reading</th>
+<th align="right">writing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">.RDS</td>
+<td align="left">1 file = a single R object</td>
+<td align="right"><code>readRDS()</code></td>
+<td align="right"><code>saveRDS()</code></td>
+</tr>
+<tr class="even">
+<td align="left">.RData</td>
+<td align="left">1 file = a collection of R objects</td>
+<td align="right"><code>load()</code></td>
+<td align="right"><code>save()</code><br><code>save.image()</code> - to save all objects in the environment)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Excel files</strong><br />
+The package <strong>readxl</strong> provides a variety of functions for reading in different types of Microsoft Excel spreadsheet, such as <code>read_excel()</code>, <code>read_xls()</code>, <code>read_xlsx()</code>.</p>
+<p><strong>Other software</strong><br />
+The package <strong>haven</strong> provides functions for files which have been saved from other statistical software, for instance with <code>read_spss()</code>/<code>read_sav()</code> and <code>read_sas()</code> for files from SPSS and SAS.</p>
+<p><strong>Google sheets</strong><br />
+The <strong>googlesheets4</strong> package can read in data directly from a spreadsheet stored on google drive. You simply find the <em>id</em> of the sheet (it’s the big long string of numbers &amp; letters in the url of your google sheet), and pass it to <code>read_sheet()</code>.<br />
+It will prompt you to authenticate your account via your browser, but it’s really easy!</p>
+<div class="question-begin">
+Question A1
+</div>
+<div class="question-body">
+<p>Read in the two data-sets. Take care to look at the file extension (e.g., <strong>.csv</strong>, <strong>.tsv</strong>, <strong>.xlsx</strong>) as indicators of what function to try.<br />
+Make sure you assign them identifiable names.<br />
+Once you’ve loaded the data-set, take a look at them using functions like <code>summary()</code>, <code>str()</code>, <code>dim()</code>/<code>nrow()</code>, or viewing them by clicking on them in the environment.</p>
+<p><strong>Hints:</strong></p>
+<ul>
+<li>Some functions like <code>read_excel()</code> don’t allow you to download directly from a url, like we have been doing in the previous weeks.
+<ul>
+<li>Solution 1:
+<ul>
+<li>Download the data to your computer</li>
+<li>upload to the rstudio server if you are using it</li>
+<li>Direct the function to read it from the place you stored it.</li>
+</ul></li>
+<li>Solution 2:
+<ul>
+<li>Make R download the data directly to somewhere in your working directory (see <code>download.file()</code>).</li>
+</ul></li>
+</ul></li>
+<li>Do both the data-sets have column names? By default R will assume the first row is the name of the column. Look in the help documentation to see how to stop this from happening.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+
+download.file(&#39;https://uoepsy.github.io/data/blink_eyegaze.xlsx&#39;, &#39;data/blink_eyegaze.xlsx&#39;, mode=&quot;wb&quot;)
+eyedata &lt;- read_excel(path = &#39;data/blink_eyegaze.xlsx&#39;)
+
+setupdata &lt;- read_csv(&quot;https://uoepsy.github.io/data/blink_setup.csv&quot;, col_names = FALSE)</code></pre>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="renaming-columns" class="section level1">
+<h1>Renaming Columns</h1>
+<p>You can access the column names from a data-set using <code>names()</code> or <code>colnames()</code>.</p>
+<pre class="r"><code>names(data)
+colnames(data)</code></pre>
+<p>And we can easily rename these using indexing:</p>
+<pre class="r"><code>#name the third column &quot;peppapig&quot;
+names(data)[3]&lt;-&quot;peppapig&quot;</code></pre>
+<p>Or in tidyverse, using <code>rename()</code>:</p>
+<pre class="r"><code>data %&gt;%
+  rename(newname = currentname)</code></pre>
+<div class="question-begin">
+Question A2
+</div>
+<div class="question-body">
+<p><strong>Problem</strong></p>
+<p>The <em>blink_setup.csv</em> file doesn’t have any column names!<br />
+We know that there are 20 trials for each participant, and we can see that the 2nd column has information about which subject it is.<br />
+Columns 3:22 are trials 1 to 20.</p>
+<pre class="r"><code>head(setupdata)</code></pre>
+<pre><code>##    X1        X2                       X3 ...
+## 1   1 subject_1 /files/vids/blinks_1.mp4 ...
+## 2   2 subject_2 /files/vids/blinks_2.mp4 ...
+## 3   3 subject_3 /files/vids/blinks_4.mp4 ...
+## 4   4 subject_4 /files/vids/blinks_4.mp4 ...
+## 5   5 subject_5 /files/vids/blinks_1.mp4 ...
+## 6   6 subject_6 /files/vids/blinks_2.mp4 ...
+## 7 ...       ...                      ... ...
+## 8 ...       ...                      ... ...</code></pre>
+<p><strong>Task</strong></p>
+<ol style="list-style-type: decimal">
+<li>Remove the first column</li>
+<li>Rename columns 2 to 22 with sensible names.</li>
+</ol>
+<p><strong>Hints:</strong></p>
+<pre class="r"><code>names(setupdata) # what are the names
+names(setupdata)[2] # what is the 2nd name
+names(setupdata) &lt;- c(&quot;...&quot;, &quot;...&quot;, &quot;...&quot;,..) # set the names</code></pre>
+<pre class="r"><code>c(&quot;kermit&quot;, paste(&quot;peppapig&quot;, 1:3, sep=&quot;_&quot;))</code></pre>
+<pre><code>## [1] &quot;kermit&quot;     &quot;peppapig_1&quot; &quot;peppapig_2&quot; &quot;peppapig_3&quot;</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<p>remove the first column</p>
+<pre class="r"><code>setupdata &lt;- setupdata[,-1]</code></pre>
+<p>Set the names</p>
+<pre class="r"><code>names(setupdata) &lt;- c(&quot;sub&quot;,paste(&quot;trial&quot;, 1:20, sep = &quot;_&quot;))</code></pre>
+<p>Check:</p>
+<pre class="r"><code>head(setupdata)</code></pre>
+<pre><code>##         sub                  trial_1 ...
+## 1 subject_1 /files/vids/blinks_1.mp4 ...
+## 2 subject_2 /files/vids/blinks_2.mp4 ...
+## 3 subject_3 /files/vids/blinks_4.mp4 ...
+## 4 subject_4 /files/vids/blinks_4.mp4 ...
+## 5 subject_5 /files/vids/blinks_1.mp4 ...
+## 6 subject_6 /files/vids/blinks_2.mp4 ...
+## 7       ...                      ... ...
+## 8       ...                      ... ...</code></pre>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="reshaping-data" class="section level1">
+<h1>Reshaping data</h1>
+<p><strong>Pivot!</strong></p>
+<p>One of the more confusing things to get to grips with is the idea of reshaping a dataframe.<br />
+For different reasons, you might sometimes want to have data in wide, or in long format.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-16"></span>
+<img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif" alt="Source: https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/" width="80%" />
+<p class="caption">
+Figure 1: Source: <a href="https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/" class="uri">https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/</a>
+</p>
+</div>
+<p>When the data is wide, we can make it long using <code>pivot_longer()</code>. When we make data longer, we’re essentially making lots of columns into 2 longer columns. Above, in the animation, the wide variable <strong>x</strong>, <strong>y</strong> and <strong>z</strong> go into a new longer column called <strong>name</strong> that specifies which (x/y/z) it came from, and the values get put into the <strong>val</strong> column.</p>
+<p>The animation takes a shortcut in the code it displays above, but you could also use <code>pivot_longer(c(x,y,z), names_to = "name", values_to = "val")</code>. To reverse this, and put it back to being wide, we tell R which columns to take the names and values <em>from</em>: <code>pivot_wider(names_from = name, values_from = val)</code>.</p>
+<div class="question-begin">
+Question A3
+</div>
+<div class="question-body">
+<p><strong>Problem</strong><br />
+The <em>blink_setup.csv</em> file has the data in a different shape to the <em>blink_eyegaze.xlsx</em> file.</p>
+<ul>
+<li><em>blink_setup.csv</em> : one row per participant<br />
+</li>
+<li><em>blink_eyegaze.xlsx</em> : one row per trial</li>
+</ul>
+<p><strong>Task</strong></p>
+<p>Reshape the data to make it so that there is one row per trial.</p>
+<p><strong>Hint</strong>:</p>
+<ul>
+<li>in the tidyverse functions, you can specify all columns between column <strong>x</strong> and column <strong>z</strong> by using the colon, <code>x:z</code>.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<p>(Note that this will depend on what you called your columns in the previous question - we just called them “trial_1”, … , “trial_20”).</p>
+<pre class="r"><code>setuplong &lt;- 
+  setupdata %&gt;%
+  pivot_longer(trial_1:trial_20, names_to = &quot;trial_number&quot;, values_to = &quot;video&quot;)
+
+setuplong</code></pre>
+<pre><code>## # A tibble: 460 x 3
+##    sub       trial_number video                    
+##    &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;                    
+##  1 subject_1 trial_1      /files/vids/blinks_1.mp4 
+##  2 subject_1 trial_2      /files/vids/blinsk_8.mp4 
+##  3 subject_1 trial_3      /files/vids/blinks_1.mp4 
+##  4 subject_1 trial_4      /files/vids/blinks_5.mp4 
+##  5 subject_1 trial_5      /files/vids/blinks_4.mp4 
+##  6 subject_1 trial_6      /files/vids/blinks_10.mp4
+##  7 subject_1 trial_7      /files/vids/blinks_1.mp4 
+##  8 subject_1 trial_8      /files/vids/blinks_5.mp4 
+##  9 subject_1 trial_9      /files/vids/blinks_6.mp4 
+## 10 subject_1 trial_10     /files/vids/blinks_4.mp4 
+## # … with 450 more rows</code></pre>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="dealing-with-character-strings" class="section level1">
+<h1>Dealing with character strings</h1>
+<p>There are loads of functions we can use to do various things with character strings in R.<br />
+Here are a few examples:</p>
+<div class="optional-begin">
+gsub()<span id="opt-start-75" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-75&#39;, &#39;opt-start-75&#39;)"></span>
+</div>
+<div id="opt-body-75" class="optional-body" style="display: none;">
+<p>substitute a string of characters for another string:</p>
+<pre class="r"><code>gsub(&quot;don&#39;t like&quot;,&quot;love&quot;, &quot;i really really really don&#39;t like statistics!&quot;)</code></pre>
+<pre><code>## [1] &quot;i really really really love statistics!&quot;</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+separate()<span id="opt-start-76" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-76&#39;, &#39;opt-start-76&#39;)"></span>
+</div>
+<div id="opt-body-76" class="optional-body" style="display: none;">
+<p>separate a column into multiple columns by splitting at a set of characters</p>
+<pre class="r"><code>mupsimp &lt;- read_csv(&quot;https://uoepsy.github.io/data/muppet_simp.csv&quot;)
+mupsimp</code></pre>
+<pre><code>## # A tibble: 18 x 1
+##    show_name                     
+##    &lt;chr&gt;                         
+##  1 simpsons_Marge Simpson        
+##  2 muppets_Scooter               
+##  3 muppets_Rowlf the Dog         
+##  4 muppets_Fozzie Bear           
+##  5 simpsons_Abraham Simpson      
+##  6 muppets_Walter                
+##  7 muppets_Pepe the King Prawn   
+##  8 muppets_Gonzo                 
+##  9 simpsons_Santa&#39;s Little Helper
+## 10 simpsons_Snowball II/V        
+## 11 simpsons_Maggie Simpson       
+## 12 simpsons_Lisa Simpson         
+## 13 simpsons_Bart Simpson         
+## 14 muppets_Animal                
+## 15 simpsons_Homer Simpson        
+## 16 muppets_Miss Piggy            
+## 17 muppets_Rizzo the Rat         
+## 18 muppets_Kermit the Frog</code></pre>
+<pre class="r"><code>mupsimp %&gt;% 
+  separate(show_name, into = c(&quot;show&quot;,&quot;name&quot;), sep = &quot;_&quot;)</code></pre>
+<pre><code>## # A tibble: 18 x 2
+##    show     name                 
+##    &lt;chr&gt;    &lt;chr&gt;                
+##  1 simpsons Marge Simpson        
+##  2 muppets  Scooter              
+##  3 muppets  Rowlf the Dog        
+##  4 muppets  Fozzie Bear          
+##  5 simpsons Abraham Simpson      
+##  6 muppets  Walter               
+##  7 muppets  Pepe the King Prawn  
+##  8 muppets  Gonzo                
+##  9 simpsons Santa&#39;s Little Helper
+## 10 simpsons Snowball II/V        
+## 11 simpsons Maggie Simpson       
+## 12 simpsons Lisa Simpson         
+## 13 simpsons Bart Simpson         
+## 14 muppets  Animal               
+## 15 simpsons Homer Simpson        
+## 16 muppets  Miss Piggy           
+## 17 muppets  Rizzo the Rat        
+## 18 muppets  Kermit the Frog</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+substr()<span id="opt-start-77" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-77&#39;, &#39;opt-start-77&#39;)"></span>
+</div>
+<div id="opt-body-77" class="optional-body" style="display: none;">
+<p>Extract or replace substrings in a character vector.</p>
+<pre class="r"><code># get the first 3 letters
+substr(mupsimp$show_name, 1, 3)</code></pre>
+<pre><code>##  [1] &quot;sim&quot; &quot;mup&quot; &quot;mup&quot; &quot;mup&quot; &quot;sim&quot; &quot;mup&quot; &quot;mup&quot; &quot;mup&quot; &quot;sim&quot; &quot;sim&quot; &quot;sim&quot; &quot;sim&quot;
+## [13] &quot;sim&quot; &quot;mup&quot; &quot;sim&quot; &quot;mup&quot; &quot;mup&quot; &quot;mup&quot;</code></pre>
+<p>Can be combined with functions like <code>nchar()</code> (to find the number of characters in each string). Additionally, can be used in tidyverse easily:</p>
+<pre class="r"><code>mupsimp %&gt;%
+  mutate(
+    first3 = substr(show_name, 1, 3),
+    last3 = substr(show_name, nchar(show_name)-2, nchar(show_name))
+  )</code></pre>
+<pre><code>## # A tibble: 18 x 3
+##    show_name                      first3 last3
+##    &lt;chr&gt;                          &lt;chr&gt;  &lt;chr&gt;
+##  1 simpsons_Marge Simpson         sim    son  
+##  2 muppets_Scooter                mup    ter  
+##  3 muppets_Rowlf the Dog          mup    Dog  
+##  4 muppets_Fozzie Bear            mup    ear  
+##  5 simpsons_Abraham Simpson       sim    son  
+##  6 muppets_Walter                 mup    ter  
+##  7 muppets_Pepe the King Prawn    mup    awn  
+##  8 muppets_Gonzo                  mup    nzo  
+##  9 simpsons_Santa&#39;s Little Helper sim    per  
+## 10 simpsons_Snowball II/V         sim    I/V  
+## 11 simpsons_Maggie Simpson        sim    son  
+## 12 simpsons_Lisa Simpson          sim    son  
+## 13 simpsons_Bart Simpson          sim    son  
+## 14 muppets_Animal                 mup    mal  
+## 15 simpsons_Homer Simpson         sim    son  
+## 16 muppets_Miss Piggy             mup    ggy  
+## 17 muppets_Rizzo the Rat          mup    Rat  
+## 18 muppets_Kermit the Frog        mup    rog</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+paste()<span id="opt-start-78" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-78&#39;, &#39;opt-start-78&#39;)"></span>
+</div>
+<div id="opt-body-78" class="optional-body" style="display: none;">
+<p><code>paste()</code> can quickly combine two character vectors:</p>
+<pre class="r"><code>paste(&quot;hello&quot;,&quot;everyone&quot;,sep=&quot; &quot;)</code></pre>
+<pre><code>## [1] &quot;hello everyone&quot;</code></pre>
+<p>You can also use it to <em>collapse</em> a vector into a single string:</p>
+<pre class="r"><code>paste(mupsimp$show_name, collapse=&quot; &quot;)</code></pre>
+<pre><code>## [1] &quot;simpsons_Marge Simpson muppets_Scooter muppets_Rowlf the Dog muppets_Fozzie Bear simpsons_Abraham Simpson muppets_Walter muppets_Pepe the King Prawn muppets_Gonzo simpsons_Santa&#39;s Little Helper simpsons_Snowball II/V simpsons_Maggie Simpson simpsons_Lisa Simpson simpsons_Bart Simpson muppets_Animal simpsons_Homer Simpson muppets_Miss Piggy muppets_Rizzo the Rat muppets_Kermit the Frog&quot;</code></pre>
+<p>and <code>paste0()</code> is a quick shortcut for using <code>sep=""</code>:</p>
+<pre class="r"><code>paste0(&quot;hello&quot;,&quot;everyone&quot;)</code></pre>
+<pre><code>## [1] &quot;helloeveryone&quot;</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="question-begin">
+Question A4
+</div>
+<div class="question-body">
+<p><strong>Problem</strong><br />
+If you look at what data was captured by the software to indicate which video was used in each trial, there is a lot of unnecessary data there. The number of the filename indicates how many blinks are in the video. This is the only bit of information we want.</p>
+<pre class="r"><code>head(setuplong$video)</code></pre>
+<pre><code>## [1] &quot;/files/vids/blinks_1.mp4&quot;  &quot;/files/vids/blinsk_8.mp4&quot; 
+## [3] &quot;/files/vids/blinks_1.mp4&quot;  &quot;/files/vids/blinks_5.mp4&quot; 
+## [5] &quot;/files/vids/blinks_4.mp4&quot;  &quot;/files/vids/blinks_10.mp4&quot;</code></pre>
+<p><strong>Task</strong></p>
+<ul>
+<li>In your (now reshaped to long) <strong>blink_setup.csv</strong> data, make a new, or edit an existing column, which is a <em>numeric</em> variable containing the number of blinks presented in the video in each trial</li>
+</ul>
+<p><strong>Hints</strong>:</p>
+<ul>
+<li><p>there are lots of different ways you could do this.<br />
+</p></li>
+<li><p>you can substitute out multiple different strings by separating them with the <code>|</code> symbol:</p>
+<pre class="r"><code>gsub(&quot;dog|cat&quot;, &quot;horse&quot;, &quot;I have a dog and a cat and the dogs name is Graham&quot;)</code></pre>
+<pre><code>## [1] &quot;I have a horse and a horse and the horses name is Graham&quot;</code></pre></li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>setuplong &lt;- setuplong %&gt;%
+  mutate(
+    nr_blinks = as.numeric(gsub(&quot;/files/vids/|blinks_|blinsk_|.mp4&quot;,&quot;&quot;,video))
+  )
+
+setuplong</code></pre>
+<pre><code>## # A tibble: 460 x 4
+##    sub       trial_number video                     nr_blinks
+##    &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;                         &lt;dbl&gt;
+##  1 subject_1 trial_1      /files/vids/blinks_1.mp4          1
+##  2 subject_1 trial_2      /files/vids/blinsk_8.mp4          8
+##  3 subject_1 trial_3      /files/vids/blinks_1.mp4          1
+##  4 subject_1 trial_4      /files/vids/blinks_5.mp4          5
+##  5 subject_1 trial_5      /files/vids/blinks_4.mp4          4
+##  6 subject_1 trial_6      /files/vids/blinks_10.mp4        10
+##  7 subject_1 trial_7      /files/vids/blinks_1.mp4          1
+##  8 subject_1 trial_8      /files/vids/blinks_5.mp4          5
+##  9 subject_1 trial_9      /files/vids/blinks_6.mp4          6
+## 10 subject_1 trial_10     /files/vids/blinks_4.mp4          4
+## # … with 450 more rows</code></pre>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="joiningmerging" class="section level1">
+<h1>Joining/merging</h1>
+<p>Now comes a fun bit.<br />
+Recall that the research question is interested in the relationship between the number of times the speaker was seen to blink, and the time the participants spent looking at the distractor object (indicating perceived dishonesty).<br />
+You may have noticed that these variables are currently in different data-sets! The <strong>blink_setup.csv</strong> contains information about the numbers of blinks in the videos, and the <strong>blink_eyegaze.xlsx</strong> contains the data on the fixations.</p>
+<p>Solution: we need to join them together!</p>
+<p>Note that because both data-sets contain information on participant number and trial number, which uniquely identifies each observation, we can join them together matching on these variables!</p>
+<p>There are lots of different ways to join data-sets, depending on whether we want to keep rows from one data-set or the other, or keep only those in both data-sets etc.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-28"></span>
+<img src="images/messy/joins.png" alt="Check out the help documentation for them all using `?full_join`." width="80%" />
+<p class="caption">
+Figure 2: Check out the help documentation for them all using <code>?full_join</code>.
+</p>
+</div>
+<div class="question-begin">
+Question A5
+</div>
+<div class="question-body">
+<p><strong>Problem</strong><br />
+Variables are in different data-sets.</p>
+<p><strong>Task</strong></p>
+<ol style="list-style-type: decimal">
+<li>Join the two data-sets (the reshaped-to-long <strong>blink_setup.csv</strong> data, and the <strong>blink_eyegaze.xlsx</strong> data) together, and store the joined data in a new object (you can use your own name, but the solutions will use the name <code>blinks_full</code>).</li>
+</ol>
+<p><strong>Hints</strong></p>
+<p>We want to match the observations based on two columns which are present in each data-set, indicating which participant, and which trial.</p>
+<ul>
+<li>Remember that R doesn’t have your intelligence - it doesn’t <em>know</em> that in one data-set the variable is called e.g., <code>trial_no</code> and in the other it is called <code>trial_number</code>.<br />
+</li>
+<li>Another thing which R doesn’t know is that “subject_1” in setup data is the same participant as “1” in the eye gaze data. It needs to match the same symbols, and what is more, it needs the variables to be <em>the same type</em> (character, numeric, factor etc).
+<ul>
+<li>you might want to make use of the skills you learned for manipulating character strings.</li>
+</ul></li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<p>In this solution, let’s build up a sequence step by step. Work through the steps, adding lines of code each time. Between each step, run the code to quickly see what the output looks like at each step.</p>
+<ol style="list-style-type: decimal">
+<li><p>First, let’s see how we can remove the “subject_” from “subject_1” etc..</p>
+<pre class="r"><code>setuplong %&gt;%
+  mutate(
+    sub = gsub(&quot;subject_&quot;,&quot;&quot;,sub)
+  )</code></pre></li>
+<li><p>But we also want it to be numeric, to match the <code>sub</code> variable in the eyegaze data, so let’s edit it to:</p>
+<pre class="r"><code>setuplong %&gt;%
+  mutate(
+    sub = as.numeric(gsub(&quot;subject_&quot;,&quot;&quot;,sub))
+  )</code></pre></li>
+<li><p>We’ll also need to do the same for the <code>trial_number</code> variable, so let’s add that line too:</p>
+<pre class="r"><code>setuplong %&gt;%
+  mutate(
+    sub = as.numeric(gsub(&quot;subject_&quot;,&quot;&quot;,sub)),
+    trial_number = as.numeric(gsub(&quot;trial_&quot;,&quot;&quot;,trial_number))
+  )</code></pre></li>
+<li><p>And then, we’ll note that we need to have the same name for variables indicating trial number in both data-sets, so lets rename it:</p>
+<pre class="r"><code>setuplong %&gt;%
+  mutate(
+    sub = as.numeric(gsub(&quot;subject_&quot;,&quot;&quot;,sub)),
+    trial_number = as.numeric(gsub(&quot;trial_&quot;,&quot;&quot;,trial_number))
+  ) %&gt;%
+  rename(trial_no = trial_number)</code></pre></li>
+<li><p>And now… add the join!</p>
+<pre class="r"><code>setuplong %&gt;%
+  mutate(
+    sub = as.numeric(gsub(&quot;subject_&quot;,&quot;&quot;,sub)),
+    trial_number = as.numeric(gsub(&quot;trial_&quot;,&quot;&quot;,trial_number))
+  ) %&gt;%
+  rename(trial_no = trial_number) %&gt;%
+  full_join(x = ., y = eyedata)</code></pre>
+<p><strong>NOTE</strong> the solution has <code>x = ., y = eyedata</code> to make it clear that we are ‘piping in’ (using <code>%&gt;%</code>) the thing coming out of the previous lines of code, and putting it where the <code>.</code> is. <code>.... %&gt;% full_join(eyedata)</code> would do the same.<br />
+We use <code>full_join</code> here because we want to keep all the data, but <code>left_join</code> would do the same. <code>right_join</code> would be slightly different, because there are 3 observations in the setup data (when reshaped to long, n = 460) which aren’t in the eye gaze data (n = 457). You can see which ones they are by using <code>anti_join</code>.<br />
+</p></li>
+<li><p>Finally - we need to give the whole output a name to store it in our environment!</p>
+<pre class="r"><code>blinks_full &lt;- 
+  setuplong %&gt;%
+  mutate(
+    sub = as.numeric(gsub(&quot;subject_&quot;,&quot;&quot;,sub)),
+    trial_number = as.numeric(gsub(&quot;trial_&quot;,&quot;&quot;,trial_number))
+  ) %&gt;%
+  rename(trial_no = trial_number) %&gt;%
+  full_join(x = ., y = eyedata)</code></pre></li>
+</ol>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="impossible-values" class="section level1">
+<h1>Impossible Values</h1>
+<p>It’s important to check that there are no values in the data which are impossible, given what you know about how the data was measured. This is where exploratory plots and descriptive statistics come in handy.</p>
+<pre class="r"><code>hist(as.numeric(blinks_full$distractor_fix))</code></pre>
+<p><img src="06_messy_files/figure-html/unnamed-chunk-35-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>In some trials, participants spent less that 0ms fixating on the distractor object!?!?!?</p>
+</div>
+<p>We have a couple of options as to how to deal with them.</p>
+<ol style="list-style-type: decimal">
+<li>Delete the entire row</li>
+<li>Change the specific entry/s in that variable to be <code>NA</code> (Not Applicable) - this has the benefit of keeping the rows should we consider those row to have a valid observation in other variables (for instance the <code>rt</code> - reaction time?)</li>
+</ol>
+<p>Some of the tools we learned in <a href="01_categorical.html#Editing_parts_of_the_data">Week 1</a> will come in handy here.</p>
+<div class="question-begin">
+Question A6
+</div>
+<div class="question-body">
+<p><strong>Problem</strong><br />
+Some impossible values in the <code>distractor_fix</code> variable.</p>
+<p><strong>Task</strong><br />
+- Assign the entries of the <code>distractor_fix</code> variable which are &lt; 0 to be <code>NA</code>.<br />
+- Are there any other impossible values (or combinations of values) in the data?</p>
+<p><strong>Hints:</strong></p>
+<ul>
+<li><p>While you’re there, why not convert any variables to the right type (numeric, factor, etc).<br />
+</p></li>
+<li><p>We might not have come across this before, but there is a really useful function called <code>ifelse()</code>.<br />
+Play around with the below code to learn:</p>
+<pre class="r"><code>tibble(x = 1:10) %&gt;%
+  mutate(
+    new_variable = ifelse(x&gt;5,1,0),
+    another_new_variable = ifelse(x&gt;5,&quot;peppapig&quot;,&quot;kermit&quot;),
+    morevariables = ifelse(another_new_variable == &quot;kermit&quot;,&quot;kermit the frog&quot;, another_new_variable)
+  )</code></pre></li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<p>Below we’ve taken similar steps for both the <code>distractor_fix</code> and <code>rt</code> variables. Neither can be &lt;0 or &gt;5000.<br />
+However, we know that the <code>distractor_fix</code> variable has no entries &gt;5000 (because of the histogram above).</p>
+<pre class="r"><code>blinks_full &lt;- 
+  blinks_full %&gt;%
+  mutate(
+    distractor_fix = as.numeric(distractor_fix),
+    distractor_fix = ifelse(distractor_fix&lt;0, NA, distractor_fix),
+    rt = ifelse(as.numeric(rt)&gt;5000 | as.numeric(rt)&lt;0, NA, as.numeric(rt))
+  )</code></pre>
+<p>Note how two steps (making it numeric, and replacing values with <code>NA</code>s) are combined for the <code>rt</code> variable. Note also how we have specified that we replace with <code>NA</code>s entries which meet either on condition (&gt;5000) <strong>or</strong> (using <code>|</code>) another (&lt;0).</p>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="missing-data-in-r" class="section level1">
+<h1>Missing Data in R</h1>
+<p>Missing data can be a big problem for statistics. For those of you thinking of taking Multivariate Statistics &amp; Methodology in R next semester, you can look forward to discussions around this sort of issue.</p>
+<p>Here, however, we are simply going to discuss the practicalities of how to make R code work when some of your values are <code>NA</code>s.</p>
+<p>Consider:</p>
+<pre class="r"><code>vec &lt;- c(1,2,3,4,NA)
+mean(vec)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>Think about why this is:
+<span class="math display">\[
+\text{mean(vec)} = \frac{1+2+3+4+\text{NA}}{5} = \frac{\text{??}}{5} = \text{??}
+\]</span>
+There are numerous different ways that functions in R cope with missing values, but if you’re ever in doubt, try <code>na.rm = TRUE</code>. This will basically tell R to “remove the NAs before doing the calculation”.</p>
+<pre class="r"><code>mean(vec, na.rm=T)</code></pre>
+<pre><code>## [1] 2.5</code></pre>
+<p>Other functions include <code>na.omit()</code>, which remove any row with has an <code>NA</code> anywhere in it:</p>
+<pre class="r"><code>complete_data &lt;- na.omit(data)</code></pre>
+</div>
+<div id="outliers" class="section level1">
+<h1>Outliers</h1>
+<p><em>Outliers</em> are the extreme - but plausible - values in variables.
+There is no one way to identify what is extreme enough to consider and outlier, nor is there one way to handle them.</p>
+<p>Some outliers could be considered important observations which we would not want to exclude. However, being an outlier <em>can</em> (but not always) result in an observation exerting too great an influence on our analysis.</p>
+<div class="question-begin">
+Question A7
+</div>
+<div class="question-body">
+<p>Make a bloxplot of the <code>distractor_fix</code> variable. Does it look like there might be any outliers?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<p>The last line of this is there just because I personally don’t like the default look of <code>geom_boxplot</code> where it is really wide, so this line changes the limits of the x-axis (and also removes the ticks).</p>
+<pre class="r"><code>ggplot(data = blinks_full, aes(y = distractor_fix)) +
+  geom_boxplot()+
+  scale_x_continuous(limits = c(-2,2), breaks = NULL)</code></pre>
+<p><img src="06_messy_files/figure-html/unnamed-chunk-41-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>It looks like there are possibly some outliers at the upper end of the distribution. One of them looks really quite anomalous!</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<p>Some common approaches to identifying outliers:</p>
+<ul>
+<li>observations which are <span class="math inline">\(&gt; 3\)</span> (sometimes <span class="math inline">\(&gt; 2.5\)</span>) standard deviations away from the mean.</li>
+<li>observations greater than <span class="math inline">\(1.5 \times IQR\)</span> below the first quartile <span class="math inline">\(Q_1\)</span> or above the third quartile <span class="math inline">\(Q_3\)</span>.</li>
+</ul>
+<p>Some common approaches to handling outliers:</p>
+<ul>
+<li>Exclude now - for instance, set as NA</li>
+<li>“Winsorize” - set to a specified percentile. For example, all observations below the 5th percentile set to the 5th percentile, and all observations above the 95th percentile set to the 95th percentile</li>
+<li>Exclude from analysis later, based on measures of influence (we’ll learn about this in future weeks)</li>
+</ul>
+<div class="question-begin">
+Question A8 (OPTIONAL DIFFICULT)
+</div>
+<div class="question-body">
+<p><strong>Writing your own function</strong></p>
+<p>We already saw some custom functions in the first week, where we made some called <code>dice()</code> and <code>wdice()</code>.</p>
+<p>Can you write a function which, given a vector, returns TRUE if it is an outlier and FALSE if it is not, based on the criterion of being <span class="math inline">\(&gt;3\)</span> sd away from the mean.</p>
+<pre class="r"><code>outliers &lt;- function(obs){
+ ...
+ ...
+ ...
+}</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<div class="optional-begin">
+Working out the internal code<span id="opt-start-84" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-84&#39;, &#39;opt-start-84&#39;)"></span>
+</div>
+<div id="opt-body-84" class="optional-body" style="display: none;">
+<p>Let’s do the calculation on a little vector, keeping it all outside of a function first:</p>
+<pre class="r"><code># a random vector (length = 20)
+vec &lt;- rnorm(n = 20, mean = 0, sd = 1)
+# pick two random entries and make them outliers (one in each direction)
+vec[3] &lt;- 150
+vec[16] &lt;- -150
+vec</code></pre>
+<pre><code>##  [1]   -0.54257657    1.41694610  150.00000000   -0.64036189   -0.42032077
+##  [6]    1.12865413   -0.79699212    0.71558158   -0.13812339    1.23304117
+## [11]   -1.65814746    0.97116230   -0.51487714    1.11694494   -0.31495125
+## [16] -150.00000000    1.50818128    1.39131885    0.02197424   -1.71851011</code></pre>
+<pre class="r"><code># deviations from each point to mean
+vec - mean(vec)</code></pre>
+<pre><code>##  [1]   -0.6805238    1.2789989  149.8620528   -0.7783091   -0.5582680
+##  [6]    0.9907069   -0.9349393    0.5776344   -0.2760706    1.0950940
+## [11]   -1.7960947    0.8332151   -0.6528243    0.9789977   -0.4528984
+## [16] -150.1379472    1.3702341    1.2533717   -0.1159730   -1.8564573</code></pre>
+<pre class="r"><code># and three times the standard deviation
+3 * sd(vec)</code></pre>
+<pre><code>## [1] 146.03</code></pre>
+<pre class="r"><code># but this won&#39;t work because some are below, rather than above the mean. 
+(vec - mean(vec)) &gt; (3 * sd(vec))</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code># instead we want the ABSOLUTE value 
+abs(vec - mean(vec)) &gt; (3 * sd(vec))</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Writing it as a function<span id="opt-start-85" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-85&#39;, &#39;opt-start-85&#39;)"></span>
+</div>
+<div id="opt-body-85" class="optional-body" style="display: none;">
+<p>Okay, now that we’ve worked out the code, we want to make this a function. The template function in the question had an input called <code>obs</code>:</p>
+<pre class="r"><code>outliers &lt;- function(obs){
+
+}</code></pre>
+<p>So we would want to add our code to the function, but change it to use <code>obs</code> (which is whatever we give the function)</p>
+<pre class="r"><code>outliers &lt;- function(obs){
+  abs(obs - mean(obs)) &gt; (3 * sd(obs))
+}</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Testing the function<span id="opt-start-86" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-86&#39;, &#39;opt-start-86&#39;)"></span>
+</div>
+<div id="opt-body-86" class="optional-body" style="display: none;">
+<p>we can test it on the <code>vec</code> object we created earlier.</p>
+<pre class="r"><code>outliers(obs = vec)</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE</code></pre>
+<p>We can use it to access and edit those entries:</p>
+<pre class="r"><code>vec[outliers(vec)]</code></pre>
+<pre><code>## [1]  150 -150</code></pre>
+<pre class="r"><code>vec[outliers(vec)] &lt;- NA</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Extra - adding more arguments<span id="opt-start-87" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-87&#39;, &#39;opt-start-87&#39;)"></span>
+</div>
+<div id="opt-body-87" class="optional-body" style="display: none;">
+<p>We could edit the function so that we can also vary how many standard deviations away we are wanting to identify!</p>
+<pre class="r"><code>outliers &lt;- function(obs, x = 3){
+  abs(obs - mean(obs)) &gt; (x * sd(obs))
+}</code></pre>
+<p>the <code>x = 3</code> means that the function will default to looking 3 standard deviations away, but if we wanted to use <code>outliers(obs = vec, x = 2)</code> we could identify those which are 2 away!</p>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A9 (OPTIONAL DIFFICULT)
+</div>
+<div class="question-body">
+<p>If you attempted question <strong>A8</strong> above, can you edit your <code>outliers()</code> function to make it work with vectors which include <code>NA</code>s?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>outliers &lt;- function(obs, x = 3){
+  abs(obs - mean(obs, na.rm=TRUE)) &gt; (x * sd(obs, na.rm=TRUE))
+}</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A10
+</div>
+<div class="question-body">
+<div class="frame">
+<p>If you skipped questions <strong>A8</strong> and <strong>A9</strong>, then copy and run this code into your .Rmd document.
+It will give you a function which takes a vector and returns TRUEs and FALSEs based on whether each entry is greater than 3 standard deviations from the mean.</p>
+<pre class="r"><code>outliers &lt;- function(obs, x = 3){
+  abs(obs - mean(obs, na.rm=TRUE)) &gt; (x * sd(obs, na.rm=TRUE))
+}</code></pre>
+</div>
+<p><strong>Problem</strong><br />
+Possible outliers in the <code>distractor_fix</code> variable.</p>
+<p><strong>Task</strong></p>
+<ol style="list-style-type: decimal">
+<li>Replace any values of the <code>distractor_fix</code> variable which are <span class="math inline">\(&gt;3\)</span> standard deviations from the mean with <code>NA</code>.<br />
+</li>
+<li>Make a new boxplot of the variable</li>
+</ol>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>blinks_full$distractor_fix[outliers(blinks_full$distractor_fix)]&lt;- NA
+
+ggplot(data = blinks_full, aes(y = distractor_fix)) +
+  geom_boxplot()+
+  scale_x_continuous(limits = c(-2,2), breaks = NULL)</code></pre>
+<p><img src="06_messy_files/figure-html/unnamed-chunk-51-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="build-a-model" class="section level1">
+<h1>Build a model!</h1>
+<p>We’re now finally getting to the analysis. As we said earlier, this can sometimes be very straightforward in comparison to the amount of effort involved in cleaning data.</p>
+<blockquote>
+<p><em>Recall</em><br />
+We’re interested in whether the perception of whether or not a speaker is lying about the location of some hidden treasure (as measured by the pattern of eye fixations towards the object <em>not</em> referred to by the speaker) is influenced by the number of times the speaker is seen to blink while producing utterance.</p>
+</blockquote>
+<div class="question-begin">
+Question B1
+</div>
+<div class="question-body">
+<p>Plot the relationship between the two variables you think will be best used to answer this question.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>ggplot(blinks_full, aes(x=nr_blinks, y = distractor_fix))+
+  geom_point()</code></pre>
+<p><img src="06_messy_files/figure-html/unnamed-chunk-52-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B2
+</div>
+<div class="question-body">
+<p>We’ve seen briefly in <a href="05_covcor.html#Exercises:_Functions_and_Models">Week 5</a>, as well as in the lecture, the form of a linear regression model. Below, we have stated the form of the model we will use to answer our research question. We’ll cover what the symbols mean in more detail next week.</p>
+<p><span class="math display">\[
+\text{Fixation time to distractor} = \beta_0 + \beta_1 \ \text{Number of blinks} + \epsilon \\
+\quad \\
+\text{where} \quad \epsilon \sim N(0, \sigma) \text{ independently}
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Fit the linear model to the data using the <code>lm()</code> function and store the output in the environment as an object named <code>blinks_mdl</code>.<br />
+<em>The syntax of the <code>lm()</code> function is: </em>
+<code>lm(<b>dependent variable</b> ~ 1 + <b>explanatory variable</b>,<br>data = <b>dataframe</b>)</code></li>
+<li>Take a look around the output of <code>summary(blinks_mdl)</code>. There’s a lot of it, and we’re going to go through what all the different bits mean in the coming weeks!</li>
+</ol>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution
+</div>
+<div class="solution-body">
+<pre class="r"><code>blinks_mdl &lt;- lm(distractor_fix ~ nr_blinks, data=blinks_full)
+
+summary(blinks_mdl)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = distractor_fix ~ nr_blinks, data = blinks_full)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -944.47 -253.55    5.58  217.74 1033.81 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  517.296     36.076   14.34   &lt;2e-16 ***
+## nr_blinks     64.128      5.808   11.04   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 355.1 on 447 degrees of freedom
+##   (11 observations deleted due to missingness)
+## Multiple R-squared:  0.2143, Adjusted R-squared:  0.2126 
+## F-statistic: 121.9 on 1 and 447 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>A well designed study with a well-thought through data collection process can go a long way to remedy this!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

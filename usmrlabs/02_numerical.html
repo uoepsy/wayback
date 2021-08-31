@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Numerical Data</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Numerical Data</h1>
+
+</div>
+
+
+<div class="red">
+<p><strong>Preliminaries</strong></p>
+<!-- - Be sure to check the [**solutions to last week's exercises**](01_categorical.html). You can still ask any questions about previous weeks' materials if things aren't clear!     -->
+<ol style="list-style-type: decimal">
+<li><p>Open Rstudio, make sure you have the USMR project open, and create a new RMarkdown document (giving it a title for this week).</p></li>
+<li><p>Make sure you regularly save the Rmarkdown files you are writing in, and it might help to close the ones from previous weeks to make your RStudio experience less busy. You should still be able to see in the bottom right window of RStudio, there is a “Files” tab. When this is open, you are able to see the various files within your project.</p></li>
+</ol>
+</div>
+<div id="reading-tidyverse-and-pipes" class="section level1">
+<h1>Reading: Tidyverse and pipes!</h1>
+<p>Before we get started on the statistics, we’re going to briefly introduce a crucial bit of R code.</p>
+<p>We have seen already seen a few examples of R code such as:</p>
+<pre class="r"><code># show the dimensions of the data
+dim(somedata)
+# show the frequency table of values in a variable
+table(somedata$somevariable)</code></pre>
+<p>And we have seen how we might wrap functions inside functions:</p>
+<pre class="r"><code>barplot(table(somedata$somevariable))</code></pre>
+<div class="yellow">
+<p><strong>R evaluates code from the inside-out!</strong></p>
+<p>You can end up with functions inside functions inside functions …</p>
+<pre class="r"><code># Don&#39;t worry about what all these functions do, 
+# it&#39;s just an example -
+round(mean(log(cumsum(diff(1:10)))))</code></pre>
+</div>
+<p>We can write in a different style, however, and this may help to keep code tidy and easily readable - we can write <strong>sequentially</strong>:</p>
+<p><img src="images/numeric/pipes.png" /></p>
+<p>Notice that what we are doing is using a new symbol: <code>%&gt;%</code><br />
+This symbol takes the output of whatever is on it’s left-hand side, and uses it as an <em>input</em> for whatever is on the right-hand side. The <code>%&gt;%</code> symbol gets called a “pipe”.</p>
+<p>Let’s see it in action with the starwars2 dataset from the previous lab. First we need to load the tidyverse packages, because that is where <code>%&gt;%</code> and <code>read_csv()</code> are found.</p>
+<pre class="r"><code>library(tidyverse)
+starwars2 &lt;- read_csv(&quot;https://uoepsy.github.io/data/starwars2.csv&quot;)</code></pre>
+<div class="yellow">
+<p><strong>Reading data from a URL</strong></p>
+<p>Note that when you have a url for some data, such as <a href="https://raw.githubusercontent.com/uoepsy/data/master/starwars2.csv">https://uoepsy.github.io/data/starwars2.csv</a>, you can read it in directly by giving functions like <code>read_csv()</code> the url inside quotation marks.</p>
+</div>
+<pre class="r"><code>starwars2 %&gt;%
+    summary()</code></pre>
+<pre><code>##      name               height       hair_color         eye_color        
+##  Length:75          Min.   : 79.0   Length:75          Length:75         
+##  Class :character   1st Qu.:167.5   Class :character   Class :character  
+##  Mode  :character   Median :180.0   Mode  :character   Mode  :character  
+##                     Mean   :176.1                                        
+##                     3rd Qu.:191.0                                        
+##                     Max.   :264.0                                        
+##   homeworld           species         
+##  Length:75          Length:75         
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character  
+##                                       
+##                                       
+## </code></pre>
+<p>We can now write code that requires reading it from the inside-out:</p>
+<pre class="r"><code>barplot(table(starwars2$species))</code></pre>
+<p>or which reads from left to right:</p>
+<pre class="r"><code>starwars2$species %&gt;%
+    table() %&gt;%
+    barplot()</code></pre>
+<p>Both of which do exactly the same thing! They create the plot below:
+<img src="02_numerical_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Similarly, that long line of code from above:</p>
+<pre class="r"><code># again, don&#39;t worry about all these functions, 
+# just notice the difference in the two styles.
+round(mean(log(cumsum(diff(1:10)))))</code></pre>
+<p>becomes:</p>
+<pre class="r"><code>1:10 %&gt;%
+    diff() %&gt;%
+    cumsum() %&gt;%
+    log() %&gt;%
+    mean() %&gt;%
+    round()</code></pre>
+<p><br>
+We’re going to use this way of writing a lot throughout the course, and it pairs really well with a group of functions in the <strong>tidyverse</strong> packages, which were designed to be used in conjunction with <code>%&gt;%</code>:</p>
+<ul>
+<li><code>select()</code> extracts columns<br />
+</li>
+<li><code>filter()</code> subsets data based on conditions<br />
+</li>
+<li><code>mutate()</code> adds new variables<br />
+</li>
+<li><code>group_by()</code> group related rows together<br />
+</li>
+<li><code>summarise()</code>/<code>summarize()</code> reduces values down to a single summary</li>
+</ul>
+<p>We introduce a couple of these in more detail in the refresher and exercises below.</p>
+</div>
+<div id="exercises-sampling-heights" class="section level1">
+<h1>Exercises: Sampling heights</h1>
+<div class="question-begin">
+Question A1
+</div>
+<div class="question-body">
+<p>Copy the code below and explore what it does.<br />
+Note that <code>tibble()</code> is the tidyverse name for a <code>data.frame()</code>.</p>
+<p>If you want to get <strong>exactly</strong> the same data as this page, this is what the <code>set.seed(1234)</code> bit does. It basically means that all our randomly generated numbers (the <code>rnorm</code> bit) are the same.</p>
+<pre class="r"><code>library(tidyverse)
+set.seed(1234)
+simdata &lt;-
+  tibble(
+    id = 1:10000,
+    height = rnorm(10000, mean = 178, sd = 10)
+  )
+
+simdata</code></pre>
+<pre><code>## # A tibble: 10,000 x 2
+##       id height
+##    &lt;int&gt;  &lt;dbl&gt;
+##  1     1   166.
+##  2     2   181.
+##  3     3   189.
+##  4     4   155.
+##  5     5   182.
+##  6     6   183.
+##  7     7   172.
+##  8     8   173.
+##  9     9   172.
+## 10    10   169.
+## # … with 9,990 more rows</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-17" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-17&#39;, &#39;sol-start-17&#39;)"></span>
+</div>
+<div id="sol-body-17" class="solution-body" style="display: none;">
+<p>The code creates a dataframe object called “simdata”, which has 2 columns, “id” and “height”.<br />
+The “id” variable has the numbers 1 to 10,000. The “height” variable has 10,000 random numbers drawn from a population with a mean of 178 and a standard deviation of 10.</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A2
+</div>
+<div class="question-body">
+<p>For now, let’s imagine that the 10,000 entries we created in <code>simdata</code> are the entire population of interest.<br />
+Calculate the mean height of the population.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-18" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-18&#39;, &#39;sol-start-18&#39;)"></span>
+</div>
+<div id="sol-body-18" class="solution-body" style="display: none;">
+<pre class="r"><code>mean(simdata$height)</code></pre>
+<pre><code>## [1] 178.0612</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="yellow">
+<p><strong>mutate()</strong></p>
+<p>The <code>mutate()</code> function is used to add or modify variables to data.</p>
+<pre class="r"><code># take the data
+# %&gt;%
+# mutate it, such that there is a variable called &quot;newvariable&quot;, which
+# has the values of a variable called &quot;oldvariable&quot; multiplied by two.
+data %&gt;%
+  mutate(
+    newvariable = oldvariable * 2
+  )</code></pre>
+<p><strong>Note:</strong> Inside <code>mutate()</code>, we don’t have to keep using the dollar sign <code>$</code>, as we have already told it what data to look for variables in.</p>
+<p>To ensure that our additions/modifications of variables are stored in R’s environment (rather than simply printed out), we need to <em>reassign</em> the name of our dataframe:</p>
+<pre class="r"><code>data &lt;- 
+  data %&gt;%
+  mutate(
+    ...
+  )</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-15"></span>
+<img src="images/ahorst/dplyr_mutate.png" alt="Artwork by \@allison_horst" width="50%" />
+<p class="caption">
+Figure 1: Artwork by @allison_horst
+</p>
+</div>
+</div>
+<div class="question-begin">
+Question A3
+</div>
+<div class="question-body">
+<p>Add a new variable to <code>simdata</code> which is TRUE for those in the population who are over 6 foot (182.88cm) and FALSE for those who are under.<br />
+You can do this with or without using <code>mutate()</code>, why not see if you can do both?</p>
+<p>Calculate the proportion of the population are over 6 foot?</p>
+<div class="optional-begin">
+helpful hint. Click the plus to expand →<span id="opt-start-19" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-19&#39;, &#39;opt-start-19&#39;)"></span>
+</div>
+<div id="opt-body-19" class="optional-body" style="display: none;">
+<pre class="r"><code># some numbers:
+x1 &lt;- c(3,1,4,2,7)
+# whether or not each value is &lt;5
+x2 &lt;- x1&lt;5
+# x2 is a set of TRUEs and FALSEs
+x2</code></pre>
+<pre><code>## [1]  TRUE  TRUE  TRUE  TRUE FALSE</code></pre>
+<pre class="r"><code># TRUE gets counted as 1, FALSE as 0:
+sum(x2)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code># the proportion of TRUEs:
+sum(x2)/length(x2)</code></pre>
+<pre><code>## [1] 0.8</code></pre>
+<pre class="r"><code># or, alternatively:
+mean(x2)</code></pre>
+<pre><code>## [1] 0.8</code></pre>
+<pre class="r"><code>mean(x1&lt;5)</code></pre>
+<pre><code>## [1] 0.8</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-20" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-20&#39;, &#39;sol-start-20&#39;)"></span>
+</div>
+<div id="sol-body-20" class="solution-body" style="display: none;">
+<p>Using <code>mutate()</code>:</p>
+<pre class="r"><code>simdata &lt;- 
+  simdata %&gt;% 
+  mutate(
+    over6foot = height &gt; 182.88
+  )</code></pre>
+<p>Or, the non-tidyverse way:</p>
+<pre class="r"><code>simdata$over6foot &lt;- simdata$height &gt; 182.88</code></pre>
+<p>Proportion over 6 foot:</p>
+<pre class="r"><code>mean(simdata$over6foot)</code></pre>
+<pre><code>## [1] 0.3119</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A4
+</div>
+<div class="question-body">
+<p>In real life, we rarely have data on the entire population that we’re interested in. Instead, we collect a sample. Statistical inference is the use of a sample statistic to estimate a population parameter. For example, we can use the mean height from a sample of 20 as an estimate of the mean height of the population!</p>
+<p>The thing is, <em>samples vary</em>. Using <code>sample()</code>, take a sample of size <span class="math inline">\(n=20\)</span> from the <code>simdata</code> population.<br />
+Calculate the mean height of the sample.
+Run the code a couple of times (each time you run <code>sample()</code> it will draw a new sample), to see how the mean of the samples vary.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-21" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-21&#39;, &#39;sol-start-21&#39;)"></span>
+</div>
+<div id="sol-body-21" class="solution-body" style="display: none;">
+<pre class="r"><code>mean(sample(simdata$height, size = 20))</code></pre>
+<pre><code>## [1] 178.1487</code></pre>
+<pre class="r"><code>mean(sample(simdata$height, size = 20))</code></pre>
+<pre><code>## [1] 177.1189</code></pre>
+<pre class="r"><code>mean(sample(simdata$height, size = 20))</code></pre>
+<pre><code>## [1] 176.6232</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A5
+</div>
+<div class="question-body">
+<p>Using <code>replicate()</code>, calculate the means of 1000 samples of size <span class="math inline">\(n=20\)</span> drawn randomly from the heights in <code>simdata</code>.<br />
+You can make a quick visualisation of the distribution of sample means using <code>hist()</code>.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-22" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-22&#39;, &#39;sol-start-22&#39;)"></span>
+</div>
+<div id="sol-body-22" class="solution-body" style="display: none;">
+<pre class="r"><code>hist(replicate(1000, mean(sample(simdata$height, size = 20))))</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-21-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A6
+</div>
+<div class="question-body">
+<p>What happens to the shape of the distribution if you take 1000 means of samples of size <span class="math inline">\(n=200\)</span>, rather than <span class="math inline">\(n=20\)</span>?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-23" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-23&#39;, &#39;sol-start-23&#39;)"></span>
+</div>
+<div id="sol-body-23" class="solution-body" style="display: none;">
+<pre class="r"><code>hist(replicate(1000, mean(sample(simdata$height, size = 200))))</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-22-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>Note the values on the x-axis. Most of the values are in a much narrow bracket (176 to 180) than when we took lots of samples of <span class="math inline">\(n=20\)</span>.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A7
+</div>
+<div class="question-body">
+<p>For 1000 samples of size <span class="math inline">\(n=20\)</span>, calculate the proportion of the sample which is over 6 foot. Plot the distribution of the 1000 sample proportions.<br />
+At what value would you expect the distribution to be centred?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-24" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-24&#39;, &#39;sol-start-24&#39;)"></span>
+</div>
+<div id="sol-body-24" class="solution-body" style="display: none;">
+<p>We would expect the distribution of sample proportions to be centered around the population proportion.</p>
+<pre class="r"><code>hist(replicate(1000, mean(sample(simdata$over6foot, size = 20))))</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-23-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A8
+</div>
+<div class="question-body">
+<p>Plot the distribution of heights of you and your fellow students.<br />
+In Welcome week, we asked a set of core questions in surveys delivered to all of the statistics courses the statistics courses in Psychology Department. Anonymised data are available at <a href="https://uoepsy.github.io/data/surveydata_allcourse.csv" class="uri">https://uoepsy.github.io/data/surveydata_allcourse.csv</a>.</p>
+<p>Can you think of how you might make a separate histogram for the distributions of heights in different courses?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-25" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-25&#39;, &#39;sol-start-25&#39;)"></span>
+</div>
+<div id="sol-body-25" class="solution-body" style="display: none;">
+<pre class="r"><code>survey_data &lt;- read_csv(&quot;https://uoepsy.github.io/data/surveydata_allcourse.csv&quot;)
+ggplot(survey_data, aes(x = height)) +
+  geom_histogram()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-24-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(survey_data, aes(x = height)) +
+  geom_histogram() + 
+  facet_wrap(~course)</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-25-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="reading-central-tendency-and-spread" class="section level1">
+<h1>Reading: Central Tendency and Spread</h1>
+<div class="frame">
+<p>In the following examples, we are going to use some data on 120 participants’ IQ scores (measured on the Wechsler Adult Intelligence Scale (WAIS)), their ages, and their scores on 2 other tests.<br />
+The data are available at <a href="https://uoepsy.github.io/data/wechsler.csv" class="uri">https://uoepsy.github.io/data/wechsler.csv</a></p>
+<pre class="r"><code>wechsler &lt;- read_csv(&quot;https://uoepsy.github.io/data/wechsler.csv&quot;)
+summary(wechsler)</code></pre>
+<pre><code>##  participant              iq              age            test1      
+##  Length:120         Min.   : 58.00   Min.   :20.00   Min.   :30.00  
+##  Class :character   1st Qu.: 88.00   1st Qu.:29.50   1st Qu.:45.75  
+##  Mode  :character   Median :100.50   Median :37.00   Median :49.00  
+##                     Mean   : 99.33   Mean   :36.63   Mean   :49.33  
+##                     3rd Qu.:109.00   3rd Qu.:44.00   3rd Qu.:53.25  
+##                     Max.   :137.00   Max.   :71.00   Max.   :67.00  
+##      test2      
+##  Min.   : 2.00  
+##  1st Qu.:42.00  
+##  Median :52.50  
+##  Mean   :51.24  
+##  3rd Qu.:62.00  
+##  Max.   :80.00</code></pre>
+</div>
+<div id="mode-and-median-revisited" class="section level2 unnumbered">
+<h2>Mode and median revisited</h2>
+<p>For categorical data there are two different measures of central tendency:</p>
+<ul>
+<li><strong>Mode:</strong> The most frequent value (the value that occurs the greatest number of times).<br />
+</li>
+<li><strong>Median:</strong> The value for which 50% of observations a lower and 50% are higher. It is the mid-point of the values when they are rank-ordered.</li>
+</ul>
+<p>We can apply these to categorical data, but we can also use them for <strong>numeric</strong> data.</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right"></th>
+<th align="right">Mode</th>
+<th align="right">Median</th>
+<th align="right">Mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">Nominal (unordered categorical)</td>
+<td align="right">✔</td>
+<td align="right">✘</td>
+<td align="right">✘</td>
+</tr>
+<tr class="even">
+<td align="right">Ordinal (ordered categorical)</td>
+<td align="right">✔</td>
+<td align="right">✔</td>
+<td align="right"><strong>?</strong><br>(you may see it sometimes for certain types of ordinal data - there’s no consensus)</td>
+</tr>
+<tr class="odd">
+<td align="right">Numeric Continuous</td>
+<td align="right">✔</td>
+<td align="right">✔</td>
+<td align="right">✔</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+The mode of numeric variables is not frequently used. Unlike categorical variables where there are a distinct set of possible values which the data can take, for numeric variables, data can take a many more (or infinitely many) different values. Finding the “most common” is sometimes not possible.<br />
+<br>
+The most frequent value (the <strong>mode</strong>) of the <em>iq</em> variable is 97:</p>
+<pre class="r"><code># take the &quot;wechsler&quot; dataframe %&gt;%
+# count() the values in the &quot;iq&quot; variable (creates an &quot;n&quot; column), and
+# from there, arrange() the data so that the &quot;n&quot; column is descending - desc()
+wechsler %&gt;%
+    count(iq) %&gt;%
+    arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 53 x 2
+##       iq     n
+##    &lt;dbl&gt; &lt;int&gt;
+##  1    97     7
+##  2   108     6
+##  3    92     5
+##  4   103     5
+##  5   105     5
+##  6   110     5
+##  7    85     4
+##  8    99     4
+##  9   107     4
+## 10   113     4
+## # … with 43 more rows</code></pre>
+<p>Recall that the <strong>median</strong> is found by ordering the data from lowest to highest, and finding the mid-point.
+In the <em>wechsler</em> dataset we have IQ scores for 120 participants.
+We find the median by ranking them from lowest to highest IQ, and finding the mid-point between the <span class="math inline">\(60^{th}\)</span> and <span class="math inline">\(61^{st}\)</span> participants’ scores.</p>
+<p>We can also use the <code>median()</code> function with which we are already familiar:</p>
+<pre class="r"><code>median(wechsler$iq)</code></pre>
+<pre><code>## [1] 100.5</code></pre>
+</div>
+<div id="mean" class="section level2 unnumbered">
+<h2>Mean</h2>
+<p>One of the most frequently used measures of central tendency for <strong>numeric</strong> data is the <strong>mean</strong>.</p>
+<div class="yellow">
+<p><strong>Mean:</strong> <span class="math inline">\(\bar{x}\)</span></p>
+<p>The mean is calculated by summing all of the observations together and then dividing by the total number of obervations (<span class="math inline">\(n\)</span>).</p>
+<p>When we have sampled some data, we denote the mean of our sample with the symbol <span class="math inline">\(\bar{x}\)</span> (sometimes referred to as “x bar”). The equation for the mean is:</p>
+<p><span class="math display">\[\bar{x} = \frac{\sum\limits_{i = 1}^{n}x_i}{n}\]</span></p>
+<div class="optional-begin">
+Optional - Help reading mathematical formulae. Click the plus to expand →<span id="opt-start-26" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-26&#39;, &#39;opt-start-26&#39;)"></span>
+</div>
+<div id="opt-body-26" class="optional-body" style="display: none;">
+<p>This might be the first mathematical formula you have seen in a while, so let’s unpack it.</p>
+<p>The <span class="math inline">\(\sum\)</span> symbol is used to denote a <em>series of additions</em> - a <strong>“summation”.</strong></p>
+<p>When we include the bits around it: <span class="math inline">\(\sum\limits_{i = 1}^{n}x_i\)</span> we are indicating that we add together all the terms <span class="math inline">\(x_i\)</span> for values of <span class="math inline">\(i\)</span> between <span class="math inline">\(1\)</span> and <span class="math inline">\(n\)</span>:
+<span class="math display">\[\sum\limits_{i = 1}^{n}x_i \qquad = \qquad x_1+x_2+x_3+...+x_n\]</span></p>
+<p>So in order to calculate the mean, we do the summation (adding together) of all the values from the <span class="math inline">\(1^{st}\)</span> to the <span class="math inline">\(n^{th}\)</span> (where <span class="math inline">\(n\)</span> is the total number of values), and we divide that by <span class="math inline">\(n\)</span>.</p>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Optional - Samples and populations. Click the plus to expand →<span id="opt-start-27" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-27&#39;, &#39;opt-start-27&#39;)"></span>
+</div>
+<div id="opt-body-27" class="optional-body" style="display: none;">
+<p>Statistics is all about drawing inferences from some <strong>sampled</strong> data about the larger <strong>population</strong> from which it is sampled.</p>
+<p>A statistic which we calculate from our sample provides us with <em>an estimate</em> of something in the population (for instance, we might take the average age of students at Edinburgh University as an estimate of the age of <em>all</em> students).</p>
+<p>Because of this, statisticians have different notations for when we are talking about populations vs talking about samples:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right"></th>
+<th align="right">Sample</th>
+<th align="right">Population</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">Number of observations</td>
+<td align="right"><span class="math inline">\(n\)</span></td>
+<td align="right"><span class="math inline">\(N\)</span></td>
+</tr>
+<tr class="even">
+<td align="right">Mean</td>
+<td align="right"><span class="math inline">\(\bar{x} = \frac{\sum\limits_{i = 1}^{n}x_i}{n}\)</span></td>
+<td align="right"><span class="math inline">\(\mu = \frac{\sum\limits_{i = 1}^{N}x_i}{N}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<p>We can do the calculation by summing the <em>iq</em> variable, and dividing by the number of observations (in our case we have 120 participants):</p>
+<pre class="r"><code># get the values in the &quot;iq&quot; variable from the &quot;wechsler&quot; dataframe, and
+# sum them all together. Then divide this by 120
+sum(wechsler$iq)/120</code></pre>
+<pre><code>## [1] 99.33333</code></pre>
+<p>Or, more easily, we can use the <code>mean()</code> function:</p>
+<pre class="r"><code>mean(wechsler$iq)</code></pre>
+<pre><code>## [1] 99.33333</code></pre>
+</div>
+<div id="summarising-variables" class="section level2 unnumbered">
+<h2>Summarising variables</h2>
+<p>Functions such as <code>mean()</code>, <code>median()</code>, <code>min()</code> and <code>max()</code> can quickly summarise data, and we can use them together really easily in combination with <code>summarise()</code>.</p>
+<div class="yellow">
+<p><strong>Summarise()</strong></p>
+<p>The <code>summarise()</code> function is used to reduce variables down to a single summary value.</p>
+<pre class="r"><code># take the data %&gt;%
+# summarise() it, such that there is a value called &quot;summary_value&quot;, which
+# is the sum() of &quot;variable1&quot; column, and a value called 
+# &quot;summary_value2&quot; which is the mean() of the &quot;variable2&quot; column.
+data %&gt;%
+  summarise(
+    summary_value = sum(variable1),
+    summary_value2 = mean(variable2)
+  )</code></pre>
+<p><strong>Note:</strong> Just like with <code>mutate()</code> we don’t have to keep using the dollar sign <code>$</code>, as we have already told it what dataframe to look for the variables in.</p>
+</div>
+<p>So if we want to show the mean IQ score and the mean age of our participants:</p>
+<pre class="r"><code># take the &quot;wechsler&quot; dataframe %&gt;%
+# summarise() it, such that there is a value called &quot;mean_iq&quot;, which
+# is the mean() of the &quot;iq&quot; variable, and a value called 
+# &quot;mean_age&quot; which is the mean() of the &quot;age&quot; variable. 
+wechsler %&gt;%
+    summarise(
+        mean_iq = mean(iq),
+        mean_age = mean(age)
+    )</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   mean_iq mean_age
+##     &lt;dbl&gt;    &lt;dbl&gt;
+## 1    99.3     36.6</code></pre>
+</div>
+<div id="interquartile-range" class="section level2 unnumbered">
+<h2>Interquartile range</h2>
+<p>If we are using the <strong>median</strong> as our measure of central tendency and we want to discuss how spread out the spread are around it, then we will want to use quartiles (recall that these are linked: the <span class="math inline">\(2^{nd}\)</span> quartile = the median).</p>
+<p>We have already briefly introduced how for <strong>ordinal</strong> data, the 1st and 3rd quartiles give us information about how spread out the data are across the possible response categories.
+For numeric data, we can likewise find the 1st and 3rd quartiles in the same way - we rank-order all the data, and find the point at which 25% and 75% of the data falls below.</p>
+<p>The <em>difference</em> between the 1st and 3rd quartiles is known as the <strong>interquartile range (IQR)</strong>.<br />
+<small>( <strong>Note</strong>, we couldn’t take the <em>difference</em> for ordinal data, because “difference” would not be quantifiable - the categories are ordered, but intervals between categories are unknown)</small></p>
+<p>In R, we can find the IQR as follows:</p>
+<pre class="r"><code>IQR(wechsler$age)</code></pre>
+<pre><code>## [1] 14.5</code></pre>
+<p>Alternatively, we can use this inside <code>summarise()</code>:</p>
+<pre class="r"><code># take the &quot;wechsler&quot; dataframe %&gt;%
+# summarise() it, such that there is a value called &quot;median_age&quot;, which
+# is the median() of the &quot;age&quot; variable, and a value called &quot;iqr_age&quot;, which
+# is the IQR() of the &quot;age&quot; variable.
+wechsler %&gt;% 
+  summarise(
+    median_age = median(age),
+    iqr_age = IQR(age)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   median_age iqr_age
+##        &lt;dbl&gt;   &lt;dbl&gt;
+## 1         37    14.5</code></pre>
+</div>
+<div id="variance" class="section level2 unnumbered">
+<h2>Variance</h2>
+<p>If we are using the <strong>mean</strong> as our as our measure of central tendency, we can think of the spread of the data in terms of the <strong>deviations</strong> (distances from each value to the mean).</p>
+<p>Recall that the mean is denoted by <span class="math inline">\(\bar{x}\)</span>. If we use <span class="math inline">\(x_i\)</span> to denote the <span class="math inline">\(i^{th}\)</span> value of <span class="math inline">\(x\)</span>, then we can denote deviation for <span class="math inline">\(x_i\)</span> as <span class="math inline">\(x_i - \bar{x}\)</span>.<br />
+The deviations can be visualised by the red lines in Figure <a href="#fig:deviations">2</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:deviations"></span>
+<img src="images/numeric/deviations.png" alt="Deviations from the mean" width="80%" />
+<p class="caption">
+Figure 2: Deviations from the mean
+</p>
+</div>
+<div class="frame">
+<p><strong>The sum of the deviations from the mean, <span class="math inline">\(x_i - \bar x\)</span>, is always zero</strong></p>
+<p><span class="math display">\[
+\sum\limits_{i = 1}^{n} (x_i - \bar{x}) = 0
+\]</span></p>
+<p>The mean is like a center of gravity - the sum of the positive deviations (where <span class="math inline">\(x_i &gt; \bar{x}\)</span>) is equal to the sum of the negative deviations (where <span class="math inline">\(x_i &lt; \bar{x}\)</span>).</p>
+</div>
+<p>Because deviations around the mean always sum to zero, in order to express how spread out the data are around the mean, we must we consider <strong>squared deviations</strong>.<br />
+Squaring the deviations makes them all positive. Observations far away from the mean <em>in either direction</em> will have large, positive squared deviations. The average squared deviation is known as the <strong>variance,</strong> and denoted by <span class="math inline">\(s^2\)</span></p>
+<div class="yellow">
+<p><strong>Variance:</strong> <span class="math inline">\(s^2\)</span></p>
+<p>The variance is calculated as the average of the squared deviations from the mean.</p>
+<p>When we have sampled some data, we denote the mean of our sample with the symbol <span class="math inline">\(\bar{x}\)</span> (sometimes referred to as “x bar”). The equation for the variance is:</p>
+<p><span class="math display">\[s^2 = \frac{\sum\limits_{i=1}^{n}(x_i - \bar{x})^2}{n-1}\]</span></p>
+<div class="optional-begin">
+Optional: Why n minus 1? Click the plus to expand →<span id="opt-start-28" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-28&#39;, &#39;opt-start-28&#39;)"></span>
+</div>
+<div id="opt-body-28" class="optional-body" style="display: none;">
+<p>The top part of the equation <span class="math inline">\(\sum\limits_{i=1}^{n}(x_i - \bar{x})^2\)</span> can be expressed in <span class="math inline">\(n-1\)</span> terms, so we divide by <span class="math inline">\(n-1\)</span> to get the average.<br />
+<br>
+<strong>Example:</strong> If we only have two observations <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, then we can write out the formula for variance in full quite easily. The top part of the equation would be:
+<span class="math display">\[
+\sum\limits_{i=1}^{2}(x_i - \bar{x})^2 \qquad = \qquad (x_1 - \bar{x})^2 + (x_2 - \bar{x})^2
+\]</span></p>
+<p>The mean for only two observations can be expressed as <span class="math inline">\(\bar{x} = \frac{x_1 + x_2}{2}\)</span>, so we can substitute this in to the formula above.
+<span class="math display">\[
+(x_1 - \bar{x})^2 + (x_2 - \bar{x})^2 \qquad = \qquad \left(x_1 - \frac{x_1 + x_2}{2}\right)^2 + \left(x_2 - \frac{x_1 + x_2}{2}\right)^2 
+\]</span>
+Which simplifies down to one value:
+<span class="math display">\[
+\left(x_1 - \frac{x_1 + x_2}{2}\right)^2 + \left(x_2 - \frac{x_1 + x_2}{2}\right)^2 \qquad = \qquad  \left(\frac{x_1 - x_2}{\sqrt{2}}\right)^2
+\]</span>
+<br>
+So although we have <span class="math inline">\(n=2\)</span> datapoints (<span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>), the top part of the equation for the variance has only 1 (<span class="math inline">\(n-1\)</span>) units of information. In order to take the average of these bits of information, we divide by <span class="math inline">\(n-1\)</span>.</p>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<p>We can get R to calculate this for us using the <code>var()</code> function:</p>
+<pre class="r"><code>wechsler %&gt;%
+  summarise(
+    variance_iq = var(iq)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   variance_iq
+##         &lt;dbl&gt;
+## 1        238.</code></pre>
+</div>
+<div id="standard-deviation" class="section level2 unnumbered">
+<h2>Standard deviation</h2>
+<p>One difficulty in interpreting <strong>variance</strong> as a measure of spread is that it is in units of <strong>squared deviations.</strong> It reflects the typical <em>squared</em> distance from a value to the mean.<br />
+Conveniently, by taking the square root of the variance, we can translate the measure back into the units of our original variable. This is known as the <strong>standard deviation.</strong></p>
+<div class="yellow">
+<p><strong>Standard Deviation:</strong> <span class="math inline">\(s\)</span></p>
+<p>The standard deviation, denoted by <span class="math inline">\(s\)</span>, is a rough estimate of the typical distance from a value to the mean.<br />
+It is the square root of the variance (the typical <em>squared</em> distance from a value to the mean).</p>
+<p><span class="math display">\[
+s = \sqrt{\frac{\sum\limits_{i=1}^{n}(x_i - \bar{x})^2}{n-1}}
+\]</span></p>
+</div>
+<p>We can get R to calculate the standard deviation of a variable <code>sd()</code> function:</p>
+<pre class="r"><code>wechsler %&gt;%
+  summarise(
+    variance_iq = var(iq),
+    sd_iq = sd(iq)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   variance_iq sd_iq
+##         &lt;dbl&gt; &lt;dbl&gt;
+## 1        238.  15.4</code></pre>
+</div>
+</div>
+<div id="reading-visualisations" class="section level1">
+<h1>Reading: Visualisations</h1>
+<div id="boxplots" class="section level2 unnumbered">
+<h2>Boxplots</h2>
+<p>Boxplots provide a useful way of visualising the <strong>interquartile range (IQR).</strong> You can see what each part of the boxplot represents in Figure <a href="#fig:boxplotdesc">3</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:boxplotdesc"></span>
+<img src="02_numerical_files/figure-html/boxplotdesc-1.png" alt="Anatomy of a boxplot" width="100%" />
+<p class="caption">
+Figure 3: Anatomy of a boxplot
+</p>
+</div>
+<p>We can create a boxplot of our age variable using the following code:</p>
+<pre class="r"><code># Notice, we put age on the x axis, making the box plot vertical. 
+# If we had set aes(y = age) instead, then it would simply be rotated 90 degrees 
+ggplot(data = wechsler, aes(x = age)) +
+  geom_boxplot()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-37-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="histograms" class="section level2 unnumbered">
+<h2>Histograms</h2>
+<p>Now that we have learned about the different measures of central tendency and of spread, we can look at how these influence visualisations of numeric variables.</p>
+<p>We can visualise numeric data using a <strong>histogram</strong>, which shows the frequency of values which fall within <em>bins</em> of an equal width.</p>
+<pre class="r"><code># make a ggplot with the &quot;wechsler&quot; data. 
+# on the x axis put the possible values in the &quot;iq&quot; variable,
+# add a histogram geom (will add bars representing the count 
+# in each bin of the variable on the x-axis)
+ggplot(data = wechsler, aes(x = iq)) + 
+  geom_histogram()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-38-1.png" width="80%" style="display: block; margin: auto;" />
+We can specifiy the width of the bins:</p>
+<pre class="r"><code>ggplot(data = wechsler, aes(x = iq)) + 
+  geom_histogram(binwidth = 5)</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-39-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Let’s take a look at the means and standard deviations of participants’ scores on the other tests (the <em>test1</em> and <em>test2</em> variables):</p>
+<pre class="r"><code>wechsler %&gt;% 
+  summarise(
+    mean_test1 = mean(test1),
+    sd_test1 = sd(test1),
+    mean_test2 = mean(test2),
+    sd_test2 = sd(test2)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   mean_test1 sd_test1 mean_test2 sd_test2
+##        &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1       49.3     7.15       51.2     14.4</code></pre>
+<p>Tests 1 and 2 have similar means (around 50), but the standard deviation of Test 2 is almost double that of Test 1. We can see this distinction in the visualisation below - the histograms are centered at around the same point (50), but the one for Test 2 is a lot wider than that for Test 1.
+<img src="02_numerical_files/figure-html/unnamed-chunk-41-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="density-curves" class="section level2 unnumbered">
+<h2>Density curves</h2>
+<p>In addition to grouping numeric data into <em>bins</em> in order to produce a histogram, we can also visualise a <strong>density curve.</strong></p>
+<p>For the time being, you can think of the density as a bit similar to the notion of <strong>relative frequency</strong>, in that for a density curve, the values on the y-axis are scaled so that the total area under the curve is equal to 1. Because there are infinitely many values that numeric variables could take (e.g., 50, 50.1, 50.01, 5.001, …), we could group the data into infinitely many bins. In creating a curve for which the total area underneath is equal to one, we can use the area under the curve in a range of values to indicate the proportion of values in that range.</p>
+<pre class="r"><code>ggplot(data = wechsler, aes(x = iq)) + 
+  geom_density()+
+  xlim(50,150)</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-42-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="skew" class="section level2">
+<h2>Skew</h2>
+<p>Skewness is a measure of <em>asymmetry</em> in a distribution. Distributions can be <em>positively skewed</em> or <em>negatively skewed</em>, and this influences our measures of central tendency and of spread to different degrees (see Figure <a href="#fig:skewplot">4</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:skewplot"></span>
+<img src="02_numerical_files/figure-html/skewplot-1.png" alt="Skew influences the mean and median to different degrees." width="80%" />
+<p class="caption">
+Figure 4: Skew influences the mean and median to different degrees.
+</p>
+</div>
+</div>
+</div>
+<div id="exercises-stroop-experiment" class="section level1">
+<h1>Exercises: Stroop Experiment</h1>
+<div class="frame">
+The data we are going to use for these exercises is from an experiment using one of the best known tasks in psychology, the “Stroop task”.<br />
+<br>
+130 participants completed an online task in which they saw two sets of coloured words. Participants spoke out loud the colour of each word, and timed how long it took to complete each set. In the first set of words, the words <em>matched</em> the colours they were presented in (e.g., word “blue” was coloured blue). In the second set of words, the words <em>mismatched</em> the colours (e.g., the word “blue” was coloured red, see Figure <a href="#fig:stroop">5</a>). Participants’ recorded their times for each set (<em>matching</em> and <em>mismatching</em>).<br />
+Participants were randomly assigned to either do the task once only, or to record their times after practicing the task twice.<br />
+<br>
+You can try out the experiment at <a href="https://faculty.washington.edu/chudler/java/ready.html" class="uri">https://faculty.washington.edu/chudler/java/ready.html</a>.<br />
+<br>
+The data are available at <a href="https://uoepsy.github.io/data/strooptask.csv" class="uri">https://uoepsy.github.io/data/strooptask.csv</a>
+<br><br>
+<div class="figure" style="text-align: center"><span id="fig:stroop"></span>
+<img src="images/numeric/stroop1.png" alt="Stroop Task - Color word interference. Images from  https://faculty.washington.edu/chudler/java/ready.html" width="80%" />
+<p class="caption">
+Figure 5: Stroop Task - Color word interference. Images from <a href="https://faculty.washington.edu/chudler/java/ready.html" class="uri">https://faculty.washington.edu/chudler/java/ready.html</a>
+</p>
+</div>
+</div>
+<div class="question-begin">
+Question B1
+</div>
+<div class="question-body">
+<p>Create a new heading for these exercises and read in the data. Be sure to assign it a clear name.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-29" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-29&#39;, &#39;sol-start-29&#39;)"></span>
+</div>
+<div id="sol-body-29" class="solution-body" style="display: none;">
+<pre class="r"><code>stroopdata &lt;- read_csv(&quot;https://uoepsy.github.io/data/strooptask.csv&quot;)</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B2
+</div>
+<div class="question-body">
+<p>using <code>summarise()</code>, show the minimum, maximum, mean and median of the times taken to read the matching word set, and then do the same for the mismatching word set.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-30" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-30&#39;, &#39;sol-start-30&#39;)"></span>
+</div>
+<div id="sol-body-30" class="solution-body" style="display: none;">
+<p>Matching words</p>
+<pre class="r"><code>stroopdata %&gt;%
+  summarise(
+    min_time = min(matching),
+    max_time = max(matching),
+    mean_time = mean(matching),
+    median_time = median(matching)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   min_time max_time mean_time median_time
+##      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1     5.61     31.4      15.1        14.8</code></pre>
+<p>Mismatching words</p>
+<pre class="r"><code>stroopdata %&gt;%
+  summarise(
+    min_time = min(mismatching),
+    max_time = max(mismatching),
+    mean_time = mean(mismatching),
+    median_time = median(mismatching)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##   min_time max_time mean_time median_time
+##      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1     4.29     29.7      17.5        17.0</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B3
+</div>
+<div class="question-body">
+<p>What we are interested in is the differences between these times. For someone who took 10 seconds for the matching set, and 30 seconds for the mismatching set, we want to record the difference of 20 seconds.</p>
+<p>Create a new variable called <em>stroop_effect</em> which is the difference between the <em>mismatching</em> and <em>matching</em> variables.</p>
+<p><strong>Hint:</strong> Remember we can use the <code>mutate()</code> function to add a new variable. Recall also that we need to <em>reassign</em> this to the name of your dataframe, to make the changes appear in the <strong>environment</strong> (rather than just printing them out).</p>
+<pre class="r"><code>stroopdata &lt;- 
+  stroopdata %&gt;%
+  mutate(
+    ?? = ??
+  )</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-31" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-31&#39;, &#39;sol-start-31&#39;)"></span>
+</div>
+<div id="sol-body-31" class="solution-body" style="display: none;">
+<pre class="r"><code>stroopdata &lt;- 
+  stroopdata %&gt;%
+  mutate(
+    stroop_effect = mismatching - matching
+  )
+
+# and print it out:
+stroopdata</code></pre>
+<pre><code>## # A tibble: 131 x 7
+##       id   age practice matching mismatching height stroop_effect
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+##  1     1    41 yes         22.3        16.9     162         -5.40
+##  2     2    24 yes         22.3        19.1     168         -3.20
+##  3     3    40 yes         15.4        13.6     166         -1.81
+##  4     4    46 yes          9.9        15.0     165          5.14
+##  5     5    36 yes         14.2        16.4     160          2.18
+##  6     6    29 yes         19.9        18.0     154         -1.9 
+##  7     7    45 no          10.2        17.1     179          6.83
+##  8     8    44 no          16.2        19.6     162          3.39
+##  9     9    47 yes          9.73        6.14    148         -3.59
+## 10    10    59 no           7.68       11.6     153          3.88
+## # … with 121 more rows</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B4
+</div>
+<div class="question-body">
+<p>For the <em>stroop_effect</em> variable you just created, produce both a histogram and a density curve.</p>
+<p>What is the more appropriate guess for the mean of this variable?</p>
+<ol style="list-style-type: lower-alpha">
+<li>0</li>
+<li>2</li>
+<li>6</li>
+<li>8</li>
+</ol>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-32" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-32&#39;, &#39;sol-start-32&#39;)"></span>
+</div>
+<div id="sol-body-32" class="solution-body" style="display: none;">
+<pre class="r"><code>ggplot(data = stroopdata, aes(x = stroop_effect)) +
+  geom_histogram()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The default binwidth of the histogram here might lead you astray in guessing the mean value - the highest bar by some distance is at 0 seconds.<br />
+Try changing the binwidth to get a different picture - for example:</p>
+<pre class="r"><code>ggplot(data = stroopdata, aes(x = stroop_effect)) +
+  geom_histogram(binwidth = 2)</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-49-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>In both histograms, you can see that there is quite a lot of data between the values of 0 and 5.</p>
+<p>An advantage of the density curve is that they are better at displaying the distribution shape as they are not influenced by the number of bins. However, this comes at the expense of no longer having the easily interpreted <em>count</em> on the y-axis. A benefit of a histogram is that the viewer can also gain an idea of <em>how much</em> data there is, whereas a density curve of 10 datapoints could be hard to distinguish from one of 100.</p>
+<pre class="r"><code>ggplot(data = stroopdata, aes(x = stroop_effect)) +
+  geom_density()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-50-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div id="introducing-filter-and-select" class="section level2">
+<h2>Introducing filter() and select()</h2>
+<p>We know how to use <code>[]</code> and <code>$</code> in order to manipulate data by specifying rows/columns/conditions which we want to access:</p>
+<pre class="r"><code># In the stroopdata dataframe, give me all the rows for which the
+# condition stroopdata$practice==&quot;no&quot; is TRUE, and give me all the columns.
+stroopdata[stroopdata$practice == &quot;no&quot;, ]</code></pre>
+<p>In the <strong>tidyverse</strong> way of doing things, there are two functions which provide similar functionality - <code>filter()</code> and <code>select()</code>.<br />
+They are designed to work well with the rest of tidyverse (e.g., <code>mutate()</code> and <code>summarise()</code>) and are often used in conjunction with the <code>%&gt;%</code> operator to tell the functions where to find the variables (meaning we don’t need to use <code>data$variable</code>, we can just use the variable name)</p>
+<div class="yellow">
+<p><strong>filter()</strong></p>
+<p>The <code>filter()</code> function allows us to filter a dataframe down to those rows which meet a given condition. It will return all columns.</p>
+<pre class="r"><code># take the data
+# and filter it to only the rows where the &quot;variable1&quot; column is 
+# equal to &quot;value1&quot;. 
+data %&gt;% 
+  filter(variable1 == value1)</code></pre>
+</div>
+<div class="yellow">
+<p><strong>select()</strong></p>
+<p>The <code>select()</code> function allows us to choose certain columns in a dataframe. It will return all rows.</p>
+<pre class="r"><code># take the data
+# and select the &quot;variable1&quot; and &quot;variable2&quot; columns
+data %&gt;%
+  select(variable1, variable2)</code></pre>
+</div>
+<hr />
+<div class="question-begin">
+Question B5
+</div>
+<div class="question-body">
+<p>Filter the data to only participants who are at least 40 years old and did not have any practice, and calculate the mean stroop effect for these participants.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-33" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-33&#39;, &#39;sol-start-33&#39;)"></span>
+</div>
+<div id="sol-body-33" class="solution-body" style="display: none;">
+<pre class="r"><code>stroopdata %&gt;% filter(age &gt;= 40, practice == &quot;no&quot;) %&gt;%
+  summarise(
+    meanstroop = mean(stroop_effect)
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   meanstroop
+##        &lt;dbl&gt;
+## 1       5.34</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B6
+</div>
+<div class="question-body">
+<p>Create a density plot of the stroop effect for those who had no practice.<br />
+If the experimental manipulation had no effect, what would you expect the mean to be?</p>
+<p><strong>Tip:</strong> You can pass data to a ggplot using <code>%&gt;%</code>. It means you can do sequences of <strong>data → manipulation → plot</strong>, without having to store the manipulated data as a named object in R’s memory. For instance:</p>
+<pre class="r"><code>data %&gt;% 
+  filter(condition) %&gt;% 
+  mutate(
+    new_variable = variable1 * variable2
+  )
+  ggplot(aes(x = variable1, y = new_variable)) +
+  geom....</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-34" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-34&#39;, &#39;sol-start-34&#39;)"></span>
+</div>
+<div id="sol-body-34" class="solution-body" style="display: none;">
+<pre class="r"><code>stroopdata %&gt;% 
+  filter(practice == &quot;no&quot;) %&gt;%
+  ggplot(aes(x = stroop_effect)) + 
+  geom_density()</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-56-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>If there wasn’t a difference between the conditions, then we would expect the mean of the variable we just created (the difference between conditions) to be 0.</p>
+</div>
+<p class="solution-end">
+</p>
+</div>
+</div>
+<div id="exercises-many-samples" class="section level1">
+<h1>Exercises: Many samples</h1>
+<p>Let’s assume that in the population, the Stroop task doesn’t do anything - i.e., in the population there is <em>no</em> difference in reaction times between the matching and mismatching conditions. In other words, the mean in the population “stroop_effect” is zero (indicating no difference between conditions).
+Let’s also assume, for this example, that the standard deviation of the population is the same as the standard deviation of the sample we collected (<code>sd(stroopdata$stroop_effect)</code> = 5.0157738).</p>
+<p>We can now generate an hypothetical sample of the “stroop_effect” variable, of the same <span class="math inline">\(n\)</span> as our experiment.</p>
+<pre class="r"><code># generate a sample of 131, drawn from population with mean 0 and sd 5.02
+rnorm(n = 131, mean = 0, sd = 5.015774) </code></pre>
+<pre><code>##   [1]   2.99959699  -4.14493907  -3.53089254  -3.35882484   2.93711564
+##   [6]   2.46200631   7.10617809  -3.72995760  -3.67632811   6.65991969
+##  [11]   0.88307952   1.28056854   6.88897759  -8.52454222   6.01056262
+##  [16]   2.38338266  -4.28344898   1.43382922   1.52221963   5.44066241
+##  [21]  -8.71337786  -4.62151667  -6.56912787  11.90628041  -1.48672177
+##  [26]  -7.56644855  -3.24284770  -0.49148483   6.80246819   1.36939876
+##  [31]  -6.54060393  -4.90085864  -1.70166446   7.91832838  -0.03654605
+##  [36]  -4.35680838  -2.10881465  -2.17847025   4.85659335  -7.18262972
+##  [41]  -1.31134015   6.02804771   2.96569010   4.69040602   0.56731182
+##  [46]   4.10813083   3.49046219  -3.72110180  -3.88928419   0.39149283
+##  [51]   5.11696693  -2.13553835  -8.27742730   0.59732536   0.85490978
+##  [56]   3.10721550  -2.90275980  -5.13728385  -0.10669081  12.60758185
+##  [61]   4.45335635   3.47884933  -9.27937139   2.89748528  -6.40441739
+##  [66]   5.32077217   1.64089911   2.15170179  -2.29894592  -8.92761116
+##  [71]   0.40542138   5.12002766   7.77878292   1.04228775  -2.88403199
+##  [76]   1.21289398  -8.73807820  -7.46819792  -4.82111697  -7.23704430
+##  [81]  -2.22827631   0.88423884   2.61875005   7.58739964   5.06930008
+##  [86]   4.31726488   1.17684654   4.69555321  -7.04070130   5.25116826
+##  [91]  -0.68717392   6.01521639  -1.79069760   4.45129098   0.68329103
+##  [96]  -6.64929180  -4.80508931   3.93190440  -0.30550129  15.92111220
+## [101] -11.99002105  -0.73130151   9.83832774  -2.70260647  -0.13465641
+## [106]  -5.75985385   2.97299112  -5.59581915  -4.71822845 -14.04613738
+## [111]  -0.78384461   2.23832728  -2.64737762  -7.48228504  -1.84264869
+## [116]   1.07876420   1.93235401   4.70250422   1.66668649   2.33075100
+## [121]  -5.13514413   0.92471609 -10.47743347  -1.35009928   6.20737085
+## [126]  -2.66493007   2.68252554  -8.80437803  -0.41425626   0.24332414
+## [131]   1.62291539</code></pre>
+<div class="question-begin">
+Question C1
+</div>
+<div class="question-body">
+<p>Now that we know how to generate a sample, wrap the whole thing with the <code>mean()</code> function to find the mean of a randomly generated hypothetical sample.</p>
+<p>Run this again and again, and notice that your hypothetical sample means change each time. Why?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-35" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-35&#39;, &#39;sol-start-35&#39;)"></span>
+</div>
+<div id="sol-body-35" class="solution-body" style="display: none;">
+<p>Each result will be different, because we’re <em>randomly</em> generating a new sample each time!<br />
+Even when we specify <code>mean = 0</code>, randomness means that it will deviate slightly each time!</p>
+<pre class="r"><code>mean(rnorm(n = 131, mean = 0, sd = 5.015774))</code></pre>
+<pre><code>## [1] -0.2536916</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question C2
+</div>
+<div class="question-body">
+<p>Using <code>replicate()</code>, calculate the means of 2000 hypothetical samples of <span class="math inline">\(n = 131\)</span>.<br />
+Store the sample means as a named object and make a quick histogram of them using <code>hist()</code>.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-59"></span>
+<img src="images/numeric/playmo_lazy.jpg" alt="Got a boring task you want doing thousands of times over? Computers!" width="50%" />
+<p class="caption">
+Figure 6: Got a boring task you want doing thousands of times over? Computers!
+</p>
+</div>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-36" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-36&#39;, &#39;sol-start-36&#39;)"></span>
+</div>
+<div id="sol-body-36" class="solution-body" style="display: none;">
+<pre class="r"><code>samplemeans &lt;- replicate(2000, mean(rnorm(n=131, mean=0, sd=5.015774)))
+hist(samplemeans)</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-61-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question C3
+</div>
+<div class="question-body">
+<p>Write a sentence explaining what the histogram you just created shows.</p>
+<p>How can we use the histogram to inform us about the <em>observed</em> mean which we calculated from our collected data?</p>
+<pre class="r"><code># observed mean
+mean(stroopdata$stroop_effect)</code></pre>
+<pre><code>## [1] 2.402977</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-37" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-37&#39;, &#39;sol-start-37&#39;)"></span>
+</div>
+<div id="sol-body-37" class="solution-body" style="display: none;">
+<p>The histogram shows how means of samples of size 131 will vary due to random sampling, <em>if the true population mean is zero</em>.</p>
+<p>We can then ask ourselves: “if the true population mean is 0, how likely is it that we would get a mean of 2.4 from a sample of 131?”</p>
+<p>Some thing which will help us to quantify this, is the <em>standard deviation</em> of the 2000 hypothetical samples of <span class="math inline">\(n = 131\)</span>. This, as we will see more next week (and we saw in the lectures briefly <em>this</em> week), is known as the <strong>standard error</strong> of the mean.</p>
+<pre class="r"><code>sd(samplemeans)</code></pre>
+<pre><code>## [1] 0.4440691</code></pre>
+<p><img src="02_numerical_files/figure-html/unnamed-chunk-64-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

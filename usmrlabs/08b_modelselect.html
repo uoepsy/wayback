@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Extras: Model Selection</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Extras: Model Selection</h1>
+
+</div>
+
+
+<p><strong>“Which predictors should I include in my model?”</strong></p>
+<p>As a rule of thumb, you should include as predictors your variables of interest (i.e., those required to answer your questions), and those which theory suggests you should take into account (for instance, if theory tells you that temperature is likely to influence the number of shark attacks on a given day, it would be remiss of you to not include it in your model).</p>
+<p>However, in some specific situations, you may simply want to let the data tell you whatever there is to tell, without being guided by theory. This is where analysis becomes <strong>exploratory</strong> in nature (and therefore should <em>not</em> be used as confirmatory evidence in support of theory).</p>
+<p>In both the design and the analysis of a study, you will have to make many many choices. Each one takes you a different way, and leads to a different set of choices. This idea has become widely known as the <a href="https://www.americanscientist.org/article/the-statistical-crisis-in-science">garden of forking paths</a>, and has important consequences for your statistical inferences.</p>
+<p>Out of all the possible paths you could have taken, some will end with what you consider to be a significant finding, and some you will simply see as dead ends. If you reach a dead-end, do you go back and try a different path? Why might this be a risky approach to statistical analyses?</p>
+<p>For a given set of data, there will likely be some significant relationships between variables which are there simply by chance (recall that <span class="math inline">\(p&lt;.05\)</span> corresponds to a 1 in 20 chance - if we study 20 different relationships, we would expect one of them two be significant by chance). The more paths we try out, the more likely we are to find a significant relationship, even though it may actually be completely spurious!</p>
+<p>Model selection is a means of answering the question “which predictors should I include in my model?”, but it is a big maze of forking paths, which will result in keeping only those predictors which meet some criteria (e.g., significance).</p>
+<div id="stepwise" class="section level3 frame">
+<h3>Stepwise</h3>
+<p><strong>Forward Selection</strong></p>
+<ul>
+<li>Start with variable which has highest association with DV.</li>
+<li>Add the variable which most increases <span class="math inline">\(R^2\)</span> out of all which remain.</li>
+<li>Continue until no variables improve <span class="math inline">\(R^2\)</span>.</li>
+</ul>
+<p><strong>Backward Elimination</strong></p>
+<ul>
+<li>Start with all variables in the model.</li>
+<li>Remove the predictor with the highest p-value.</li>
+<li>Run the model again and repeat.<br />
+</li>
+<li>Stop when all p-values for predictors are less than the <em>a priori</em> set critical level.</li>
+</ul>
+<p><br>
+Note that we can have different criteria for selecting models in this stepwise approach, for instance, choosing the model with the biggest decrease in AIC.</p>
+</div>
+<div class="question-begin">
+Question 1
+</div>
+<div class="question-body">
+<p>Using the backward elimination approach, construct a final model to predict wellbeing scores using the <code>mwdata2</code> dataset.</p>
+<pre class="r"><code>mwdata2 &lt;- read_csv(&quot;https://uoepsy.github.io/data/wellbeing_rural.csv&quot;)</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-159" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-159&#39;, &#39;sol-start-159&#39;)"></span>
+</div>
+<div id="sol-body-159" class="solution-body" style="display: none;">
+<p>We will stop when all p-values are <span class="math inline">\(&lt;.05\)</span></p>
+<p>Note that we have two variables in there which are direct transformations of one another - “location” and “isRural”. We can’t have both.</p>
+<pre class="r"><code>summary(mwdata2)</code></pre>
+<pre><code>##       age         outdoor_time     social_int       routine        wellbeing   
+##  Min.   :18.00   Min.   : 1.00   Min.   : 3.00   Min.   :0.000   Min.   :22.0  
+##  1st Qu.:30.00   1st Qu.:12.75   1st Qu.: 9.00   1st Qu.:0.000   1st Qu.:33.0  
+##  Median :42.00   Median :18.00   Median :12.00   Median :1.000   Median :35.0  
+##  Mean   :42.30   Mean   :18.25   Mean   :12.06   Mean   :0.565   Mean   :36.3  
+##  3rd Qu.:54.25   3rd Qu.:23.00   3rd Qu.:15.00   3rd Qu.:1.000   3rd Qu.:40.0  
+##  Max.   :70.00   Max.   :35.00   Max.   :24.00   Max.   :1.000   Max.   :59.0  
+##                                                                                
+##    location            steps_k      
+##  Length:200         Min.   :  0.00  
+##  Class :character   1st Qu.: 24.00  
+##  Mode  :character   Median : 42.45  
+##                     Mean   : 44.93  
+##                     3rd Qu.: 65.28  
+##                     Max.   :111.30  
+##                     NA&#39;s   :66</code></pre>
+<pre class="r"><code>full_model &lt;- lm(wellbeing ~ age + outdoor_time + social_int + routine + location + steps_k, data = mwdata2)
+summary(full_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = wellbeing ~ age + outdoor_time + social_int + routine + 
+##     location + steps_k, data = mwdata2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -11.567  -2.901  -0.050   2.919   9.416 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    29.289216   2.094310  13.985  &lt; 2e-16 ***
+## age             0.018316   0.026404   0.694 0.489155    
+## outdoor_time    0.145573   0.061363   2.372 0.019189 *  
+## social_int      0.357076   0.098317   3.632 0.000408 ***
+## routine         3.039223   0.788248   3.856 0.000183 ***
+## locationrural  -5.176386   0.974776  -5.310 4.78e-07 ***
+## locationsuburb  0.075809   1.114115   0.068 0.945858    
+## steps_k         0.006114   0.016434   0.372 0.710489    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.457 on 126 degrees of freedom
+##   (66 observations deleted due to missingness)
+## Multiple R-squared:  0.3707, Adjusted R-squared:  0.3358 
+## F-statistic:  10.6 on 7 and 126 DF,  p-value: 1.926e-10</code></pre>
+<p>We will remove the “steps_k” variable, as it is the predictor with the highest p-value (don’t be tempted to think that “location” has the highest p-value. The estimated difference between urban and suburban does indeed have a high p-value, but the difference between rural and urban has a very low p-value).</p>
+<pre class="r"><code>model1 &lt;- lm(wellbeing ~ age + outdoor_time + social_int + routine + location, data = mwdata2)
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = wellbeing ~ age + outdoor_time + social_int + routine + 
+##     location, data = mwdata2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.9173  -2.6865  -0.2971   2.8334  14.6234 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    29.76995    1.65807  17.955  &lt; 2e-16 ***
+## age            -0.01079    0.02043  -0.528    0.598    
+## outdoor_time    0.17452    0.04295   4.063 7.03e-05 ***
+## social_int      0.38733    0.07592   5.102 8.01e-07 ***
+## routine         2.95814    0.61145   4.838 2.68e-06 ***
+## locationrural  -4.97721    0.71808  -6.931 6.09e-11 ***
+## locationsuburb -0.27975    0.86795  -0.322    0.748    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.278 on 193 degrees of freedom
+## Multiple R-squared:  0.3896, Adjusted R-squared:  0.3707 
+## F-statistic: 20.53 on 6 and 193 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>And now the “age” variable:</p>
+<pre class="r"><code>model2 &lt;- lm(wellbeing ~ outdoor_time + social_int + routine + location, data = mwdata2)
+summary(model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = wellbeing ~ outdoor_time + social_int + routine + 
+##     location, data = mwdata2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.8649  -2.6977  -0.2127   2.5935  14.8263 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    29.28101    1.37298  21.327  &lt; 2e-16 ***
+## outdoor_time    0.17561    0.04282   4.101 6.04e-05 ***
+## social_int      0.38815    0.07576   5.123 7.21e-07 ***
+## routine         2.95193    0.61020   4.838 2.67e-06 ***
+## locationrural  -4.96317    0.71625  -6.929 6.08e-11 ***
+## locationsuburb -0.28431    0.86630  -0.328    0.743    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.27 on 194 degrees of freedom
+## Multiple R-squared:  0.3888, Adjusted R-squared:  0.373 
+## F-statistic: 24.68 on 5 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>In this model, all our predictors have p-values lower than our critical level of <span class="math inline">\(.05\)</span>.</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question 2
+</div>
+<div class="question-body">
+<p>There are functions in R which automate the stepwise procedure for us.<br />
+<code>step(&lt;modelname&gt;)</code> will by default use backward elimination to choose the model with the lowest AIC.</p>
+<ol style="list-style-type: decimal">
+<li>Using data on the Big 5 Personality traits, perceptions of social ranks, and depression and anxiety, fit the full model to predict DASS-21 scores.</li>
+<li>Use <code>step()</code> to determine which predictors to keep in your model.</li>
+<li>What predictors do you have in your final model?</li>
+</ol>
+<pre class="r"><code>scs_study &lt;- read_csv(&quot;https://uoepsy.github.io/data/scs_study.csv&quot;)
+
+scs_study &lt;-
+  scs_study %&gt;%
+  mutate(
+    scs_mc = scs - mean(scs)
+  )</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-160" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-160&#39;, &#39;sol-start-160&#39;)"></span>
+</div>
+<div id="sol-body-160" class="solution-body" style="display: none;">
+<pre class="r"><code>full_dass_model &lt;- lm(dass ~ zn*scs_mc + zo + zc + ze + za + zn, data = scs_study)
+step(full_dass_model)</code></pre>
+<pre><code>## Start:  AIC=2374.99
+## dass ~ zn * scs_mc + zo + zc + ze + za + zn
+## 
+##             Df Sum of Sq   RSS    AIC
+## - zc         1      2.05 23915 2373.0
+## - za         1     11.06 23924 2373.3
+## - zo         1     22.82 23936 2373.6
+## &lt;none&gt;                   23913 2375.0
+## - ze         1    147.25 24060 2377.0
+## - zn:scs_mc  1   2340.68 26254 2434.2
+## 
+## Step:  AIC=2373.04
+## dass ~ zn + scs_mc + zo + ze + za + zn:scs_mc
+## 
+##             Df Sum of Sq   RSS    AIC
+## - za         1     10.66 23926 2371.3
+## - zo         1     23.28 23938 2371.7
+## &lt;none&gt;                   23915 2373.0
+## - ze         1    148.17 24063 2375.1
+## - zn:scs_mc  1   2339.57 26255 2432.3
+## 
+## Step:  AIC=2371.33
+## dass ~ zn + scs_mc + zo + ze + zn:scs_mc
+## 
+##             Df Sum of Sq   RSS    AIC
+## - zo         1     22.33 23948 2369.9
+## &lt;none&gt;                   23926 2371.3
+## - ze         1    497.48 24423 2382.8
+## - zn:scs_mc  1   2340.17 26266 2430.6
+## 
+## Step:  AIC=2369.95
+## dass ~ zn + scs_mc + ze + zn:scs_mc
+## 
+##             Df Sum of Sq   RSS    AIC
+## &lt;none&gt;                   23948 2369.9
+## - ze         1     496.1 24444 2381.4
+## - zn:scs_mc  1    2318.4 26266 2428.6</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dass ~ zn + scs_mc + ze + zn:scs_mc, data = scs_study)
+## 
+## Coefficients:
+## (Intercept)           zn       scs_mc           ze    zn:scs_mc  
+##     44.9311       1.5566      -0.4471       0.8708      -0.5153</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<hr />
+<p>Extra reading: <a href="http://joshualoftus.com/post/model-selection-bias-invalidates-significance-tests/">Joshua Loftus’ Blog: Model selection bias invalidates significance tests</a></p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

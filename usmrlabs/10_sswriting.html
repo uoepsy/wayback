@@ -1,0 +1,2683 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Writing-up</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Writing-up</h1>
+
+</div>
+
+
+<div class="optional-begin">
+Motor Offences data<span id="opt-start-184" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-184&#39;, &#39;opt-start-184&#39;)"></span>
+</div>
+<div id="opt-body-184" class="optional-body" style="display: none;">
+<p>Two datasets can be loaded from the following url:</p>
+<pre class="r"><code>load(url(&quot;https://uoepsy.github.io/data/usmr_1920_assignment.RData&quot;))</code></pre>
+<p>The data provided contains information about the nature and circumstances of motorists stopped and breathalysed by the Police.<br />
+Data is collected every time that driver is stopped by the Police and breathalysed. Records indicate the speed at which the driver is travelling when they are stopped, and the blood alcohol content of the driver when measured via breathalyser. Information is also captured on the age and prior motoring offences of the driver, and whether the incident occurred at day or night. Police officers may have had reasons for stopping drivers other than presuming them to be intoxicated (for instance, someone who is stopped for speeding may subsequently be breathalysed if they are deemed to be acting unusually).</p>
+<p>Each time a police officer stops a motorist, an incident ID is created. A separate database used primarily for administrative purposes includes records of which officer (recorded as initials) attends which incidents.</p>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#xpqxkbfqhg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#xpqxkbfqhg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#xpqxkbfqhg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#xpqxkbfqhg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#xpqxkbfqhg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#xpqxkbfqhg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#xpqxkbfqhg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#xpqxkbfqhg .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xpqxkbfqhg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xpqxkbfqhg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xpqxkbfqhg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xpqxkbfqhg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xpqxkbfqhg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#xpqxkbfqhg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xpqxkbfqhg .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xpqxkbfqhg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#xpqxkbfqhg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#xpqxkbfqhg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xpqxkbfqhg .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#xpqxkbfqhg .gt_left {
+  text-align: left;
+}
+
+#xpqxkbfqhg .gt_center {
+  text-align: center;
+}
+
+#xpqxkbfqhg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xpqxkbfqhg .gt_font_normal {
+  font-weight: normal;
+}
+
+#xpqxkbfqhg .gt_font_bold {
+  font-weight: bold;
+}
+
+#xpqxkbfqhg .gt_font_italic {
+  font-style: italic;
+}
+
+#xpqxkbfqhg .gt_super {
+  font-size: 65%;
+}
+
+#xpqxkbfqhg .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="xpqxkbfqhg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Variable</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Description</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">age</td>
+      <td class="gt_row gt_left">Age of driver (in years)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">nighttime</td>
+      <td class="gt_row gt_left">Whether or not the incident occurred at night</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">prior_offence</td>
+      <td class="gt_row gt_left">Offence code for any prior motoring offences</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">speed</td>
+      <td class="gt_row gt_left">Speed when stopped by police (mph)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">bac</td>
+      <td class="gt_row gt_left">Blood Alcohol Content (%) as measured by breathalyser</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">outcome</td>
+      <td class="gt_row gt_left">Outcome of stop ('fine','warning')</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">incident_id</td>
+      <td class="gt_row gt_left">ID of incident</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">officer</td>
+      <td class="gt_row gt_left">Officer attending (initials)</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+</div>
+<p class="optional-end">
+</p>
+<p>We saw in the lecture a brief explanation of approaching the following sample question from last years coursework report:</p>
+<div class="blue">
+<p><strong>Sample Question: Driving speeds, night vs. day</strong></p>
+<p>Does time of day and speed of driving predict the blood alcohol content over and above driver’s age? Fit appropriate model(s) to test this question, and report the results (you may add a figure or table if appropriate).</p>
+</div>
+<div class="question-begin">
+Question A1
+</div>
+<div class="question-body">
+<p>Explore and clean the dataset (i.e., remove any impossible values etc).<br />
+Some info on the lecture slides this week will help with guidance on what to look for.</p>
+<p>(for now, you can ignore things like the “prior_offence” variable if you want, as this is a tricky one to tidy up, and isn’t relevant for the sample question we are considering)</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-185" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-185&#39;, &#39;sol-start-185&#39;)"></span>
+</div>
+<div id="sol-body-185" class="solution-body" style="display: none;">
+<pre class="r"><code>drinkdriving %&gt;% mutate(
+  age = case_when(age &gt; 120 | is.na(age) ~ NA_real_, TRUE ~ age),
+  outcome = factor(tolower(outcome)),
+  nighttime = factor(ifelse(nighttime %in% c(&quot;day&quot;,&quot;night&quot;), nighttime, NA)),
+  # prior_offence = fct_other(factor(prior_offence), keep=c(&quot;N&quot;,&quot;DR50&quot;)),
+  prior_offence = factor(case_when(str_detect(prior_offence, &quot;DR50&quot;) ~ &quot;DUI&quot;,
+                            str_detect(prior_offence, &quot;N&quot;) ~ &quot;None&quot;,
+                            TRUE ~ &quot;Other&quot;))
+  ) -&gt; drinkdriving</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A2
+</div>
+<div class="question-body">
+<p>Fit the following models:</p>
+<pre class="r"><code>m1&lt;-lm(bac~age + nighttime + speed, data=drinkdriving)
+m2&lt;-lm(bac~speed + age + nighttime, data=drinkdriving)
+m3&lt;-lm(bac~nighttime + speed + age, data=drinkdriving)
+m4&lt;-lm(bac~age + speed + nighttime, data=drinkdriving)</code></pre>
+<p>Are they different in any way? Are the coefficients different, or the significance tests different?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-186" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-186&#39;, &#39;sol-start-186&#39;)"></span>
+</div>
+<div id="sol-body-186" class="solution-body" style="display: none;">
+<p>Nope! They’re all the same!</p>
+<p>You can use <code>summary()</code> here, but we thought you might also like to learn about the <code>tidy()</code> function from the <strong>broom</strong> package:</p>
+<pre class="r"><code>library(broom)
+tidy(m1)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term           estimate std.error statistic     p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)     14.5       2.73        5.32 0.000000265
+## 2 age             -0.0399    0.0323     -1.24 0.218      
+## 3 nighttimenight   3.83      0.902       4.25 0.0000325  
+## 4 speed            0.198     0.0383      5.17 0.000000529</code></pre>
+<pre class="r"><code>tidy(m2)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term           estimate std.error statistic     p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)     14.5       2.73        5.32 0.000000265
+## 2 speed            0.198     0.0383      5.17 0.000000529
+## 3 age             -0.0399    0.0323     -1.24 0.218      
+## 4 nighttimenight   3.83      0.902       4.25 0.0000325</code></pre>
+<pre class="r"><code>tidy(m3)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term           estimate std.error statistic     p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)     14.5       2.73        5.32 0.000000265
+## 2 nighttimenight   3.83      0.902       4.25 0.0000325  
+## 3 speed            0.198     0.0383      5.17 0.000000529
+## 4 age             -0.0399    0.0323     -1.24 0.218</code></pre>
+<pre class="r"><code>tidy(m4)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term           estimate std.error statistic     p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)     14.5       2.73        5.32 0.000000265
+## 2 age             -0.0399    0.0323     -1.24 0.218      
+## 3 speed            0.198     0.0383      5.17 0.000000529
+## 4 nighttimenight   3.83      0.902       4.25 0.0000325</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div id="types-of-sums-of-squares" class="section level1">
+<h1>Types of Sums of Squares</h1>
+<div class="question-begin">
+Question A3
+</div>
+<div class="question-body">
+<p>Run the following:</p>
+<pre class="r"><code>anova(m1)
+anova(m2)
+anova(m3)
+anova(m4)</code></pre>
+<p>Are they different? In what way?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-187" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-187&#39;, &#39;sol-start-187&#39;)"></span>
+</div>
+<div id="sol-body-187" class="solution-body" style="display: none;">
+<p>The results below are all different from one another. The astute of you may notice that the last row of each output (i.e., corresponding to the last term specified in m1, m2, and m3, and m4) give the same <span class="math inline">\(p\)</span>-values as the coefficients from <code>summary()</code> of <em>any</em> of m1, m2, m3 or m4.</p>
+<pre class="r"><code>anova(m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## age         1 1417.8  1417.8  37.020 5.326e-09 ***
+## nighttime   1  620.5   620.5  16.202 7.901e-05 ***
+## speed       1 1024.8  1024.8  26.760 5.287e-07 ***
+## Residuals 214 8195.7    38.3                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(m2)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## speed       1 2271.0 2270.99  59.299 4.956e-13 ***
+## age         1  101.8  101.79   2.658    0.1045    
+## nighttime   1  690.3  690.33  18.025 3.249e-05 ***
+## Residuals 214 8195.7   38.30                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(m3)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## nighttime   1  779.3  779.31 20.3489 1.064e-05 ***
+## speed       1 2225.2 2225.21 58.1034 7.982e-13 ***
+## age         1   58.6   58.58  1.5297    0.2175    
+## Residuals 214 8195.7   38.30                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(m4)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## age         1 1417.8 1417.77  37.020 5.326e-09 ***
+## speed       1  955.0  955.01  24.937 1.228e-06 ***
+## nighttime   1  690.3  690.33  18.025 3.249e-05 ***
+## Residuals 214 8195.7   38.30                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<p>These results are all different from one another, because when we use <code>anova()</code>, we are by default using Type 1 Sums of Squares.
+What does this mean? It means that we’re calculating each predictor’s improvement to the model in the order that they are specified in the model <a href="https://uoepsy.github.io/usmr/lectures/lecture_7.html#57">(See Week 8 Lecture)</a>.<br />
+For <code>anova()</code>, <strong>order matters</strong>.</p>
+<div class="yellow">
+<p>**Sums of Squares</p>
+<ul>
+<li><strong>Type 1 sum of squares (sequential)</strong>: Variables are tested in the order that they are listed in the model.<br />
+</li>
+<li><strong>Type 2 sums of squares</strong>: Rarely used. Similar to Type 3 below, but main effects come before interactions, preserving the principle of marginality.<br />
+</li>
+<li><strong>Type 3 sum of squares (partial)</strong>: Variables are tested in light of every other term in the model (i.e., as if they are the last term in Type 1).</li>
+</ul>
+</div>
+<div class="optional-begin">
+Demonstration<span id="opt-start-188" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-188&#39;, &#39;opt-start-188&#39;)"></span>
+</div>
+<div id="opt-body-188" class="optional-body" style="display: none;">
+<p>Take, for instance:</p>
+<pre class="r"><code>m1&lt;-lm(bac ~ age + nighttime + speed, data=drinkdriving)</code></pre>
+<pre class="r"><code>anova(m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## age         1 1417.8  1417.8  37.020 5.326e-09 ***
+## nighttime   1  620.5   620.5  16.202 7.901e-05 ***
+## speed       1 1024.8  1024.8  26.760 5.287e-07 ***
+## Residuals 214 8195.7    38.3                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>We can see that the result for the <em>speed</em> variable is the same as the the coefficient for speed in the <code>lm()</code>s of <strong>m1</strong>, <strong>m2</strong>, and <strong>m3</strong>:</p>
+<pre class="r"><code>tidy(m1)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term           estimate std.error statistic     p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 (Intercept)     14.5       2.73        5.32 0.000000265
+## 2 age             -0.0399    0.0323     -1.24 0.218      
+## 3 nighttimenight   3.83      0.902       4.25 0.0000325  
+## 4 speed            0.198     0.0383      5.17 0.000000529</code></pre>
+<p>The same applies for <em>age</em> in this model:</p>
+<pre class="r"><code>m3&lt;-lm(bac~nighttime + speed + age, data=drinkdriving)</code></pre>
+<pre class="r"><code>anova(m3)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: bac
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## nighttime   1  779.3  779.31 20.3489 1.064e-05 ***
+## speed       1 2225.2 2225.21 58.1034 7.982e-13 ***
+## age         1   58.6   58.58  1.5297    0.2175    
+## Residuals 214 8195.7   38.30                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># These aren&#39;t all run here, but they will show exactly the same: 
+# tidy(m1) %&gt;% filter(term==&quot;age&quot;)
+# tidy(m2) %&gt;% filter(term==&quot;age&quot;)
+# tidy(m3) %&gt;% filter(term==&quot;age&quot;)
+tidy(m4) %&gt;% filter(term==&quot;age&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 5
+##   term  estimate std.error statistic p.value
+##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 age    -0.0399    0.0323     -1.24   0.218</code></pre>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<div id="a-sample-question" class="section level1">
+<h1>A sample question</h1>
+<div class="question-begin">
+Question A4
+</div>
+<div class="question-body">
+<p>Recall our question:</p>
+<blockquote>
+<p>Does time of day and speed of driving predict the blood alcohol content over and above driver’s age? Fit appropriate model(s) to test this question, and report the results (you may add a figure or table if appropriate).</p>
+</blockquote>
+<p>How might we use <code>anova()</code> and/or <code>lm()</code> to best answer this question? Can you give extra context to your answer?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-189" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-189&#39;, &#39;sol-start-189&#39;)"></span>
+</div>
+<div id="sol-body-189" class="solution-body" style="display: none;">
+<p>“over and above” here indicates that we are looking at the improvement in model RSS (residual sums of squares), i.e., we would ideally want to examine the effect(s) in question <em>in light of every other term in the model</em>.</p>
+<p>However, the question concerns the improvement due to a <em>set</em> of predictors, not just one. So how can we examine this?
+Well, one option is to use model comparison!</p>
+<p>Because we want to compare models, we need to use the same dataset, and <code>lm()</code> will do case-wise deletion of any observations which are missing in any of the predictors. E.g. if we have some <code>NA</code>s in speed, it will drop these from a model which includes speed as a predictor, but include them for a model which doesn’t (provided it is not also <code>NA</code> in the other variables).</p>
+<pre class="r"><code>drinkdriving2 &lt;- drinkdriving %&gt;% filter(!is.na(age), !is.na(nighttime), !is.na(speed))
+modA &lt;- lm(bac ~ age, drinkdriving2)
+modB &lt;- lm(bac ~ age + nighttime + speed, drinkdriving2)
+anova(modA, modB)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: bac ~ age
+## Model 2: bac ~ age + nighttime + speed
+##   Res.Df    RSS Df Sum of Sq      F   Pr(&gt;F)    
+## 1    216 9841.0                                 
+## 2    214 8195.7  2    1645.3 21.481 3.15e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>And we should remember to assess our model assumptions:</p>
+<pre class="r"><code>plot(modA)</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot(modA)</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" />
+Which highlights a couple of points which seem to be extremely influential.
+On further investigation, one of these observations seemed to be very fast (was the max speed observed) and both have recorded very high BAC values.</p>
+<pre class="r"><code>drinkdriving2[c(101,140),]</code></pre>
+<pre><code>## # A tibble: 2 x 7
+##     age nighttime prior_offence speed   bac outcome incident_id
+##   &lt;dbl&gt; &lt;fct&gt;     &lt;fct&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;      
+## 1    29 day       Other         120.   57.3 fine    inc_110    
+## 2    44 night     Other          81.0  65.8 fine    inc_154</code></pre>
+<div class="red">
+<p><strong>Why are these different from the -c(99, 136) in the lecture recordings???</strong><br />
+This is a nice little demonstration of what is sometimes termed “researcher degrees of freedom”. Some decision early on (which may not have even felt like a ‘decision’ at the time) has meant that the analysis presented here began to deviate from that presented in the lecture.
+Small decisions we make have trickle down effects on our results. This is unavoidable, and provided we feel justified in the steps we have taken, we should be happy to continue. In most cases, we would hope that variance in results due to differences in little decisions do not lead to meaningful differences in conclusions.</p>
+<p>What did we do here differently from the lecture?<br />
+Just looking quickly:</p>
+<ul>
+<li>Lecture removed datapoints where speed = 0, we did not (1 observation).<br />
+</li>
+<li>Lecture recoded datapoints where nighttime = ‘2:05’ to ‘night’. Here we excluded them. (2 observations).</li>
+</ul>
+<p>With the limited knowledge we have about the data, both approaches are arguably justified. More often, you will have more scope to query your knowledge about how the data was collected (e.g., if you collected it yourself).</p>
+</div>
+<p>Removing these points from our models does not change the overall conclusion:</p>
+<pre class="r"><code>modA &lt;- lm(bac ~ age, drinkdriving2[-c(101,140), ])
+modB &lt;- lm(bac ~ age + nighttime + speed, drinkdriving2[-c(101,140), ])
+anova(modA, modB)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: bac ~ age
+## Model 2: bac ~ age + nighttime + speed
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    214 6948.0                                  
+## 2    212 6219.1  2    728.91 12.424 7.906e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>However, we might be interested in contextualising our answer to discuss the addition of each effect individually.<br />
+Which we can obtain using, e.g.:</p>
+<pre class="r"><code>modB &lt;- lm(bac ~ age + nighttime + speed, drinkdriving2[-c(101,140),])
+modC &lt;- lm(bac ~ age + speed + nighttime, drinkdriving2[-c(101,140),])
+anova(modB)
+anova(modC)</code></pre>
+<p>Or we can get the addition of speed to (age + nighttime), and the addition of nighttime to (age + speed), which will match the final rows outputted from <code>anova(modB)</code> and <code>anova(modC)</code> respectively (<span class="math inline">\(t\)</span> = <span class="math inline">\(\sqrt{F}\)</span>, see optional box in <a href="https://uoepsy.github.io/usmr/labs/07_slr.html#Testing_Model_Utility">Week 8 exercises</a>).</p>
+<pre class="r"><code># or summary(modC), the results will be the same
+summary(modB)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = bac ~ age + nighttime + speed, data = drinkdriving2[-c(101, 
+##     140), ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -15.6457  -4.3757   0.5792   3.5662  14.2890 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    23.52651    2.66327   8.834 3.89e-16 ***
+## age            -0.11596    0.02990  -3.878 0.000141 ***
+## nighttimenight  3.87648    0.79353   4.885 2.04e-06 ***
+## speed           0.04110    0.03958   1.038 0.300244    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.416 on 212 degrees of freedom
+##   (5 observations deleted due to missingness)
+## Multiple R-squared:  0.246,  Adjusted R-squared:  0.2353 
+## F-statistic: 23.05 on 3 and 212 DF,  p-value: 5.894e-13</code></pre>
+<ul>
+<li><p>A good answer to this question could be one which draws on model comparison between a restricted “age only” model, and a model with both additional predictors (speed and nighttime) in it.</p></li>
+<li><p>It would detail any observations excluded from the analysis and the reasons for doing so (e.g., high influence on model fit).</p></li>
+<li><p>It could refer back to the research question and state a conclusion. In doing so, it would report in text the results which have a bearing on the question (highlighted below), and include also a table/figure where this provides extra information.</p>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#jxqiwkyfqa .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jxqiwkyfqa .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jxqiwkyfqa .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jxqiwkyfqa .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jxqiwkyfqa .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jxqiwkyfqa .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jxqiwkyfqa .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jxqiwkyfqa .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jxqiwkyfqa .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jxqiwkyfqa .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jxqiwkyfqa .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jxqiwkyfqa .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jxqiwkyfqa .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#jxqiwkyfqa .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqiwkyfqa .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jxqiwkyfqa .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jxqiwkyfqa .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#jxqiwkyfqa .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jxqiwkyfqa .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#jxqiwkyfqa .gt_left {
+  text-align: left;
+}
+
+#jxqiwkyfqa .gt_center {
+  text-align: center;
+}
+
+#jxqiwkyfqa .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jxqiwkyfqa .gt_font_normal {
+  font-weight: normal;
+}
+
+#jxqiwkyfqa .gt_font_bold {
+  font-weight: bold;
+}
+
+#jxqiwkyfqa .gt_font_italic {
+  font-style: italic;
+}
+
+#jxqiwkyfqa .gt_super {
+  font-size: 65%;
+}
+
+#jxqiwkyfqa .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="jxqiwkyfqa" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Res.Df</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">RSS</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Df</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Sum of Sq</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">F</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Pr(&gt;F)</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_right">214</td>
+      <td class="gt_row gt_right">6948.043</td>
+      <td class="gt_row gt_right">NA</td>
+      <td class="gt_row gt_right">NA</td>
+      <td class="gt_row gt_right">NA</td>
+      <td class="gt_row gt_right">NA</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">212</td>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">6219.134</td>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">2</td>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">728.9098</td>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">12.42367</td>
+      <td class="gt_row gt_right" style="background-color: #D9654B;">7.905711e-06</td>
+    </tr>
+  </tbody>
+
+
+</table></div></li>
+<li><p>It could then discuss in more depth an explanation for this finding, for instance by discussing the improvement due to the speed and nighttime variables individually (for instance, the table below), as well as how the age coefficient changes with their inclusion.</p>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+<p> </p>
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+<p>bac</p>
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+<p>Predictors</p>
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+<p>Estimates</p>
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+<p>CI</p>
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+<p>p</p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+<p>(Intercept)</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>23.53</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>18.28 – 28.78</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p><strong>&lt;0.001</strong></p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+<p>age</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>-0.12</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>-0.17 – -0.06</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p><strong>&lt;0.001</strong></p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+<p>nighttime [night]</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>3.88</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>2.31 – 5.44</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p><strong>&lt;0.001</strong></p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+<p>speed</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>0.04</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>-0.04 – 0.12</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<p>0.300</p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+<p>Observations</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+<p>216</p>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+<p>R<sup>2</sup> / R<sup>2</sup> adjusted</p>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+<p>0.246 / 0.235</p>
+</td>
+</tr>
+</table></li>
+</ul>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="write-up-task" class="section level1">
+<h1>Write-up task</h1>
+<p>Here, we’re going to walk through a high-level step-by-step guide of what to include in a write-up of a statistical analysis. We’re going to use an example analysis using one of the datasets we have worked with on a number of exercises in previous labs concerning personality traits, social comparison, and depression and anxiety.</p>
+<div class="frame">
+<p>The aim in writing should be that a reader is able to more or less replicate your analyses <strong>without</strong> referring to your R code. This requires detailing all of the steps you took in conducting the analysis.<br />
+The point of using RMarkdown is that you can pull your results <strong>directly</strong> from the code. If your analysis changes, so does your report!</p>
+<p>You can find a .pdf of the take-everywhere write-up checklist <a href="https://uoepsy.github.io/files/writeup_guide.pdf">here</a>.</p>
+</div>
+<div class="optional-begin">
+Research question and analysis<span id="opt-start-190" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-190&#39;, &#39;opt-start-190&#39;)"></span>
+</div>
+<div id="opt-body-190" class="optional-body" style="display: none;">
+<blockquote>
+<p><strong>Research question</strong><br />
+Previous research has identified an association between an individual’s perception of their social rank and symptoms of depression, anxiety and stress. We are interested in the individual differences in this relationship.<br />
+Specifically:</p>
+<ul>
+<li>Controlling for other personality traits, does neuroticism moderate effects of social comparison on symptoms of depression, anxiety and stress?</li>
+</ul>
+</blockquote>
+<pre class="r"><code>library(tidyverse) # for all things!
+library(psych) # good for descriptive stats
+library(car) # for assumption tests
+library(sjPlot) # for plotting models
+
+scs_study &lt;- read_csv(&quot;https://uoepsy.github.io/data/scs_study.csv&quot;)
+
+# scale scs score
+scs_study &lt;- 
+  scs_study %&gt;% 
+    mutate(
+      zscs = (scs-mean(scs))/sd(scs)
+    )
+
+# the describe() function is from the psych package
+describe(scs_study)</code></pre>
+<pre><code>##      vars   n  mean   sd median trimmed  mad   min   max range  skew kurtosis
+## zo      1 656  0.09 1.02   0.08    0.08 1.07 -2.82  3.55  6.37  0.15    -0.08
+## zc      2 656  0.02 1.00   0.00    0.03 1.03 -3.22  3.08  6.30 -0.08    -0.13
+## ze      3 656  0.00 1.00  -0.04   -0.01 1.00 -3.01  2.80  5.81  0.05    -0.13
+## za      4 656  0.00 1.00  -0.02    0.01 1.04 -2.94  2.97  5.91 -0.08    -0.04
+## zn      5 656  0.00 1.00  -0.21   -0.10 1.00 -1.45  3.35  4.80  0.80     0.04
+## scs     6 656 35.77 3.53  35.00   35.59 2.97 27.00 54.00 27.00  0.60     0.96
+## dass    7 656 44.72 6.76  44.00   44.62 5.93 23.00 68.00 45.00  0.18     0.33
+## zscs    8 656  0.00 1.00  -0.22   -0.05 0.84 -2.48  5.16  7.64  0.60     0.96
+##        se
+## zo   0.04
+## zc   0.04
+## ze   0.04
+## za   0.04
+## zn   0.04
+## scs  0.14
+## dass 0.26
+## zscs 0.04</code></pre>
+<pre class="r"><code>dass_mdl &lt;- lm(dass ~ 1 + zscs*zn + zo + zc + ze + za, data = scs_study)
+plot(dass_mdl)</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-27-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre><code>##       35 
+## 2.664798</code></pre>
+<pre class="r"><code>dass_mdl2 &lt;- lm(dass ~ 1 + zscs*zn + zo + zc + ze + za, data = scs_study[-35, ])</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-29-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># linearity
+plot(dass_mdl2, which=1)</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-30-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># equal variances
+residualPlots(dass_mdl2)</code></pre>
+<p><img src="10_sswriting_files/figure-html/unnamed-chunk-30-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre><code>##            Test stat Pr(&gt;|Test stat|)  
+## zscs          1.8141          0.07013 .
+## zn           -0.5911          0.55467  
+## zo            1.7801          0.07553 .
+## zc           -0.2403          0.81018  
+## ze           -0.9951          0.32004  
+## za            0.0725          0.94219  
+## Tukey test   -1.6406          0.10089  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>ncvTest(dass_mdl2)</code></pre>
+<pre><code>## Non-constant Variance Score Test 
+## Variance formula: ~ fitted.values 
+## Chisquare = 1.508659, Df = 1, p = 0.21934</code></pre>
+<pre class="r"><code># normality
+shapiro.test(residuals(dass_mdl2))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  residuals(dass_mdl2)
+## W = 0.99826, p-value = 0.7616</code></pre>
+<pre class="r"><code># independence
+dwt(dass_mdl2)</code></pre>
+<pre><code>##  lag Autocorrelation D-W Statistic p-value
+##    1     -0.03991314      2.078413   0.324
+##  Alternative hypothesis: rho != 0</code></pre>
+<pre class="r"><code># multicollinearity
+vif(dass_mdl2)</code></pre>
+<pre><code>##     zscs       zn       zo       zc       ze       za  zscs:zn 
+## 1.015133 1.015736 1.013310 1.008235 2.332486 2.342220 1.012475</code></pre>
+<pre class="r"><code>summary(dass_mdl2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dass ~ 1 + zscs * zn + zo + zc + ze + za, data = scs_study[-35, 
+##     ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.1455  -3.8155  -0.0066   3.6905  18.1483 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 44.97703    0.22635 198.708  &lt; 2e-16 ***
+## zscs        -1.93818    0.23042  -8.412 2.58e-16 ***
+## zn           1.41639    0.22661   6.250 7.44e-10 ***
+## zo          -0.31435    0.22056  -1.425    0.155    
+## zc           0.09134    0.22515   0.406    0.685    
+## ze           0.52695    0.34233   1.539    0.124    
+## za           0.33847    0.34281   0.987    0.324    
+## zscs:zn     -2.76609    0.24097 -11.479  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.733 on 647 degrees of freedom
+## Multiple R-squared:  0.279,  Adjusted R-squared:  0.2712 
+## F-statistic: 35.76 on 7 and 647 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div id="think" class="section level2">
+<h2>Think</h2>
+<div class="yellow">
+<p>What do you know? What do you hope to learn? What did you learn during the exploratory analysis?</p>
+</div>
+<div class="question-begin">
+B1: Describe design
+</div>
+<div class="question-body">
+<p>If you were reporting on your own study, then the first you would want to describe the study design, the data collection strategy, etc.<br />
+This is not necessary here, but we could always say something brief like:</p>
+<div class="int">
+<p>Data was obtained from <a href="https://uoepsy.github.io/data/scs_study.csv" class="uri">https://uoepsy.github.io/data/scs_study.csv</a>: a dataset containing information on 656 participants</p>
+</div>
+<p class="question-end">
+</p>
+</div>
+<div class="question-begin">
+B2: Describe the data
+</div>
+<div class="question-body">
+<ul>
+<li>How many observational units?<br />
+</li>
+<li>Are there any observations that have been excluded based on pre-defined criteria? How/why, and how many?</li>
+<li>Describe and visualise the variables of interest. How are they scored? have they been transformed at all?</li>
+<li>Describe and visualise relationships between variables. Report covariances/correlations.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-191" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-191&#39;, &#39;sol-start-191&#39;)"></span>
+</div>
+<div id="sol-body-191" class="solution-body" style="display: none;">
+<div class="int">
+<p>Data was obtained from <a href="https://uoepsy.github.io/data/scs_study.csv" class="uri">https://uoepsy.github.io/data/scs_study.csv</a>: a dataset containing information on 656 participants, including Z-scores on the 5 personality traits assessed by the Big-Five Aspects Scale (BFAS) (Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism). Participants were also assessed on the Social Comparison Scale (SCS), which is an 11-item scale measuring self-perception (relative to others) of social rank, attractiveness and belonging, and the Depression Anxiety and Stress Scale (DASS-21) - a 21 item measure with higher scores indicating higher severity of symptoms. For both of these measures, only total scores are available. Items in the SCS are measured on a 5-point scale, giving minimum and maximum possible scores of 11 and 55 respectively. Items in the DASS-21 are measured on a 4-point scale, meaning that scores can range from a possible 21 to 84.</p>
+<p>All participant data was complete (no missing values), with scores on the SCS and the DASS-21 all within possible ranges (see Table <a href="#tab:scsdasstab">1</a>). Bivariate correlations show a moderate negative relationship between DASS-21 and SCS scores; a moderate positive relationship between DASS-21 and Neuroticism, and a weak positive correlation between SCS and Neuroticism. Additionally, a strong positive relationship is evident between Extraversion and Agreeableness (see Figure <a href="#fig:splom">1</a>).</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:scsdasstab">Table 1: </span>SCS and DASS-21 descriptive statistics
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+scs
+</td>
+<td style="text-align:right;">
+656
+</td>
+<td style="text-align:right;">
+35.77
+</td>
+<td style="text-align:right;">
+3.53
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dass
+</td>
+<td style="text-align:right;">
+656
+</td>
+<td style="text-align:right;">
+44.72
+</td>
+<td style="text-align:right;">
+6.76
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+68
+</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span id="fig:splom"></span>
+<img src="10_sswriting_files/figure-html/splom-1.png" alt="Bivariate scatter plots (below diagonal), histograms (diagonal), and Pearson correlation coefficient (above diagonal), of personality trait measures and scores on the SCS and the DASS-21" width="80%" />
+<p class="caption">
+Figure 1: Bivariate scatter plots (below diagonal), histograms (diagonal), and Pearson correlation coefficient (above diagonal), of personality trait measures and scores on the SCS and the DASS-21
+</p>
+</div>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+B3: Describe the analytical approach
+</div>
+<div class="question-body">
+<ul>
+<li>What type of statistical analysis do you use to answer the research question? (e.g., t-test, simple linear regression, multiple linear regression)</li>
+<li>Describe the model/analysis structure</li>
+<li>What is your outcome variable? What is its type?</li>
+<li>What are your predictors? What are their types?</li>
+<li>Any other specifics?</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-192" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-192&#39;, &#39;sol-start-192&#39;)"></span>
+</div>
+<div id="sol-body-192" class="solution-body" style="display: none;">
+<div class="int">
+<p>To investigate whether, when controlling for other personality traits, neuroticism moderates the effect of social comparison on symptoms of depression, anxiety and stress, total scores on the DASS-21 were modelled using multiple linear regression. The Z-scored measures on each of the big-five personality traits were included as predictors, along with scores on the SCS (Z-scored) and its interaction with the measure of Neuroticism. Effects will be considered statistically significant at <span class="math inline">\(\alpha = 0.01\)</span>.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+B4: Planned analysis vs actual analysis
+</div>
+<div class="question-body">
+<ul>
+<li>Was there anything you had to do differently than planned during the analysis? Did the modelling highlight issues in your data?</li>
+<li>Did you have to do anything (e.g., transform any variables, exclude any observations) in order to meet assumptions?</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-193" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-193&#39;, &#39;sol-start-193&#39;)"></span>
+</div>
+<div id="sol-body-193" class="solution-body" style="display: none;">
+<div class="int">
+<p>One observation was excluded from the final analysis as it was judged to be too influential on the model (Cook’s Distance = 2.66).</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="show" class="section level2">
+<h2>Show</h2>
+<div class="yellow">
+<p>Show the mechanics and visualisations which will support your conclusions</p>
+</div>
+<div class="question-begin">
+B5: Present and describe final model
+</div>
+<div class="question-body">
+<p>Present and describe the model or test which you deemed best to answer your question.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-194" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-194&#39;, &#39;sol-start-194&#39;)"></span>
+</div>
+<div id="sol-body-194" class="solution-body" style="display: none;">
+<div class="int">
+<p>The final model was fitted to the remaining 655 observations, and took the form:
+<span class="math display">\[
+\text{DASS-21} = \beta_0 + \beta_1 \text{O} + \beta_2 \text{C} + \beta_3 \text{E} + \beta_4 \text{A} + \beta_5 \text{N} + \beta_6 \text{SCS} + \beta_7 \text{SCS} \cdot \text{N} + \epsilon  \\
+\begin{align}
+\text{Where} \\
+&amp; \text{O = Openness} \\
+&amp; \text{C = Conscientiousness} \\
+&amp; \text{E = Extraversion} \\
+&amp; \text{A = Agreeableness} \\
+&amp; \text{N = Neuroticism} \\
+\end{align}
+\]</span></p>
+<p>To address the research question of whether neuroticism moderates the effect of social comparison on depression and anxiety, we will consider the hypothesis test that the interaction coefficient is equal to zero, where:</p>
+<p><span class="math inline">\(H_0: \beta_7 = 0\)</span>. The interaction between SCS and Neuroticism is equal to zero.<br />
+<span class="math inline">\(H_1: \beta_7 \neq 0\)</span>. The interaction between SCS and Neuroticism is not equal to zero.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+B6: Are the assumptions and conditions of your final test or model satisfied?
+</div>
+<div class="question-body">
+<p>For the final model (the one you report results from), were all assumptions met? (Hopefully yes, or there is more work to do…). Include evidence (tests or plots).</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-195" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-195&#39;, &#39;sol-start-195&#39;)"></span>
+</div>
+<div id="sol-body-195" class="solution-body" style="display: none;">
+<div class="int">
+<p>The model model met assumptions of linearity (see plot of model residuals vs fitted values, Figure <a href="#fig:linearityplot">2</a>), homoscedasticity (non-constant variance test indicated no evidence against the null hypothesis that the error variance is constant across level of the response, <span class="math inline">\(\chi^2(1)\)</span>=1.51, <span class="math inline">\(p\)</span>=0.219), independence of errors (Durbin-Watson test for autocorrelation of residuals: <span class="math inline">\(DW\)</span>=2.08, <span class="math inline">\(p\)</span>=0.294), and normality of error term (Shapiro-Wilk test indicated no evidence against the null hypothesis that the residuals were drawn from a normally distributed population: <span class="math inline">\(W\)</span>=1, <span class="math inline">\(p\)</span>=0.762).</p>
+<div class="figure" style="text-align: center"><span id="fig:linearityplot"></span>
+<img src="10_sswriting_files/figure-html/linearityplot-1.png" alt="Residuals vs Fitted plot demonstrating overall near constant mean and variance of error term across levels of the response" width="80%" />
+<p class="caption">
+Figure 2: Residuals vs Fitted plot demonstrating overall near constant mean and variance of error term across levels of the response
+</p>
+</div>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+B7: Report your test or model results
+</div>
+<div class="question-body">
+<ul>
+<li>Provide a table of results if applicable (for regression tables, try <code>tab_model()</code> from the <strong>sjPlot</strong> package).<br />
+</li>
+<li>Provide plots if applicable.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-196" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-196&#39;, &#39;sol-start-196&#39;)"></span>
+</div>
+<div id="sol-body-196" class="solution-body" style="display: none;">
+<div class="int">
+<p>Full regression results including 95% Confidence Intervals are shown in Table <a href="#tab:tabmodel">2</a>. The interaction between social comparison and neuroticism in predicting depression and anxiety is visually presented in Figure <a href="#fig:intplot">3</a>. The F-test for model utility was significant (F(7,647)=35.76, p&lt;.001), and the model explained approximately 27.1% of the variability in DASS-21 Scores.</p>
+<br>
+<center>
+<table style="border-collapse:collapse; border:none;">
+<caption style="font-weight: bold; text-align:left;">
+<span id="tab:tabmodel">Table 2: </span> Regression table for DASS-21 model. Outcome variable is raw total score on DASS-21, all predictors are Z-scored
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+DASS-21
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+44.98
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+44.53 – 45.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Social Comparison Scale
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-1.94
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.39 – -1.49
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Neuroticism
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.97 – 1.86
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Openness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.75 – 0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.155
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Conscientiousness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.35 – 0.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.685
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Extraversion
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.15 – 1.20
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.124
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Agreeableness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.34
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.33 – 1.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.324
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Social Comparison Scale :<br>Neutoricism
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.77
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-3.24 – -2.29
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+655
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.279 / 0.271
+</td>
+</tr>
+</table>
+</center>
+<p><br></p>
+<div class="figure" style="text-align: center"><span id="fig:intplot"></span>
+<img src="10_sswriting_files/figure-html/intplot-1.png" alt="Predicted DASS-21 score across SCS scores, for +/-1 SD Neuroticism" width="80%" />
+<p class="caption">
+Figure 3: Predicted DASS-21 score across SCS scores, for +/-1 SD Neuroticism
+</p>
+</div>
+</div>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="tell" class="section level2">
+<h2>Tell</h2>
+<div class="yellow">
+<p>Communicate your findings</p>
+</div>
+<div class="question-begin">
+B8: Interpret your results in the context of your research question.
+</div>
+<div class="question-body">
+<ul>
+<li>What do your results suggest about your research question?</li>
+<li>Make direct links from hypotheses to models (which bit is testing hypothesis)</li>
+<li>Be specific - which statistic did you use/what did the statistical test say? Comment on effect sizes.</li>
+<li>Make sure to include measurement units where applicable.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-197" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-197&#39;, &#39;sol-start-197&#39;)"></span>
+</div>
+<div id="sol-body-197" class="solution-body" style="display: none;">
+<div class="int">
+<p>Results showed a significant conditional association between SCS scores (Z-scored) and DASS-21 Scores (<span class="math inline">\(\beta\)</span> = 44.98,SE = 0.23, p &lt;.01), suggesting that for those at the mean level of neuroticism, scores on the DASS-21 decrease by 44.98 for every 1 standard deviation increase in SCS scores. A significant conditional association was also evident between Neuroticism (Z-scored) and DASS-21 Scores (<span class="math inline">\(\beta\)</span> = -1.94,SE = 0.23, p &lt;.01), suggesting that for those who score the mean on the SCS, scores on the DASS-21 increase by -1.94 for every 1 standard deviation increase in neuroticism.
+Crucially, the association between social comparison and symptoms of depression and anxiety was found to be dependent upon the level of neuroticism, with a greater negative association between the two for those with high levels of neuroticism (<span class="math inline">\(\beta\)</span> = -2.77,SE = 0.24, p &lt;.01). This interaction is visually presented in Figure <a href="#fig:intplot">3</a>.</p>
+<p>The results presented here indicate that the association between social comparison and depression and anxiety may depend upon individuals’ levels of neuroticism, with perceived social rank perhaps leading to more symptoms of depression and anxiety for highly neurotic individuals. However, it is important to note that we can make no claims on the directions of these associations from these data - it may be that social comparison leads to more depression and anxiety in neurotic individuals, but also consistent is the view that - for these individuals - higher levels of depression leads to a greater reduction in perceived social rank.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="tying-it-all-together" class="section level2">
+<h2>Tying it all together</h2>
+<p>All the component parts we have just written in the exercises above can be brought together to make a reasonable draft of a statistical report. There is a lot of variability in how to structure the reporting of statistical analyses, for instance you may be using the same model to test a selection of different hypotheses.</p>
+<p>The answers contained within the solution box below is just an example. While we hope it is useful for you when you are writing your report, it should not be taken as an exemplary template for a report which would score 100%.<br />
+We have also included the RMarkdown file used to create this, which may be useful to see how things such as formatting and using inline R code can be used.</p>
+<div class="solution-begin">
+Solution SPOILERS ALERT<span id="sol-start-198" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-198&#39;, &#39;sol-start-198&#39;)"></span>
+</div>
+<div id="sol-body-198" class="solution-body" style="display: none;">
+<div class="frame">
+<p>You can find find the .Rmd file for the draft below at <a href="https://uoepsy.github.io/files/mlr_writeup_example.Rmd" class="uri">https://uoepsy.github.io/files/mlr_writeup_example.Rmd</a>.
+Why not try downloading and compiling it to see how it works?</p>
+<p><strong>PLEASE NOTE:</strong> A weird issue with hosting .Rmd files like this means that when you download it, it will remove the top bit of <em>meta-data</em> (i.e., the bit which includes author, title etc) meaning it will not compile without a small amount of editing. You can see the .Rmd file more clearly including these first 6 lines <a href="https://raw.githubusercontent.com/uoepsy/uoepsy.github.io/master/files/mlr_writeup_example.Rmd">here</a>.</p>
+</div>
+<p>Data was obtained from <a href="https://uoepsy.github.io/data/scs_study.csv" class="uri">https://uoepsy.github.io/data/scs_study.csv</a>: a dataset containing information on 656 participants, including Z-scores on the 5 personality traits assessed by the Big-Five Aspects Scale (BFAS) (Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism). Participants were also assessed on the Social Comparison Scale (SCS), which is an 11-item scale measuring self-perception (relative to others) of social rank, attractiveness and belonging, and the Depression Anxiety and Stress Scale (DASS-21) - a 21 item measure with higher scores indicating higher severity of symptoms. For both of these measures, only total scores are available. Items in the SCS are measured on a 5-point scale, giving minimum and maximum possible scores of 11 and 55 respectively. Items in the DASS-21 are measured on a 4-point scale, meaning that scores can range from a possible 21 to 84.</p>
+<p>All participant data was complete (no missing values), with scores on the SCS and the DASS-21 all within possible ranges (see Table <a href="#tab:scsdasstab2">3</a>). Bivariate correlations show a moderate negative relationship between DASS-21 and SCS scores; a moderate positive relationship between DASS-21 and Neuroticism, and a weak positive correlation between SCS and Neuroticism. Additionally, a strong positive relationship is evident between Extraversion and Agreeableness (see Figure <a href="#fig:splom2">4</a>).</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:scsdasstab2">Table 3: </span>SCS and DASS-21 descriptive statistics
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+scs
+</td>
+<td style="text-align:right;">
+656
+</td>
+<td style="text-align:right;">
+35.77
+</td>
+<td style="text-align:right;">
+3.53
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dass
+</td>
+<td style="text-align:right;">
+656
+</td>
+<td style="text-align:right;">
+44.72
+</td>
+<td style="text-align:right;">
+6.76
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+68
+</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span id="fig:splom2"></span>
+<img src="10_sswriting_files/figure-html/splom2-1.png" alt="Bivariate scatter plots (below diagonal), histograms (diagonal), and Pearson correlation coefficient (above diagonal), of personality trait measures and scores on the SCS and the DASS-21" width="80%" />
+<p class="caption">
+Figure 4: Bivariate scatter plots (below diagonal), histograms (diagonal), and Pearson correlation coefficient (above diagonal), of personality trait measures and scores on the SCS and the DASS-21
+</p>
+</div>
+<p><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p><strong>Analysis</strong></p>
+<p>To investigate whether, when controlling for other personality traits, neuroticism moderates the effect of social comparison on symptoms of depression, anxiety and stress, total scores on the DASS-21 were modelled using multiple linear regression. The Z-scored measures on each of the big-five personality traits were included as predictors, along with scores on the SCS (Z-scored) and its interaction with the measure of Neuroticism. Effects will be considered statistically significant at <span class="math inline">\(\alpha = 0.01\)</span>. One observation was excluded from the final analysis as it was judged to be too influential on the model (Cook’s Distance = 2.66).<br />
+The final model was fitted to the remaining 655 observations, and took the form:
+<span class="math display">\[
+\text{DASS-21} = \beta_0 + \beta_1 \text{O} + \beta_2 \text{C} + \beta_3 \text{E} + \beta_4 \text{A} + \beta_5 \text{N} + \beta_6 \text{SCS} + \beta_7 \text{SCS} \cdot \text{N} + \epsilon  \\
+\begin{align}
+\text{Where} \\
+&amp; \text{O = Openness} \\
+&amp; \text{C = Conscientiousness} \\
+&amp; \text{E = Extraversion} \\
+&amp; \text{A = Agreeableness} \\
+&amp; \text{N = Neuroticism} \\
+\end{align}
+\]</span></p>
+<p>To address the research question of whether neuroticism moderates the effect of social comparison on depression and anxiety, we will consider the hypothesis test that the interaction coefficient is equal to zero, where:</p>
+<p><span class="math inline">\(H_0: \beta_7 = 0\)</span>. The interaction between SCS and Neuroticism is equal to zero.<br />
+<span class="math inline">\(H_1: \beta_7 \neq 0\)</span>. The interaction between SCS and Neuroticism is not equal to zero.</p>
+<p>The regression model met assumptions of linearity (see plot of model residuals vs fitted values, Figure <a href="#fig:linearityplot2">5</a>), homoscedasticity (non-constant variance test indicated no evidence against the null hypothesis that the error variance is constant across level of the response, <span class="math inline">\(\chi^2(1)\)</span>=1.51, <span class="math inline">\(p\)</span>=0.219), independence of errors (Durbin-Watson test for autocorrelation of residuals: <span class="math inline">\(DW\)</span>=2.08, <span class="math inline">\(p\)</span>=0.294), and normality of error term (Shapiro-Wilk test indicated no evidence against the null hypothesis that the residuals were drawn from a normally distributed population: <span class="math inline">\(W\)</span>=1, <span class="math inline">\(p\)</span>=0.762).</p>
+<div class="figure" style="text-align: center"><span id="fig:linearityplot2"></span>
+<img src="10_sswriting_files/figure-html/linearityplot2-1.png" alt="Residuals vs Fitted plot demonstrating overall near constant mean and variance of error term across levels of the response" width="80%" />
+<p class="caption">
+Figure 5: Residuals vs Fitted plot demonstrating overall near constant mean and variance of error term across levels of the response
+</p>
+</div>
+<p><strong>Results</strong></p>
+<p>Results showed a significant conditional association between SCS scores (Z-scored) and DASS-21 Scores (<span class="math inline">\(\beta\)</span> = 44.98,SE = 0.23, p &lt;.01), suggesting that for those at the mean level of neuroticism, scores on the DASS-21 decrease by 44.98 for every 1 standard deviation increase in SCS scores. A significant conditional association was also evident between Neuroticism (Z-scored) and DASS-21 Scores (<span class="math inline">\(\beta\)</span> = -1.94,SE = 0.23, p &lt;.01), suggesting that for those who score the mean on the SCS, scores on the DASS-21 increase by -1.94 for every 1 standard deviation increase in neuroticism.
+Crucially, the association between social comparison and symptoms of depression and anxiety was found to be dependent upon the level of neuroticism, with a greater negative association between the two for those with high levels of neuroticism (<span class="math inline">\(\beta\)</span> = -2.77,SE = 0.24, p &lt;.01). This interaction is visually presented in Figure <a href="#fig:intplot2">6</a>.<br />
+The F-test for model utility was significant (F(7,647)=35.76, p&lt;.001), with the model explaining approximately 27.1% of the variability in DASS-21 Scores. Full regression results including 95% Confidence Intervals are shown in Table <a href="#tab:tabmodel2">4</a>.<br />
+The results presented here indicate that the association between social comparison and depression and anxiety may depend upon individuals’ levels of neuroticism, with perceived social rank perhaps leading to more symptoms of depression and anxiety for highly neurotic individuals. However, it is important to note that we can make no claims on the directions of these associations from these data - it may be that social comparison leads to more depression and anxiety in neurotic individuals, but also consistent is the view that - for these individuals - higher levels of depression leads to a greater reduction in perceived social rank.</p>
+<br>
+<div class="figure" style="text-align: center"><span id="fig:intplot2"></span>
+<img src="10_sswriting_files/figure-html/intplot2-1.png" alt="Predicted DASS-21 score across SCS scores, for +/-1 SD Neuroticism" width="80%" />
+<p class="caption">
+Figure 6: Predicted DASS-21 score across SCS scores, for +/-1 SD Neuroticism
+</p>
+</div>
+<br>
+<table style="border-collapse:collapse; border:none;">
+<caption style="font-weight: bold; text-align:left;">
+<span id="tab:tabmodel2">Table 4: </span> Regression table for DASS-21 model. Outcome variable is raw total score on DASS-21, all predictors are Z-scored
+</caption>
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+DASS-21
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+44.98
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+44.53 – 45.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Social Comparison Scale
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-1.94
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.39 – -1.49
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Neuroticism
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.97 – 1.86
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Openness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.75 – 0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.155
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Conscientiousness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.35 – 0.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.685
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Extraversion
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.53
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.15 – 1.20
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.124
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Agreeableness
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.34
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.33 – 1.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.324
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+Social Comparison Scale :<br>Neutoricism
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.77
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-3.24 – -2.29
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+655
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.279 / 0.271
+</td>
+</tr>
+</table>
+</div>
+<p class="solution-end">
+</p>
+</div>
+</div>
+<div id="extra-linear-models-and-other-things" class="section level1">
+<h1>Extra: linear models and other things</h1>
+<p>Once you start using linear models, you might begin to think about how many other common statistical tests can be put into a linear model framework. Below are some very quick demonstrations of a couple of equivalences, but there are many more, and we encourage you to explore this further by a) playing around with R, and b) reading through some of the examples at <a href="https://lindeloev.github.io/tests-as-linear/">https://lindeloev.github.io/tests-as-linear/</a>.</p>
+<div class="optional-begin">
+lm and t.test<span id="opt-start-199" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-199&#39;, &#39;opt-start-199&#39;)"></span>
+</div>
+<div id="opt-body-199" class="optional-body" style="display: none;">
+<pre class="r"><code>t.test(drinkdriving$age ~ drinkdriving$outcome, var.equal = T)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  drinkdriving$age by drinkdriving$outcome
+## t = -9.2825, df = 223, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -26.99844 -17.54249
+## sample estimates:
+##    mean in group fine mean in group warning 
+##              38.32044              60.59091</code></pre>
+<pre class="r"><code>summary(lm(age ~ outcome, data = drinkdriving))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = age ~ outcome, data = drinkdriving)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -42.59  -9.32  -0.32   8.68  47.68 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      38.320      1.061  36.119   &lt;2e-16 ***
+## outcomewarning   22.270      2.399   9.283   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 14.27 on 223 degrees of freedom
+##   (25 observations deleted due to missingness)
+## Multiple R-squared:  0.2787, Adjusted R-squared:  0.2755 
+## F-statistic: 86.16 on 1 and 223 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+lm and cor.test<span id="opt-start-200" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-200&#39;, &#39;opt-start-200&#39;)"></span>
+</div>
+<div id="opt-body-200" class="optional-body" style="display: none;">
+<p>Or a test of the correlation coefficient:</p>
+<pre class="r"><code>cor.test(drinkdriving$bac, drinkdriving$age)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  drinkdriving$bac and drinkdriving$age
+## t = -5.2356, df = 218, p-value = 3.863e-07
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.4467334 -0.2112790
+## sample estimates:
+##        cor 
+## -0.3342105</code></pre>
+<pre class="r"><code>summary(lm(bac ~ age, data = drinkdriving))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = bac ~ age, data = drinkdriving)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.719  -4.516  -0.861   3.849  42.785 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 29.29455    1.25564  23.330  &lt; 2e-16 ***
+## age         -0.14353    0.02741  -5.236 3.86e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.82 on 218 degrees of freedom
+##   (30 observations deleted due to missingness)
+## Multiple R-squared:  0.1117, Adjusted R-squared:  0.1076 
+## F-statistic: 27.41 on 1 and 218 DF,  p-value: 3.863e-07</code></pre>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<div id="cheat-sheets" class="section level1">
+<h1>Cheat Sheets</h1>
+<p>You can find many RStudio cheatsheets at <a href="https://rstudio.com/resources/cheatsheets/">https://rstudio.com/resources/cheatsheets/</a>, but some of the more relevant ones to this course are listed below:</p>
+<ul>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/rstudio-ide.pdf">RStudio</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/base-r.pdf">Base R</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/rmarkdown-2.0.pdf">RMarkdown</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/data-transformation.pdf">Data Transformation with dplyr</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/data-visualization-2.1.pdf">Data vis with ggplot</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/strings.pdf">Strings with stringr</a><br />
+</li>
+<li><a href="https://uoepsy.github.io/usmr/cheatsheet/factors.pdf">Factors with forcats</a></li>
+</ul>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Created with the <code>pairs.panels()</code> function from the <strong>psych</strong> package if you’re interested.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Categorical Data</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Categorical Data</h1>
+
+</div>
+
+
+<div class="red">
+<p><strong>Preliminaries</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Please ensure you have successfully installed R and RStudio, or are working on RStudio Cloud, and that you have completed the tasks on the <a href="00_intro.html">Getting started in R &amp; RStudio</a> page, which introduced the basics of a) how to navigate around Rstudio, b) how to create a Rmarkdown document, c) how to read data into R, and d) how to use R to do basic arithmetic.</p></li>
+<li><p>Open Rstudio, and make sure you have your USMR course project open.</p></li>
+<li><p>Open a new Rmarkdown document:<br />
+<strong>File &gt; New File &gt; R Markdown..</strong><br />
+</p></li>
+</ol>
+</div>
+<div id="exercises-dice-simulations" class="section level1">
+<h1>Exercises: Dice Simulations</h1>
+<div class="question-begin">
+Question A1
+</div>
+<div class="question-body">
+<p>You can add a code-chunk with the “Insert” button in the top right of your Rmarkdown document and clicking “R”, or you can use the shortcut of <strong>Ctrl + Alt + i</strong>.</p>
+<p>In your first code-chunk, copy the code from the lecture which creates a custom function called <code>dice()</code> (copied below). Be sure to run the code-chunk.</p>
+<pre class="r"><code>dice &lt;- function(num = 1) {
+  sum(sample(1:6, num, replace=TRUE))
+}</code></pre>
+<hr />
+<p><img src="images/categorical/freshrmd2.png" width="80%" style="display: block; margin: auto;" /></p>
+<p class="question-end">
+</p>
+</div>
+<div style="border-radius: 5px; padding: 20px 20px 10px 20px; margin-top: 20px; margin-bottom: 20px; border: 1px solid #333333 !important;">
+<p><strong>What did that code-chunk do?</strong></p>
+<p>In a sense, this code-chunk does <em>nothing</em>: It won’t give you any output when you run it. What it is actually doing, though, is defining a <em>function</em> called <code>dice()</code>. If you look at your <em>environment</em> panel (top right), you’ll see <code>dice</code> appear when you run the code.</p>
+<p>To produce some output, we have to <em>call</em> the function <code>dice()</code> (by writing it into code: <code>dice(4)</code>, for example). <code>dice()</code> wants to be supplied with some information (in the <em>argument</em> <code>num</code>). If no information is supplied, num will take a <em>default value</em> of <code>1</code>. (So writing <code>dice()</code> is equivalent to writing <code>dice(1)</code>).</p>
+<p>What does <code>dice()</code> do with <code>num</code>? It calls another function, <code>sample()</code>, with <em>3</em> arguments. We didn’t write <code>sample()</code>: it’s a function that’s “supplied with” R. To find out more about what <code>sample()</code> does:</p>
+<ul>
+<li><p>click inside the brackets just after <code>sample()</code> in your RMarkdown document (not this document; the one in RStudio);</p></li>
+<li><p>press <code>TAB</code> (<code>⇥</code>), then <code>F1</code></p></li>
+<li><p>you should see some help appear in the bottom right-hand panel of RStudio.</p></li>
+</ul>
+<p>You will find that “<code>sample()</code> takes a sample … from the elements of <code>x</code> …” If you compare the code in RStudio to the code under “Usage” you’ll see that where the help has <code>x</code>, we have <code>1:6</code>. So what does <code>1:6</code> mean? One way to find out is to open the <strong>console</strong> in RStudio (bottom left) and just type stuff in. What happens when you type <code>1:6</code>? What about <code>2:17</code>? (What about <code>6:1</code>?)</p>
+<p>The console is the place to “try stuff out” (don’t worry, you can’t break it).
+Watch the video below and then try it out yourself:</p>
+<center>
+<video width="320" height="240" controls>
+<source src="images/dice.mp4" type="video/mp4">
+</video>
+</center>
+<p>What you will discover is that <code>1:6</code> creates a <em>vector</em> (list of similar things, in this case numbers) of the numbers 1-6.
+The next bit of the <code>sample()</code> function is <code>size</code>. In the <code>dice()</code> function, the <code>num</code> passes down to the <code>size</code> of the <code>sample()</code>: Looking through the help, <code>size</code> is the number of items to choose. So <code>sample(1:6, 1)</code> would choose one number from the numbers 1-6 at random; <code>sample(1:6, 3)</code> would choose 3, and so on. The last argument, <code>replace=TRUE</code>, tells <code>sample()</code> what to do with a number once it’s been picked: Does it go ‘back into the bag’ to be picked again (<code>TRUE</code>) or not? (<code>FALSE</code>)?</p>
+<p>Around the outside is <code>sum()</code> which simply sums the numbers on however many (<code>num</code>) dice you “rolled”.</p>
+<p>Putting it all together, our <code>dice()</code> function “throws a die <code>num</code> times” by <code>sample()</code>ing from the numbers 1-6 <code>num</code> times, <code>replace</code>ing each number when it’s been picked, and sums the numbers of all the dice.</p>
+</div>
+<div class="question-begin">
+Question A2
+</div>
+<div class="question-body">
+<p>Look up the function <code>replicate()</code>. We can use it to do something in R lots of times!</p>
+<pre class="r"><code># run the code &quot;1+1&quot; 20 times: 
+replicate(20, 1+1)</code></pre>
+<pre><code>##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</code></pre>
+<p>Use <code>replicate()</code> to simulate 100 rolls of a single dice (<em>Hint:</em> this means <code>num = 1</code>), and store the results in an object in your environment. Give it an easily identifiable name.<br />
+<strong>Refresher:</strong> defining things in R, we use the syntax <code>name &lt;- value</code></p>
+<p>Create a barplot showing the frequency with which each number was landed on in the 100 rolls.<br />
+<strong>Hint:</strong> the functions <code>table()</code> and <code>barplot()</code> were used to do this in the lecture.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-3" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-3&#39;, &#39;sol-start-3&#39;)"></span>
+</div>
+<div id="sol-body-3" class="solution-body" style="display: none;">
+<p>We’ll name it “roll100”.</p>
+<pre class="r"><code>roll100 &lt;- replicate(100, dice(1))</code></pre>
+<p>We can get the frequency table using <code>table()</code></p>
+<pre class="r"><code>table(roll100)</code></pre>
+<pre><code>## roll100
+##  1  2  3  4  5  6 
+## 13 17 14 20 20 16</code></pre>
+<p>Which we can then pass to the <code>barplot()</code> function:</p>
+<pre class="r"><code>barplot(table(roll100))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A3
+</div>
+<div class="question-body">
+<p>Do the same for 1,000 rolls, and then for 10,000.<br />
+What do you notice?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-4" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-4&#39;, &#39;sol-start-4&#39;)"></span>
+</div>
+<div id="sol-body-4" class="solution-body" style="display: none;">
+<pre class="r"><code>d &lt;- replicate(1000, dice(1))
+barplot(table(d))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>d &lt;- replicate(10000, dice(1))
+barplot(table(d))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-7-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>The more rolls we do of the dice, the flatter the graph becomes. This is because there is an equal probability of the die landing on any of the responses - there is a <strong>uniform probability</strong>.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A4
+</div>
+<div class="question-body">
+<p>Copy the code below into a code-chunk and run it.
+It creates a new function called <code>wdice()</code> which simulates the rolling of <code>num</code> dice which are slightly weighted.</p>
+<p>Roll a single weighted die 100 times and plot the frequency distribution. Do the same for 1,000 and 10,000 rolls of a single die.<br />
+Does a pattern emerge? At how many rolls?</p>
+<pre class="r"><code>wdice &lt;- function(num = 1){
+    sum(sample(1:6, num, replace=TRUE, prob = c(0.15,0.15,0.15,0.15,0.15,0.25)))
+}</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-5" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-5&#39;, &#39;sol-start-5&#39;)"></span>
+</div>
+<div id="sol-body-5" class="solution-body" style="display: none;">
+<p>Your plots will look slightly different to these, because all of our dice are random!</p>
+<pre class="r"><code>wd &lt;- replicate(100, wdice(1))
+barplot(table(wd))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-10-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>wd &lt;- replicate(1000, wdice(1))
+barplot(table(wd))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-10-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>wd &lt;- replicate(10000, wdice(1))
+barplot(table(wd))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-10-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>The die is clearly weighted towards landing on 6.
+However, 100 rolls is not enough to reliably observe this. In our 100 rolls above, it landed on 2 quite a bit too! The pattern becomes clearer after 1000 rolls.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A5
+</div>
+<div class="question-body">
+<p>Remember, <code>wdice()</code> and <code>dice()</code> are really just relying on different functions, like <code>sample()</code>. Try playing around with <code>sample()</code> in the console again - what does the <code>prob = c(....)</code> bit do?<br />
+<br></p>
+<p>Now let’s try to modify the <code>wdice()</code> function. Edit the code for <code>wdice()</code> so that 50% of the time it lands on number 6.</p>
+<p><strong>NOTE:</strong> To test out your modified function, you will need to re-run code which defines the function.</p>
+<div class="frame">
+<p><strong>Think of it as “overwriting”, “replacing”, or “reassigning”</strong></p>
+<pre class="r"><code># define an object called &quot;x&quot; which has the value 3
+x &lt;- 3
+# print the object x
+x </code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code># reassign the name &quot;x&quot; to 2 plus the current value of x. 
+x &lt;- x + 2
+# x is now 5, not 3
+x</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>When we use the assignment operator <code>&lt;-</code> we assign a name to a value and store in R’s memory.<br />
+To edit any of these named objects, we simply <em>reassign</em> the name to the edited value. This applies to functions, to dataframes, and to specific observations in dataframes etc.</p>
+</div>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-6" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-6&#39;, &#39;sol-start-6&#39;)"></span>
+</div>
+<div id="sol-body-6" class="solution-body" style="display: none;">
+<p>The <code>prob</code> bit of <code>sample()</code> takes a set of probabilities <code>prob = c(.....)</code>.<br />
+We need to be careful to remember that the probability of the different outcomes must sum to 1 (i.e., it’s not possible to “50% of the time land on 6” as well as “70% of the time land on 5”!).</p>
+<pre class="r"><code>wdice &lt;- function(num = 1){
+    sum(sample(1:6, num, replace=TRUE, prob = c(0.1,0.1,0.1,0.1,0.1,0.5)))
+}</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A6
+</div>
+<div class="question-body">
+<p>Can you observe the weighting in your new die (the one which 50% of the time lands on number 6) in only 100 rolls?</p>
+<p>Conceptually, what can we learn from this toy example?<br />
+<strong>Hint:</strong> Think of how strongly weighted the die is as an <em>effect size</em>, and the number of rolls as the <em>sample size</em>.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-7" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-7&#39;, &#39;sol-start-7&#39;)"></span>
+</div>
+<div id="sol-body-7" class="solution-body" style="display: none;">
+<pre class="r"><code>wd &lt;- replicate(100, wdice(1))
+barplot(table(wd))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="int">
+<p>The bigger the effect, the smaller the sample size required to observe it.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<hr />
+<hr />
+</div>
+<div id="reading-data-in-r" class="section level1">
+<h1>Reading: Data in R</h1>
+<p>Now that we’ve played with a toy example for a bit, we’re going to look at reading in some data, exploring some of the variables, and the syntax we can use to access and edit certain bits of a dataset.</p>
+<div id="reading-in-data" class="section level2">
+<h2>Reading in data</h2>
+<p>First we’ll load the <strong>tidyverse</strong> package, so that we can use the <code>read_csv()</code> function.</p>
+<pre class="r"><code>library(tidyverse)
+starwars2 &lt;- read_csv(&quot;https://uoepsy.github.io/data/starwars2.csv&quot;)</code></pre>
+<div class="yellow">
+<p><strong>Reading data from a URL</strong></p>
+<p>Note that when you have a url for some data (e.g. <a href="https://raw.githubusercontent.com/uoepsy/data/master/starwars2.csv">this</a>) you can read it in directly by giving functions like <code>read_csv()</code> the url inside quotation marks.</p>
+</div>
+<p>The data contains information on various characteristics of characters from Star Wars.
+We can print out the top of the data by using the <code>head()</code> function which displays the first six rows of the data by default. You could change this by saying, for example, <code>head(data, n = 10)</code>:</p>
+<pre class="r"><code>head(starwars2, n = 10)</code></pre>
+<pre><code>## # A tibble: 10 x 6
+##    name               height hair_color    eye_color homeworld species
+##    &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+##  1 Luke Skywalker        172 blond         blue      Tatooine  Human  
+##  2 C-3PO                 167 &lt;NA&gt;          yellow    Tatooine  Human  
+##  3 R2-D2                  96 &lt;NA&gt;          red       Naboo     Droid  
+##  4 Darth Vader           202 none          yellow    Tatooine  Human  
+##  5 Leia Organa           150 brown         brown     Alderaan  Human  
+##  6 Owen Lars             178 brown, grey   blue      Tatooine  Human  
+##  7 Beru Whitesun lars    165 brown         blue      Tatooine  Human  
+##  8 R5-D4                  97 &lt;NA&gt;          red       Tatooine  Droid  
+##  9 Biggs Darklighter     183 black         brown     Tatooine  Human  
+## 10 Obi-Wan Kenobi        182 auburn, white blue-gray Stewjon   Human</code></pre>
+<p><em>(Don’t worry about the</em> NAs <em>for now, they are just how R tells you an entry is missing, i.e. Not Available.)</em></p>
+<div class="green">
+<p><strong>Tip:</strong> Try clicking on the data in your <strong>environment</strong> (the top right window of RStudio). It will open the data in a tab in the editor window - this is another way of looking at the data, more like you would in spreadsheet software like Microsoft Excel.
+This can be time-consuming if your data file is big.</p>
+</div>
+<p>We can take a look at how big the data is (the dimensions), using <code>dim()</code></p>
+<pre class="r"><code>dim(starwars2)</code></pre>
+<pre><code>## [1] 75  6</code></pre>
+<p>We can see that there are 75 rows and 6 columns.<br />
+In the <strong>starwars2</strong> data, each character is an <strong>observational unit</strong>, and there are 6 <strong>variables</strong> (things which vary between units) such as their <em>height</em>, <em>species</em>, <em>homeworld</em>, etc.</p>
+<div class="yellow">
+<p><strong>Units and variables</strong></p>
+<p>The individual entities on which data are collected are called <strong>observational units</strong> or <strong>cases</strong>. Often (but not always), these equate to the rows of a dataset.</p>
+<p>A <strong>variable</strong> is any characteristic that varies from observational unit to observational unit (these are often the columns of the dataset)</p>
+</div>
+</div>
+<div id="accessing-subsets-of-data" class="section level2">
+<h2>Accessing subsets of data</h2>
+<p>What if we want to extract certain subsections of our dataset, such as specific observational units or variables?
+This is where we learn about two important bits of R code used to access parts of data - the dollar sign <code>$</code>, and the square brackets <code>[]</code>.</p>
+<div class="frame">
+<p><strong>The dollar sign $</strong></p>
+<p>The dollar sign allows us to extract a specific variable from a dataframe.
+For instance, we can pull out the variable named “eye_color” in the data, by using <code>$eye_color</code> after the name that we gave our dataframe:</p>
+<pre class="r"><code>starwars2$eye_color</code></pre>
+<pre><code>##  [1] &quot;blue&quot;          &quot;yellow&quot;        &quot;red&quot;           &quot;yellow&quot;       
+##  [5] &quot;brown&quot;         &quot;blue&quot;          &quot;blue&quot;          &quot;red&quot;          
+##  [9] &quot;brown&quot;         &quot;blue-gray&quot;     &quot;blue&quot;          &quot;blue&quot;         
+## [13] &quot;blue&quot;          &quot;brown&quot;         &quot;black&quot;         &quot;orange&quot;       
+## [17] &quot;hazel&quot;         &quot;blue&quot;          &quot;yellow&quot;        &quot;brown&quot;        
+## [21] &quot;red&quot;           &quot;brown&quot;         &quot;blue&quot;          &quot;orange&quot;       
+## [25] &quot;blue&quot;          &quot;brown&quot;         &quot;black&quot;         &quot;red&quot;          
+## [29] &quot;blue&quot;          &quot;orange&quot;        &quot;orange&quot;        &quot;orange&quot;       
+## [33] &quot;yellow&quot;        &quot;orange&quot;        NA              &quot;brown&quot;        
+## [37] &quot;yellow&quot;        &quot;pink&quot;          &quot;hazel&quot;         &quot;yellow&quot;       
+## [41] &quot;black&quot;         &quot;orange&quot;        &quot;brown&quot;         &quot;yellow&quot;       
+## [45] &quot;black&quot;         &quot;brown&quot;         &quot;blue&quot;          &quot;orange&quot;       
+## [49] &quot;yellow&quot;        &quot;black&quot;         &quot;blue&quot;          &quot;brown&quot;        
+## [53] &quot;brown&quot;         &quot;blue&quot;          &quot;yellow&quot;        &quot;blue&quot;         
+## [57] &quot;blue&quot;          &quot;brown&quot;         &quot;brown&quot;         &quot;brown&quot;        
+## [61] &quot;brown&quot;         &quot;yellow&quot;        &quot;yellow&quot;        &quot;black&quot;        
+## [65] &quot;black&quot;         &quot;blue&quot;          &quot;unknown&quot;       &quot;unknown&quot;      
+## [69] &quot;gold&quot;          &quot;black&quot;         &quot;green, yellow&quot; &quot;blue&quot;         
+## [73] &quot;brown&quot;         &quot;black&quot;         NA</code></pre>
+</div>
+<p>Each variable in a dataframe is a vector (a set of values). Once extracted, we will have a vector and not a dataframe.</p>
+<div class="frame">
+<p><strong>The square brackets []</strong></p>
+<p>Square brackets are used to do what is known as <strong>indexing</strong> (finding specific entries in your data).<br />
+We can retrieve bits of data by identifying the <span class="math inline">\(i^{th}\)</span> entry(s) inside the square brackets, for instance:</p>
+<pre class="r"><code># assign the numbers 10, 20 ... 100 to the name &quot;somevalues&quot;
+somevalues &lt;- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+
+# pull out the 3rd entry
+somevalues[3]</code></pre>
+<pre><code>## [1] 30</code></pre>
+In the above example, we have a <strong>vector</strong> (a single sequence of values), and so we can retrieve entries with the syntax:
+<center>
+<strong>vector[entry]</strong>
+</center>
+<br>
+In a <strong>dataframe</strong> we have an extra dimension - we have rows <em>and</em> columns. Using square brackets with a dataframe needs us to specify both:<br />
+
+<center>
+<strong>dataframe[rows, columns]</strong>
+</center>
+</div>
+<p>Let’s look at some examples:</p>
+<pre class="r"><code># first row, fourth column:
+starwars2[1, 4]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   eye_color
+##   &lt;chr&gt;    
+## 1 blue</code></pre>
+<pre class="r"><code># tenth row, first column:
+starwars2[10, 1]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   name          
+##   &lt;chr&gt;         
+## 1 Obi-Wan Kenobi</code></pre>
+<p><br></p>
+<p>If we leave either rows or columns blank, then we will get out <strong>all</strong> of them:</p>
+<pre class="r"><code># tenth row, all columns:
+starwars2[10, ]</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   name           height hair_color    eye_color homeworld species
+##   &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 Obi-Wan Kenobi    182 auburn, white blue-gray Stewjon   Human</code></pre>
+<pre class="r"><code># all rows, 2nd column:
+starwars2[ , 2]</code></pre>
+<pre><code>## # A tibble: 75 x 1
+##    height
+##     &lt;dbl&gt;
+##  1    172
+##  2    167
+##  3     96
+##  4    202
+##  5    150
+##  6    178
+##  7    165
+##  8     97
+##  9    183
+## 10    182
+## # … with 65 more rows</code></pre>
+<p><br></p>
+<p>There are is another way to identify column - we can use the name in quotation marks:</p>
+<pre class="r"><code># first row, &quot;species&quot; column
+starwars2[1, &quot;species&quot;]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   species
+##   &lt;chr&gt;  
+## 1 Human</code></pre>
+<p><br>
+Finally, we can also ask for multiple rows, or multiple columns, or both! To do that, we use the combine function <code>c()</code>:</p>
+<pre class="r"><code># the 1st AND the 6th row, 
+# and the 1st AND 3rd columns:
+starwars2[c(1,6), c(1,3)]</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   name           hair_color 
+##   &lt;chr&gt;          &lt;chr&gt;      
+## 1 Luke Skywalker blond      
+## 2 Owen Lars      brown, grey</code></pre>
+<p><br>
+And we can specify a sequence using the colon, <code>from:to</code>:</p>
+<pre class="r"><code># FROM the 1st TO the 6th row, all columns:
+starwars2[1:6, ]</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   name           height hair_color  eye_color homeworld species
+##   &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 Luke Skywalker    172 blond       blue      Tatooine  Human  
+## 2 C-3PO             167 &lt;NA&gt;        yellow    Tatooine  Human  
+## 3 R2-D2              96 &lt;NA&gt;        red       Naboo     Droid  
+## 4 Darth Vader       202 none        yellow    Tatooine  Human  
+## 5 Leia Organa       150 brown       brown     Alderaan  Human  
+## 6 Owen Lars         178 brown, grey blue      Tatooine  Human</code></pre>
+<p>Why? Because the colon operator, <code>from:to</code>, creates a vector from the value <code>from</code> to the value <code>to</code> in steps of 1.</p>
+<pre class="r"><code>1:6</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6</code></pre>
+<div class="optional-begin">
+Extra: Combining $ and []. Click the plus to expand →<span id="opt-start-8" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-8&#39;, &#39;opt-start-8&#39;)"></span>
+</div>
+<div id="opt-body-8" class="optional-body" style="display: none;">
+<p>We can use the two accessors in combination:</p>
+<pre class="r"><code># extract the variable called &quot;name&quot; and show the 20th entry 
+starwars2$name[20]</code></pre>
+<pre><code>## [1] &quot;Boba Fett&quot;</code></pre>
+<p>This represents the 20th name in the data.</p>
+<p><strong>Note:</strong> When we do this, we don’t have the comma inside the square brackets.<br />
+When we use the <code>$</code> to pull out a variable, such as <code>starwars2$name</code>, we no longer have a dataframe - <code>starwars2$name</code> doesn’t have rows and columns, it just has a series of values - <em>it’s a vector!</em>.<br />
+So when you are using <code>[]</code> with a <strong>vector</strong> (1 dimension) rather than a <strong>dataframe</strong> (2 dimensions), you don’t specify <code>[rows, columns]</code>, but simply <code>[entry]</code>.</p>
+</div>
+<p class="optional-end">
+</p>
+<div class="yellow">
+<p><strong>The dollar sign $</strong></p>
+<p>Used to extract a variable from a dataframe:</p>
+<ul>
+<li><code>dataframe$variable</code></li>
+</ul>
+<p><strong>The square brackets []</strong></p>
+<p>Used to extract parts of an R object by identifying rows and/or columns, or more generally, “entries”. Left blank will return all.</p>
+<ul>
+<li><code>vector[entries]</code></li>
+<li><code>dataframe[rows, columns]</code></li>
+</ul>
+</div>
+<div id="accessing-by-a-condition" class="section level3 unnumbered">
+<h3>Accessing by a condition</h3>
+<p>We can also do something really useful, which is to access all the entries in the data for which <em>a specific condition</em> is true.</p>
+<p>Let’s take a simple example to start:</p>
+<pre class="r"><code>somevalues &lt;- c(10, 10, 0, 20, 15, 40, 10, 40, 50, 35)</code></pre>
+<p>To only select values which are greater than 20, we can use:</p>
+<pre class="r"><code>somevalues[somevalues &gt; 20]</code></pre>
+<pre><code>## [1] 40 40 50 35</code></pre>
+<div class="frame">
+<p>Unpacking: <code>somevalues[somevalues &gt; 20]</code><br />
+<br>
+First, let’s look at what <code>somevalues &gt; 20</code> does. It returns TRUE for the entries of <code>somevalues</code> which are greater than 20, and FALSE for the entries of <code>somevalues</code> that are not (that is, which are less than, or equal to, 20.</p>
+<p>This statement <code>somevalues &gt; 20</code> is called the <strong>condition</strong>.</p>
+<pre class="r"><code>somevalues &gt; 20</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE</code></pre>
+<p>We can give a name to this sequence of TRUEs and FALSEs</p>
+<pre class="r"><code>condition &lt;- somevalues &gt; 20
+condition</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE</code></pre>
+<p>Now consider putting the sequence of TRUEs and FALSEs inside the square brackets in <code>somevalues[]</code>.
+This returns only the entries of <code>somevalues</code> for which the condition is <code>TRUE</code>.</p>
+<pre class="r"><code>somevalues[condition]</code></pre>
+<pre><code>## [1] 40 40 50 35</code></pre>
+<p>So what we can do is use a <strong>condition</strong> inside the square brackets to return all the values for which that condition is TRUE.</p>
+<p>Note that you don’t have to always give a name to the condition. This works too:</p>
+<pre class="r"><code>somevalues[somevalues &gt; 20]</code></pre>
+<pre><code>## [1] 40 40 50 35</code></pre>
+</div>
+<p><br>
+We can extend this same logic to a dataframe.
+Let’s suppose we want to access all the entries in our Star Wars data who have the value “Droid” in the <em>species</em> variable.
+To work out how to do this, we first need a line of code which defines our <strong>condition</strong> - one which returns <code>TRUE</code> for each entry of the <em>species</em> variable which is “Droid”, and <code>FALSE</code> for those that are not “Droid”.</p>
+<p>We can use the dollar sign to pull out the <em>species</em> variable:</p>
+<pre class="r"><code>starwars2$species</code></pre>
+<pre><code>##  [1] &quot;Human&quot;        &quot;Human&quot;        &quot;Droid&quot;        &quot;Human&quot;        &quot;Human&quot;       
+##  [6] &quot;Human&quot;        &quot;Human&quot;        &quot;Droid&quot;        &quot;Human&quot;        &quot;Human&quot;       
+## [11] &quot;Human&quot;        &quot;Human&quot;        &quot;Wookiee&quot;      &quot;Human&quot;        &quot;Rodian&quot;      
+## [16] &quot;Hutt&quot;         &quot;Human&quot;        &quot;Human&quot;        &quot;Human&quot;        &quot;Human&quot;       
+## [21] &quot;Trandoshan&quot;   &quot;Human&quot;        &quot;Human&quot;        &quot;Mon Calamari&quot; &quot;Human&quot;       
+## [26] &quot;Ewok&quot;         &quot;Sullustan&quot;    &quot;Neimodian&quot;    &quot;Human&quot;        &quot;Gungan&quot;      
+## [31] &quot;Gungan&quot;       &quot;Gungan&quot;       &quot;Toydarian&quot;    &quot;Dug&quot;          &quot;unknown&quot;     
+## [36] &quot;Human&quot;        &quot;Zabrak&quot;       &quot;Twi&#39;lek&quot;      &quot;Twi&#39;lek&quot;      &quot;Vulptereen&quot;  
+## [41] &quot;Xexto&quot;        &quot;Toong&quot;        &quot;Human&quot;        &quot;Cerean&quot;       &quot;Nautolan&quot;    
+## [46] &quot;Zabrak&quot;       &quot;Tholothian&quot;   &quot;Iktotchi&quot;     &quot;Quermian&quot;     &quot;Kel Dor&quot;     
+## [51] &quot;Chagrian&quot;     &quot;Human&quot;        &quot;Human&quot;        &quot;Human&quot;        &quot;Geonosian&quot;   
+## [56] &quot;Mirialan&quot;     &quot;Mirialan&quot;     &quot;Human&quot;        &quot;Human&quot;        &quot;Human&quot;       
+## [61] &quot;Human&quot;        &quot;Clawdite&quot;     &quot;Besalisk&quot;     &quot;Kaminoan&quot;     &quot;Kaminoan&quot;    
+## [66] &quot;Human&quot;        &quot;Aleena&quot;       &quot;Skakoan&quot;      &quot;Muun&quot;         &quot;Togruta&quot;     
+## [71] &quot;Kaleesh&quot;      &quot;Wookiee&quot;      &quot;Human&quot;        &quot;Pau&#39;an&quot;       &quot;unknown&quot;</code></pre>
+<p>And we can ask R whether each value <strong>is equal to</strong> “Droid” (<em>Remember:</em> in R, we ask whether something <strong>is equal to</strong> something else by using a double-equals, <code>==</code>). A single equal sign would be wrong, as it denotes assignment.</p>
+<pre class="r"><code>starwars2$species == &quot;Droid&quot;</code></pre>
+<pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [49] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [61] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [73] FALSE FALSE FALSE</code></pre>
+<p>Finally, we can use this condition inside our square brackets to access the entries of the data for which this condition is TRUE:</p>
+<pre class="r"><code># I would read the code below as: 
+
+# &quot;In the starwars2 dataframe, give me all the rows for which the
+# condition starwars2$species==&quot;Droid&quot; is TRUE, and give me all the columns.&quot;
+
+starwars2[starwars2$species == &quot;Droid&quot;, ]</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   name  height hair_color eye_color homeworld species
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 R2-D2     96 &lt;NA&gt;       red       Naboo     Droid  
+## 2 R5-D4     97 &lt;NA&gt;       red       Tatooine  Droid</code></pre>
+<div class="optional-begin">
+Optional: with(). Click the plus to expand →<span id="opt-start-9" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-9&#39;, &#39;opt-start-9&#39;)"></span>
+</div>
+<div id="opt-body-9" class="optional-body" style="display: none;">
+<p>A useful function is <code>with()</code>. This creates a “container” where the variables of the dataframe are available to R within the <code>with()</code> parentheses without the need to use <code>$</code>:</p>
+<pre class="r"><code>with(starwars2, starwars2[species == &quot;Droid&quot;, ])</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   name  height hair_color eye_color homeworld species
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 R2-D2     96 &lt;NA&gt;       red       Naboo     Droid  
+## 2 R5-D4     97 &lt;NA&gt;       red       Tatooine  Droid</code></pre>
+</div>
+<p class="optional-end">
+</p>
+</div>
+</div>
+<div id="editing-parts-of-the-data" class="section level2">
+<h2>Editing parts of the data</h2>
+<p>Now that we’ve seen a few ways of <em>accessing</em> sections of data, we can learn how to edit them!<br />
+One of the most common reasons you will need to modify entries in your data is in <strong>data cleaning</strong>. This is the process of identifying incorrect/incomplete/irrelevant data, and replacing/modifying/deleting them.</p>
+<div id="changing-specific-entries" class="section level3 unnumbered">
+<h3>Changing specific entries</h3>
+<p>Above, we looked at the subsection of the data where the <em>species</em> variable had the entry “Droid”. Some of you may have noticed earlier that we had some data on C3PO. Is he not also a droid?</p>
+<center>
+<img src="images/categorical/c3po.png" />
+</center>
+<p>(Looks pretty Droid-y to me! <em>disclaimer: I know nothing about Star Wars</em> 🙂 )</p>
+<p>Just as we saw above how to <em>access</em> specific entries, e.g.:</p>
+<pre class="r"><code># 2nd row, all columns
+starwars2[2, ]</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   name  height hair_color eye_color homeworld species
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 C-3PO    167 &lt;NA&gt;       yellow    Tatooine  Human</code></pre>
+<pre class="r"><code># 2nd row, 6th column (the &quot;species&quot; column)
+starwars2[2,6]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   species
+##   &lt;chr&gt;  
+## 1 Human</code></pre>
+<p>We can change these by <strong>assigning them a new value</strong> (remember the <code>&lt;-</code> symbol):</p>
+<pre class="r"><code># C3PO is a droid, not a human
+starwars2[2,6] &lt;- &quot;Droid&quot;
+
+# Look at the 2nd row now -
+# the entry in the &quot;species&quot; column has changed:
+starwars2[2, ]</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   name  height hair_color eye_color homeworld species
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 C-3PO    167 &lt;NA&gt;       yellow    Tatooine  Droid</code></pre>
+<div class="frame">
+<p>We have <em>replaced</em> / <em>overwritten</em> / <em>reassigned</em> , the entry in the 2nd row and 6th column of the data (<code>starwars2[2,6]</code>) with the value “Droid”.</p>
+</div>
+</div>
+<div id="changing-entries-via-a-condition" class="section level3 unnumbered">
+<h3>Changing entries via a condition</h3>
+<p>We saw above how to access parts of data by means of a <strong>condition</strong>, with code such as:</p>
+<pre class="r"><code># &quot;In the starwars2 dataframe, give me all the rows for which the
+# condition starwars2$homeworld==&quot;Naboo&quot; is TRUE, and give me all the columns.&quot;
+starwars2[starwars2$homeworld==&quot;Naboo&quot;, ]</code></pre>
+<pre><code>## # A tibble: 8 x 6
+##   name          height hair_color eye_color homeworld species
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  
+## 1 R2-D2             96 &lt;NA&gt;       red       Naboo     Droid  
+## 2 Palpatine        170 grey       yellow    Naboo     Human  
+## 3 Jar Jar Binks    196 none       orange    Naboo     Gungan 
+## 4 Roos Tarpals     224 none       orange    Naboo     Gungan 
+## 5 Rugor Nass       206 none       orange    Naboo     Gungan 
+## 6 Gregar Typho     185 black      brown     Naboo     Human  
+## 7 Cordé            157 brown      brown     Naboo     Human  
+## 8 Dormé            165 brown      brown     Naboo     Human</code></pre>
+<p>What if we wanted to modify it so that every character from “Naboo” was actually of species “Nabooian”?</p>
+<p>We can do that in a number of ways, all of which do the same thing - namely, they access parts of the data and assign them the new value “Nabooian”.</p>
+<p>Study the lines of code below and their interpretations:</p>
+<pre class="r"><code># In the starwars2 data, give the rows for which condition 
+# starwars2$homeworld==&quot;Naboo&quot; is TRUE, and select only the &quot;species&quot; column. 
+# Assign to these selected entries the value &quot;Nabooian&quot;.
+starwars2[starwars2$homeworld==&quot;Naboo&quot;, &quot;species&quot;] &lt;- &quot;Nabooian&quot;
+
+# In the starwars2 data, give the rows for which condition 
+# starwars2$homeworld==&quot;Naboo&quot; is TRUE, and select only the 6th column. 
+# Assign to these selected entries the value &quot;Nabooian&quot;.
+starwars2[starwars2$homeworld==&quot;Naboo&quot;, 6] &lt;- &quot;Nabooian&quot;
+
+# Extract the species variable from the starwars2 data (it&#39;s a vector).
+# Pick the entries for which the condition starwars2$homeworld==&quot;Naboo&quot; is TRUE.
+# Assign to these selected entries the value &quot;Nabooian&quot;.
+starwars2$species[starwars2$homeworld==&quot;Naboo&quot;] &lt;- &quot;Nabooian&quot;</code></pre>
+</div>
+<div id="changing-a-variable" class="section level3">
+<h3>Changing a variable</h3>
+<p>Another thing we might want to do is change a whole variable (a whole column) in some way.<br />
+The logic is exactly the same, for instance, we can take the variable “height” from the dataframe “starwars2”, dividing it by 100 via <code>starwars2$height / 100</code>, and then assign the result to the same variable name in the data, i.e. we overwrite the column:</p>
+<pre class="r"><code>starwars2$height &lt;- starwars2$height / 100</code></pre>
+<p>We coud instead have added a <em>new column</em> named “height2” with those values if we did not want to overwrite “height”:</p>
+<pre class="r"><code>starwars2$height2 &lt;- starwars2$height / 100</code></pre>
+<p>This would have left the “height” variable as-is, and created a new one called “height2” which was the values in “height” divided by 100.</p>
+</div>
+<div id="removing-rows-or-columns" class="section level3">
+<h3>Removing rows or columns</h3>
+<p>Lastly, we might want to change the data by removing a row or a column.
+Again, the logic remains the same, in that we use <code>&lt;-</code> to assign the edited data to a name (either a new name, thus creating a new object, or an existing name, thereby <em>overwriting</em> that object).</p>
+<p>For instance, notice that the 35th and 75th rows of our data probably aren’t a valid observation - I’m reasonably sure that Marge and Homer Simpson never appeared in Star Wars:</p>
+<pre class="r"><code>starwars2[c(35,75), ]</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   name          height hair_color eye_color homeworld   species
+##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;  
+## 1 Marge Simpson    1.7 Blue       &lt;NA&gt;      Springfield unknown
+## 2 Homer Simpson    1.8 &lt;NA&gt;       &lt;NA&gt;      Springfield unknown</code></pre>
+<p>We can remove a certain row(s) by using a minus sign <code>-</code> inside the square brackets</p>
+<pre class="r"><code># everything minus the 75th row
+starwars2[-75, ]</code></pre>
+<pre><code>## # A tibble: 74 x 6
+##    name               height hair_color    eye_color homeworld species 
+##    &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   
+##  1 Luke Skywalker       1.72 blond         blue      Tatooine  Human   
+##  2 C-3PO                1.67 &lt;NA&gt;          yellow    Tatooine  Droid   
+##  3 R2-D2                0.96 &lt;NA&gt;          red       Naboo     Nabooian
+##  4 Darth Vader          2.02 none          yellow    Tatooine  Human   
+##  5 Leia Organa          1.5  brown         brown     Alderaan  Human   
+##  6 Owen Lars            1.78 brown, grey   blue      Tatooine  Human   
+##  7 Beru Whitesun lars   1.65 brown         blue      Tatooine  Human   
+##  8 R5-D4                0.97 &lt;NA&gt;          red       Tatooine  Droid   
+##  9 Biggs Darklighter    1.83 black         brown     Tatooine  Human   
+## 10 Obi-Wan Kenobi       1.82 auburn, white blue-gray Stewjon   Human   
+## # … with 64 more rows</code></pre>
+<pre class="r"><code># everything minus the (35th and 75th rows)
+starwars2[-c(35, 75), ]</code></pre>
+<pre><code>## # A tibble: 73 x 6
+##    name               height hair_color    eye_color homeworld species 
+##    &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   
+##  1 Luke Skywalker       1.72 blond         blue      Tatooine  Human   
+##  2 C-3PO                1.67 &lt;NA&gt;          yellow    Tatooine  Droid   
+##  3 R2-D2                0.96 &lt;NA&gt;          red       Naboo     Nabooian
+##  4 Darth Vader          2.02 none          yellow    Tatooine  Human   
+##  5 Leia Organa          1.5  brown         brown     Alderaan  Human   
+##  6 Owen Lars            1.78 brown, grey   blue      Tatooine  Human   
+##  7 Beru Whitesun lars   1.65 brown         blue      Tatooine  Human   
+##  8 R5-D4                0.97 &lt;NA&gt;          red       Tatooine  Droid   
+##  9 Biggs Darklighter    1.83 black         brown     Tatooine  Human   
+## 10 Obi-Wan Kenobi       1.82 auburn, white blue-gray Stewjon   Human   
+## # … with 63 more rows</code></pre>
+<p>And we can simply <em>re-use</em> the name “starwars2” to overwrite the data and make this change take effect (rather than just print out the result, which the code above did):</p>
+<pre class="r"><code>starwars2 &lt;- starwars2[-c(35, 75), ]</code></pre>
+<p>(now, in the <strong>environment</strong> pane of Rstudio, the object named “starwars2” will say 73 observations, rather than 75, which it had before - we’ve removed the 2 rows)</p>
+<p><br>
+The same logic applies for columns:</p>
+<pre class="r"><code># Create a new object called &quot;anonymous_starwars2&quot; and assign it 
+# to the values which are the &quot;starwars2&quot; dataframe minus the 
+# 1st column (the &quot;name&quot; column):
+anonymous_starwars2 &lt;- starwars2[, -1]
+
+# print out anonymous_starwars2
+anonymous_starwars2</code></pre>
+<pre><code>## # A tibble: 73 x 5
+##    height hair_color    eye_color homeworld species 
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   
+##  1   1.72 blond         blue      Tatooine  Human   
+##  2   1.67 &lt;NA&gt;          yellow    Tatooine  Droid   
+##  3   0.96 &lt;NA&gt;          red       Naboo     Nabooian
+##  4   2.02 none          yellow    Tatooine  Human   
+##  5   1.5  brown         brown     Alderaan  Human   
+##  6   1.78 brown, grey   blue      Tatooine  Human   
+##  7   1.65 brown         blue      Tatooine  Human   
+##  8   0.97 &lt;NA&gt;          red       Tatooine  Droid   
+##  9   1.83 black         brown     Tatooine  Human   
+## 10   1.82 auburn, white blue-gray Stewjon   Human   
+## # … with 63 more rows</code></pre>
+</div>
+</div>
+</div>
+<div id="refresher-types-of-data" class="section level1">
+<h1>Refresher: Types of Data</h1>
+<p>In the dice-rolling example, each roll of the die could take one of a discrete set of responses (1, 2, 3, 4, 5 or 6). A die cannot land on 5.3, or 2.6.</p>
+<p>There are many different things we can measure / record on observational units, and the data we collect will also have different characteristics. Some data will be similar to rolling a die in that values take on <strong>categories</strong>, and others could take any value on a <strong>continuous</strong> scale. Many of you filled out our little survey in welcome week. Consider the how we captured data on your heights (we asked you to answer in cm, and you could be precise as you liked) and the colours of your eyes (we gave you a set of options to choose from). We distinguish between these different types of data by talking about <strong>categorical</strong> and <strong>numerical</strong> variables. Within each, there also are a few important sub-classes.</p>
+<div class="yellow">
+<p><strong>Categorical</strong> variables tell us what group or category each individual belongs to. Each distinct group or category is called a <strong>level</strong> of the variable.</p>
+</div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><strong>Type</strong></th>
+<th align="left"><strong>Description</strong></th>
+<th align="left"><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Nominal (Unordered categorical)</strong></td>
+<td align="left">A categorical variable with <em>no</em> intrinsic ordering among the levels.</td>
+<td align="left">Species: <em>Human</em>, <em>Droid</em>, <em>Wookie</em>, <em>Hutt</em>, …</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Ordinal (Ordered categorical)</strong></td>
+<td align="left">A categorical variable which levels possess some kind of order</td>
+<td align="left">Level: <em>Low</em>, <em>Medium</em>, <em>High</em></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Binary categorical</strong></td>
+<td align="left">A special case of categorical variable with only 2 possible levels</td>
+<td align="left">Is_Human: <em>Yes</em> or <em>No</em>.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div class="yellow">
+<p><strong>Numerical</strong> (or quantitative) variables consist of numbers, and represent a measurable quantity. Operations like adding and averaging make sense only for numeric variables.</p>
+</div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><strong>Type</strong></th>
+<th align="left"><strong>Description</strong></th>
+<th align="left"><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Continuous</strong></td>
+<td align="left">Variables which can take any real number within the specified range of measurement</td>
+<td align="left">Height: <em>172</em>, <em>165.2</em>, <em>183</em>, …</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Discrete</strong></td>
+<td align="left">Variables which can only take integer number values. For instance, a <em>counts</em> can only take positive integer values (0, 1, 2, 3, etc.)</td>
+<td align="left">Number_of_siblings: <em>0</em>, <em>1</em>, <em>2</em>, <em>3</em>, <em>4</em>, …</td>
+</tr>
+</tbody>
+</table>
+<img src="images/ahorst/continuous_discrete.png" width="80%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-47"></span>
+<img src="images/ahorst/nominal_ordinal_binary.png" alt="Artwork by \@allison_horst" width="80%" />
+<p class="caption">
+Figure 1: Artwork by @allison_horst
+</p>
+</div>
+</div>
+<div id="exercises-categorical-distributions" class="section level1">
+<h1>Exercises: Categorical distributions</h1>
+<p>For these exercises, we have a dataset on some of the most popular internet passwords, their strength, and how long it took for an algorithm to crack it. The data are available online at <a href="https://uoepsy.github.io/data/passworddata.csv" class="uri">https://uoepsy.github.io/data/passworddata.csv</a>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rank</td>
+<td>Popularity in the database of released passwords</td>
+</tr>
+<tr class="even">
+<td>password</td>
+<td>Password</td>
+</tr>
+<tr class="odd">
+<td>type</td>
+<td>Category of password</td>
+</tr>
+<tr class="even">
+<td>cracked</td>
+<td>Time to crack by online guessing</td>
+</tr>
+<tr class="odd">
+<td>strength</td>
+<td>Strength = quality of password where 10 is highest, 1 is lowest</td>
+</tr>
+<tr class="even">
+<td>strength_cat</td>
+<td>Strength category (weak, medium, strong)</td>
+</tr>
+</tbody>
+</table>
+<div class="question-begin">
+Question B1
+</div>
+<div class="question-body">
+<p>Read in the data from the url.<br />
+Pass the dataset to <code>summary()</code> to see a quick summary of each variable. Which variables are categorical?</p>
+<p><br>
+Don’t get misled by the output of <code>summary()</code> - R doesn’t know what type each variable is, and will use a best guess. For instance, it will treat a variable like “strength” as numerical, when it is actually a set of ordered categories.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-10" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-10&#39;, &#39;sol-start-10&#39;)"></span>
+</div>
+<div id="sol-body-10" class="solution-body" style="display: none;">
+<pre class="r"><code>pwords &lt;- read_csv(&quot;https://uoepsy.github.io/data/passworddata.csv&quot;)
+summary(pwords)</code></pre>
+<pre><code>##       rank         password             type              cracked      
+##  Min.   :  1.0   Length:500         Length:500         Min.   : 1.290  
+##  1st Qu.:125.8   Class :character   Class :character   1st Qu.: 3.430  
+##  Median :250.5   Mode  :character   Mode  :character   Median : 3.720  
+##  Mean   :250.5                                         Mean   : 5.603  
+##  3rd Qu.:375.2                                         3rd Qu.: 3.720  
+##  Max.   :500.0                                         Max.   :92.270  
+##     strength      strength_cat      
+##  Min.   : 1.000   Length:500        
+##  1st Qu.: 6.000   Class :character  
+##  Median : 7.000   Mode  :character  
+##  Mean   : 6.768                     
+##  3rd Qu.: 8.000                     
+##  Max.   :10.000</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B2
+</div>
+<div class="question-body">
+<p>In R, categorical variables are known as “factors”.</p>
+<p>Explore the help documentation for the <code>factor()</code> function.<br />
+(type <code>?factor</code> into the console to bring the help page up).</p>
+<p>For the “type” and “strength_cat” variables, use <code>factor()</code> to modify the variable so that R knows it’s a factor. Can you tell R about the ordering of the “strength_cat” variable?<br />
+After you’ve done this, try <code>summary()</code> again to see how the output changes for these two variables.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-11" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-11&#39;, &#39;sol-start-11&#39;)"></span>
+</div>
+<div id="sol-body-11" class="solution-body" style="display: none;">
+<p>Note that in R, “factors” have an attribute called “levels”. These are the possible responses/categories.</p>
+<pre class="r"><code>pwords$type &lt;- factor(pwords$type)
+levels(pwords$type)</code></pre>
+<pre><code>##  [1] &quot;animal&quot;              &quot;cool-macho&quot;          &quot;fluffy&quot;             
+##  [4] &quot;food&quot;                &quot;name&quot;                &quot;nerdy-pop&quot;          
+##  [7] &quot;password-related&quot;    &quot;rebellious-rude&quot;     &quot;simple-alphanumeric&quot;
+## [10] &quot;sport&quot;</code></pre>
+<p>The strength_cat variable is a factor, but it has an order. We tell R about this ordering, but we actually have to tell R the specific ordering. It will default to alphabetically ordering them, which would give “medium” &lt; “strong” &lt; “weak”, which is not what we want at all!</p>
+<pre class="r"><code>pwords$strength_cat &lt;- factor(pwords$strength_cat, ordered = TRUE, levels = c(&quot;weak&quot;,&quot;medium&quot;,&quot;strong&quot;))
+levels(pwords$strength_cat)</code></pre>
+<pre><code>## [1] &quot;weak&quot;   &quot;medium&quot; &quot;strong&quot;</code></pre>
+<p>Now let’s look at how <code>summary()</code> now behaves:</p>
+<pre class="r"><code>summary(pwords)</code></pre>
+<pre><code>##       rank         password                          type        cracked      
+##  Min.   :  1.0   Length:500         name               :183   Min.   : 1.290  
+##  1st Qu.:125.8   Class :character   cool-macho         : 79   1st Qu.: 3.430  
+##  Median :250.5   Mode  :character   simple-alphanumeric: 61   Median : 3.720  
+##  Mean   :250.5                      fluffy             : 44   Mean   : 5.603  
+##  3rd Qu.:375.2                      sport              : 37   3rd Qu.: 3.720  
+##  Max.   :500.0                      nerdy-pop          : 30   Max.   :92.270  
+##                                     (Other)            : 66                   
+##     strength      strength_cat
+##  Min.   : 1.000   weak  : 73  
+##  1st Qu.: 6.000   medium:402  
+##  Median : 7.000   strong: 25  
+##  Mean   : 6.768               
+##  3rd Qu.: 8.000               
+##  Max.   :10.000               
+## </code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B3
+</div>
+<div class="question-body">
+<p>Create a table of frequencies of different password types.<br />
+How might you turn the table into a table of percentages, rather than of counts?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-12" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-12&#39;, &#39;sol-start-12&#39;)"></span>
+</div>
+<div id="sol-body-12" class="solution-body" style="display: none;">
+<pre class="r"><code>table(pwords$type)</code></pre>
+<pre><code>## 
+##              animal          cool-macho              fluffy                food 
+##                  29                  79                  44                  11 
+##                name           nerdy-pop    password-related     rebellious-rude 
+##                 183                  30                  15                  11 
+## simple-alphanumeric               sport 
+##                  61                  37</code></pre>
+<p>Divide by the total number of passwords (500) in order to turn them into proportions. Multiply by 100 to turn them to percentages.</p>
+<pre class="r"><code>table(pwords$type)/500*100</code></pre>
+<pre><code>## 
+##              animal          cool-macho              fluffy                food 
+##                 5.8                15.8                 8.8                 2.2 
+##                name           nerdy-pop    password-related     rebellious-rude 
+##                36.6                 6.0                 3.0                 2.2 
+## simple-alphanumeric               sport 
+##                12.2                 7.4</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B4
+</div>
+<div class="question-body">
+<p><code>table()</code> can take multiple variables, not just one.</p>
+<p>We’re interested in how password strength differs between “cool-macho” passwords and “simple-alphanumeric” passwords.
+Make a two-way contingency table of strength and type, showing only the “cool-macho” and “simple-alphanumeric” passwords.</p>
+<p><strong>Hints:</strong></p>
+<ul>
+<li><p>We can specify multiple conditions using <code>&amp;</code> and <code>|</code> for “and” and “or” respectively. Try playing in the console to see what these lines do:</p>
+<pre class="r"><code>pwords[pwords$type == &quot;cool-macho&quot; | pwords$type == &quot;simple-alphanumeric&quot;, ]
+pwords[pwords$type == &quot;cool-macho&quot; &amp; pwords$strength == 6, ]
+pwords[pwords$cracked &gt; 5 &amp; pwords$strength &lt; 5, ]
+pwords[pwords$password==&quot;bear&quot; | pwords$strength == 2, ]</code></pre></li>
+<li><p>You might find that the table you create has all the other “levels” in it too. You could try looking into the <code>droplevels()</code> function.</p></li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-13" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-13&#39;, &#39;sol-start-13&#39;)"></span>
+</div>
+<div id="sol-body-13" class="solution-body" style="display: none;">
+<pre class="r"><code># one way to do it:
+table(pwords$type[pwords$type == &quot;cool-macho&quot; | pwords$type == &quot;simple-alphanumeric&quot;],
+      pwords$strength[pwords$type == &quot;cool-macho&quot; | pwords$type == &quot;simple-alphanumeric&quot;])</code></pre>
+<pre><code>##                      
+##                        1  2  3  4  5  6  7  8  9 10
+##   animal               0  0  0  0  0  0  0  0  0  0
+##   cool-macho           1  1  3  0  1 15 17 27 11  3
+##   fluffy               0  0  0  0  0  0  0  0  0  0
+##   food                 0  0  0  0  0  0  0  0  0  0
+##   name                 0  0  0  0  0  0  0  0  0  0
+##   nerdy-pop            0  0  0  0  0  0  0  0  0  0
+##   password-related     0  0  0  0  0  0  0  0  0  0
+##   rebellious-rude      0  0  0  0  0  0  0  0  0  0
+##   simple-alphanumeric 29  0  0 15  1  1  2  4  1  8
+##   sport                0  0  0  0  0  0  0  0  0  0</code></pre>
+<pre class="r"><code># another way:
+coolsimple &lt;- pwords[pwords$type == &quot;cool-macho&quot; | pwords$type == &quot;simple-alphanumeric&quot;, ]
+table(coolsimple$type, coolsimple$strength)</code></pre>
+<pre><code>##                      
+##                        1  2  3  4  5  6  7  8  9 10
+##   animal               0  0  0  0  0  0  0  0  0  0
+##   cool-macho           1  1  3  0  1 15 17 27 11  3
+##   fluffy               0  0  0  0  0  0  0  0  0  0
+##   food                 0  0  0  0  0  0  0  0  0  0
+##   name                 0  0  0  0  0  0  0  0  0  0
+##   nerdy-pop            0  0  0  0  0  0  0  0  0  0
+##   password-related     0  0  0  0  0  0  0  0  0  0
+##   rebellious-rude      0  0  0  0  0  0  0  0  0  0
+##   simple-alphanumeric 29  0  0 15  1  1  2  4  1  8
+##   sport                0  0  0  0  0  0  0  0  0  0</code></pre>
+<pre class="r"><code># We can get rid of the empty levels of the &quot;type&quot; variable using droplevels():
+coolsimple &lt;- droplevels(coolsimple)
+table(coolsimple$type, coolsimple$strength)</code></pre>
+<pre><code>##                      
+##                        1  2  3  4  5  6  7  8  9 10
+##   cool-macho           1  1  3  0  1 15 17 27 11  3
+##   simple-alphanumeric 29  0  0 15  1  1  2  4  1  8</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B5
+</div>
+<div class="question-body">
+<p>For a randomly selected “cool-macho” password, what is the probability that it has a strength of <span class="math inline">\(\geq 5\)</span>?
+What about for a randomly selected “simple-alphanumeric” password?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-14" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-14&#39;, &#39;sol-start-14&#39;)"></span>
+</div>
+<div id="sol-body-14" class="solution-body" style="display: none;">
+<p>Think about what the code below does:</p>
+<pre class="r"><code>pwords$strength &gt;=5</code></pre>
+<p>We can actually use this to really easily edit our two-way table:</p>
+<pre class="r"><code>table(pwords$type, pwords$strength&gt;=5)</code></pre>
+<pre><code>##                      
+##                       FALSE TRUE
+##   animal                  0   29
+##   cool-macho              5   74
+##   fluffy                  6   38
+##   food                    4    7
+##   name                    9  174
+##   nerdy-pop               0   30
+##   password-related        3   12
+##   rebellious-rude         1   10
+##   simple-alphanumeric    44   17
+##   sport                   1   36</code></pre>
+<p>For “cool-macho” the probability of being <span class="math inline">\(\geq 5\)</span> is <span class="math inline">\(\frac{74}{74+5}\)</span> = 0.94.<br />
+For “simple-alphanumeric” the probability of being <span class="math inline">\(\geq 5\)</span> is <span class="math inline">\(\frac{17}{44+17}\)</span> = 0.28.</p>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="exercises-advanced-plotting" class="section level1">
+<h1>Exercises: Advanced plotting</h1>
+<div class="frame">
+<p><em>“By visualizing information, we turn it into a landscape that you can explore with your eyes. A sort of information map. And when you’re lost in information, an information map is kind of useful.”</em> – <a href="https://informationisbeautiful.net/">David McCandless</a></p>
+</div>
+<p>We’re going to now make our first steps into the world of data visualisation. R is an incredibly capable language for creating visualisations of almost any kind. It is used by many media companies (e.g., the BBC), and has the capability of producing 3d visualisations, animations, interactive graphs, and more.</p>
+<p>We are going to use the most popular R package for visualisation, <strong>ggplot2</strong>. This is actually part of the <strong>tidyverse</strong>, so if we have an Rmarkdown document and have loaded the <strong>tidyverse</strong> packages at the start (by using <code>library(tidyverse)</code>), then <strong>ggplot2</strong> will be loaded too).</p>
+<p>Recall our way of plotting frequencies that we have seen so far:</p>
+<pre class="r"><code>barplot(table(pwords$strength))</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-58-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>We can also use ggplot() to visualise this. The benefit is that we can easily then edit <em>all</em> aspects of the visualisation.</p>
+<pre class="r"><code># create the plot, and give the &quot;mappings&quot;
+ggplot(data = pwords, aes(x = strength)) + 
+  # add some shapes
+  geom_bar() +
+  # add some titles, axes labels etc
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;, title = &quot;Password strength frequencies&quot;)+
+  # specify the exact x values for the axis
+  scale_x_continuous(breaks=1:10)</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-59-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="yellow">
+<p><strong>Basic ggplot components</strong></p>
+<p>Note the key components of the ggplot code.</p>
+<ul>
+<li><code>data =</code> where we provide the name of the dataframe.</li>
+<li><code>aes =</code> where we provide the <em>aesthetics</em>. These are things which we map from the data to the graph. For instance, the x-axis, or if we wanted to colour the columns/bars according to some aspect of the data.</li>
+</ul>
+<p>Then we add (using <code>+</code>) some <em>geometry</em>. These are the shapes (in our case, the columns/bars), which will be put in the correct place according to what we specified in <code>aes()</code>.</p>
+<ul>
+<li>`+ geom_….` Adds different shapes (e.g., bars) to the plot.</li>
+</ul>
+<p><br>
+You can find great documentation on ggplot2 at <a href="https://www.statsandr.com/blog/graphics-in-r-with-ggplot2/" class="uri">https://www.statsandr.com/blog/graphics-in-r-with-ggplot2/</a>.</p>
+</div>
+<div class="optional-begin">
+Optional - Looking ahead to different aes() and geoms, labels. Click the plus to expand →<span id="opt-start-15" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-15&#39;, &#39;opt-start-15&#39;)"></span>
+</div>
+<div id="opt-body-15" class="optional-body" style="display: none;">
+<p>Use these as reference for when you want to make changes to the plots you create.<br />
+Additionall, remember that google is your friend - there are endless forums with people asking how to do something in ggplot, and you can just copy and paste bits of code to add to your plots!</p>
+<ol style="list-style-type: decimal">
+<li>Filling/colouring geoms:</li>
+</ol>
+<pre class="r"><code>ggplot(data = pwords, aes(x = strength, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;, title = &quot;Password strength frequencies&quot;) +
+  scale_x_continuous(breaks=1:10)</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-60-1.png" width="80%" style="display: block; margin: auto;" />
+2. Change the limits of the axes:</p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = strength, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;, title = &quot;Password strength frequencies&quot;) + 
+  scale_x_continuous(breaks=1:10) +
+  ylim(0,200)</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-61-1.png" width="80%" style="display: block; margin: auto;" />
+3. Remove (or reposition) the legend:</p>
+<pre class="r"><code># setting legend.position as &quot;bottom&quot; would put it at the bottom!
+ggplot(data = pwords, aes(x = strength, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;, title = &quot;Password strength frequencies&quot;) + 
+  scale_x_continuous(breaks=1:10) + 
+  theme(legend.position = &quot;none&quot;) </code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-62-1.png" width="80%" style="display: block; margin: auto;" />
+4. Changing the theme:</p>
+<pre class="r"><code># there are many predefine themes, including: 
+# theme_bw(), theme_classic(), theme_light()
+
+ggplot(data = pwords, aes(x = strength, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;, title = &quot;Password strength frequencies&quot;) + 
+  scale_x_continuous(breaks=1:10) + 
+  theme_minimal()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-63-1.png" width="80%" style="display: block; margin: auto;" />
+5. Other shapes, x and y:</p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = type, y = strength)) +
+  geom_boxplot()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-64-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = type, y = strength)) +
+  geom_violin()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-64-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = strength, y = cracked)) + 
+  geom_point()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-64-3.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="optional-end">
+</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-65"></span>
+<img src="images/ahorst/ggplot2_masterpiece.png" alt="Artwork by \@allison_horst" width="80%" />
+<p class="caption">
+Figure 2: Artwork by @allison_horst
+</p>
+</div>
+<div class="question-begin">
+Question C1
+</div>
+<div class="question-body">
+<p>Create a ggplot visualisation which shows how password strengths (either the categories 1:10, or the categories weak, medium, and strong) are different depending on the password type. There’s no <em>Correct</em> answer to this, but certain ways of visualising provide different perspectives, and different levels of clarity.</p>
+<p>Some things you <em>might</em> to look into (but don’t <em>have</em> to use):</p>
+<ul>
+<li><code>facet_wrap()</code> or <code>facet_grid()</code></li>
+<li><code>coord_flip()</code></li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-16" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-16&#39;, &#39;sol-start-16&#39;)"></span>
+</div>
+<div id="sol-body-16" class="solution-body" style="display: none;">
+<p>Some options:</p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = type, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-66-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = type, fill = strength_cat)) +
+  geom_bar(position=&quot;dodge&quot;)+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-66-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = strength, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Strength&quot;, y = &quot;Count&quot;) + 
+  theme_minimal()+
+  facet_wrap(~type)</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-66-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = pwords, aes(x = type, fill = strength_cat)) +
+  geom_bar()+
+  labs(x = &quot;Password Type&quot;, y = &quot;Count&quot;) + 
+  theme_minimal() + 
+  coord_flip() + 
+  facet_wrap(~strength_cat, scales = &quot;free_x&quot;)</code></pre>
+<p><img src="01_categorical_files/figure-html/unnamed-chunk-66-4.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="solution-end">
+</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

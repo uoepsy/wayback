@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Covariance, Correlation, and Modelling</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+if(f.classList.contains('fa-plus')) {
+    f.classList.add('fa-minus')
+    f.classList.remove('fa-plus')
+} else {
+    f.classList.add('fa-plus')
+    f.classList.remove('fa-minus')
+}
+}
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/style-labs.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="https://uoepsy.github.io/usmr/">
+    <span class="fas fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    USMR Starts Here!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_introPG.html">Getting started with R &amp; RStudio</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data &amp; Distributions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_categorical.html">1: Categorical Data</a>
+    </li>
+    <li>
+      <a href="02_numerical.html">2: Numeric Data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tests, Models &amp; Data Wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03_nhst.html">3: Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="04_tests.html">4: More tests</a>
+    </li>
+    <li>
+      <a href="05_covcor.html">5: Cov, Cor, Functions &amp; Models</a>
+    </li>
+    <li class="dropdown-header">--- 6: Break Week ---</li>
+    <li>
+      <a href="06_messy.html">7: Messy data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression models
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07_slr.html">8: Linear Regression</a>
+    </li>
+    <li>
+      <a href="08_mlr.html">9: More Linear Regression</a>
+    </li>
+    <li>
+      <a href="08b_modelselect.html">Optional Extra: Model Selection</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    More!
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09_glm.html">10: GLM!</a>
+    </li>
+    <li>
+      <a href="10_sswriting.html">11: Writing up</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Covariance, Correlation, and Modelling</h1>
+
+</div>
+
+
+<!-- :::red -->
+<!-- **Preliminaries**   -->
+<!-- - Be sure to check the [**solutions to last week's exercises**](04_tests.html). You can still ask any questions about previous weeks' materials if things aren't clear!     -->
+<!-- - Open Rstudio, make sure you have the USMR project open, and create a new RMarkdown document (giving it a title for this week).  -->
+<!-- ::: -->
+<div id="reading-covariance-correlation" class="section level1">
+<h1>Reading: Covariance &amp; Correlation</h1>
+<p>Our data for this walkthrough is from a (hypothetical) study on memory. Twenty participants studied passages of text (c500 words long), and were tested a week later. The testing phase presented participants with 100 statements about the text. They had to answer whether each statement was true or false, as well as rate their confidence in each answer (on a sliding scale from 0 to 100). The dataset contains, for each participant, the percentage of items correctly answered, and the average confidence rating. Participants’ ages were also recorded.</p>
+<p>Let’s take a look at the relationships between the percentage of items answered correctly (<code>recall_accuracy</code>) and participants’ average self-rating of confidence in their answers (<code>recall_confidence</code>):</p>
+<pre class="r"><code>library(tidyverse)
+library(patchwork)
+
+recalldata &lt;- read_csv(&quot;https://uoepsy.github.io/data/recalldata.csv&quot;)
+
+ggplot(recalldata, aes(x=recall_confidence, recall_accuracy))+
+  geom_point() + 
+ggplot(recalldata, aes(x=age, recall_accuracy))+
+  geom_point()</code></pre>
+<p><img src="05_covcor_files/figure-html/unnamed-chunk-1-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>These two relationships look quite different.</p>
+<ul>
+<li>For participants who tended to be more confident in their answers, the percentage of items they correctly answered tends to be higher.<br />
+</li>
+<li>The older participants were, the lower the percentage of items they correctly answered tended to be.</li>
+</ul>
+<p>Which relationship should we be more confident in and why?</p>
+<p>Ideally, we would have some means of quantifying the strength and direction of these sorts of relationship. This is where we come to the two summary statistics which we can use to talk about the association between two numeric variables: <strong>Covariance</strong> and <strong>Correlation</strong>.</p>
+<div id="covariance" class="section level2">
+<h2>Covariance</h2>
+<div class="yellow">
+<p>Covariance is the measure of how two variables vary together.
+It is the change in one variable associated with the change in another variable.</p>
+<p>For samples, covariance is calculated using the following formula:</p>
+<p><span class="math display">\[\mathrm{cov}(x,y)=\frac{1}{n-1}\sum_{i=1}^n (x_{i}-\bar{x})(y_{i}-\bar{y})\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are two variables; e.g., <code>age</code> and <code>recall_accuracy</code>;</li>
+<li><span class="math inline">\(i\)</span> denotes the observational unit, such that <span class="math inline">\(x_i\)</span> is value that the <span class="math inline">\(x\)</span> variable takes on the <span class="math inline">\(i\)</span>th observational unit, and similarly for <span class="math inline">\(y_i\)</span>;</li>
+<li><span class="math inline">\(n\)</span> is the sample size.</li>
+</ul>
+<p><strong>In R</strong><br />
+We can calculate covariance in R using the <code>cov()</code> function.<br />
+<code>cov()</code> can take two variables <code>cov(x = , y = )</code>.</p>
+<pre class="r"><code>cov(x = recalldata$recall_accuracy, y = recalldata$recall_confidence)</code></pre>
+<pre><code>## [1] 118.0768</code></pre>
+</div>
+<div class="optional-begin">
+Optional: Manually calculating covariance<span id="opt-start-57" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-57&#39;, &#39;opt-start-57&#39;)"></span>
+</div>
+<div id="opt-body-57" class="optional-body" style="display: none;">
+<ol style="list-style-type: decimal">
+<li>Create 2 new columns in the memory recall data, one of which is the mean recall accuracy, and one which is the mean recall confidence.</li>
+</ol>
+<pre class="r"><code>recalldata &lt;-
+  recalldata %&gt;% mutate(
+    maccuracy = mean(recall_accuracy),
+    mconfidence = mean(recall_confidence)
+  )</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Now create three new columns which are:</p>
+<ol style="list-style-type: lower-roman">
+<li>recall accuracy minus the mean recall accuracy - this is the <span class="math inline">\((x_i - \bar{x})\)</span> part.<br />
+</li>
+<li>confidence minus the mean confidence - and this is the <span class="math inline">\((y_i - \bar{y})\)</span> part.<br />
+</li>
+<li>the product of i. and ii. - this is calculating <span class="math inline">\((x_i - \bar{x})\)</span><span class="math inline">\((y_i - \bar{y})\)</span>.</li>
+</ol></li>
+</ol>
+<pre class="r"><code>recalldata &lt;- 
+  recalldata %&gt;% 
+    mutate(
+      acc_minus_mean_acc = recall_accuracy - maccuracy,
+      conf_minus_mean_conf = recall_confidence - mconfidence,
+      prod_acc_conf = acc_minus_mean_acc * conf_minus_mean_conf
+    )
+
+recalldata</code></pre>
+<pre><code>## # A tibble: 20 x 9
+##    ppt    recall_accuracy recall_confidence   age maccuracy mconfidence
+##    &lt;chr&gt;            &lt;dbl&gt;             &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 ppt_1               72              66.6    72      69.2        55.4
+##  2 ppt_2               66              47.1    35      69.2        55.4
+##  3 ppt_3               47              43.8    48      69.2        55.4
+##  4 ppt_4               84              58.9    52      69.2        55.4
+##  5 ppt_5               84              75.1    46      69.2        55.4
+##  6 ppt_6               58              53.5    41      69.2        55.4
+##  7 ppt_7               52              48.5    86      69.2        55.4
+##  8 ppt_8               76              67.1    58      69.2        55.4
+##  9 ppt_9               41              40.4    59      69.2        55.4
+## 10 ppt_10              67              46.8    22      69.2        55.4
+## 11 ppt_11              60              50.6    62      69.2        55.4
+## 12 ppt_12              67              28.7    40      69.2        55.4
+## 13 ppt_13              76              69.0    47      69.2        55.4
+## 14 ppt_14              93              67.9    51      69.2        55.4
+## 15 ppt_15              71              54.5    34      69.2        55.4
+## 16 ppt_16              71              64.6    37      69.2        55.4
+## 17 ppt_17              99              66.3    37      69.2        55.4
+## 18 ppt_18              66              49.0    51      69.2        55.4
+## 19 ppt_19              77              58.5    41      69.2        55.4
+## 20 ppt_20              58              51.4    57      69.2        55.4
+## # … with 3 more variables: acc_minus_mean_acc &lt;dbl&gt;,
+## #   conf_minus_mean_conf &lt;dbl&gt;, prod_acc_conf &lt;dbl&gt;</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Finally, sum the products, and divide by <span class="math inline">\(n-1\)</span></li>
+</ol>
+<pre class="r"><code>recalldata %&gt;%
+  summarise(
+    prod_sum = sum(prod_acc_conf),
+    n = n()
+  )</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   prod_sum     n
+##      &lt;dbl&gt; &lt;int&gt;
+## 1    2243.    20</code></pre>
+<pre class="r"><code>2243.46 / (20-1)</code></pre>
+<pre><code>## [1] 118.0768</code></pre>
+<p>Which is the same result as using <code>cov()</code>:</p>
+<pre class="r"><code>cov(x = recalldata$recall_accuracy, y = recalldata$recall_confidence)</code></pre>
+<pre><code>## [1] 118.0768</code></pre>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Optional: Covariance explained visually<span id="opt-start-58" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-58&#39;, &#39;opt-start-58&#39;)"></span>
+</div>
+<div id="opt-body-58" class="optional-body" style="display: none;">
+<p>Consider the following scatterplot:<br />
+<img src="05_covcor_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" />
+<br>
+Now let’s superimpose a vertical dashed line at the mean of <span class="math inline">\(x\)</span> (<span class="math inline">\(\bar{x}\)</span>) and a horizontal dashed line at the mean of <span class="math inline">\(y\)</span> (<span class="math inline">\(\bar{y}\)</span>):
+<img src="05_covcor_files/figure-html/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" />
+<br>
+Now let’s pick one of the points, call it <span class="math inline">\(x_i\)</span>, and show <span class="math inline">\((x_{i}-\bar{x})\)</span> and <span class="math inline">\((y_{i}-\bar{y})\)</span>.<br />
+<br>
+Notice that this makes a rectangle.<br />
+<br>
+As <span class="math inline">\((x_{i}-\bar{x})\)</span> and <span class="math inline">\((y_{i}-\bar{y})\)</span> are both positive values, their product - <span class="math inline">\((x_{i}-\bar{x})(y_{i}-\bar{y})\)</span> - is positive.
+<img src="05_covcor_files/figure-html/unnamed-chunk-10-1.png" width="80%" style="display: block; margin: auto;" />
+<br>
+In fact, for all these points in red, the product <span class="math inline">\((x_{i}-\bar{x})(y_{i}-\bar{y})\)</span> is positive (remember that a negative multiplied by a negative gives a positive):
+<img src="05_covcor_files/figure-html/unnamed-chunk-11-1.png" width="80%" style="display: block; margin: auto;" />
+<br>
+And for these points in blue, the product <span class="math inline">\((x_{i}-\bar{x})(y_{i}-\bar{y})\)</span> is negative:<br />
+<img src="05_covcor_files/figure-html/unnamed-chunk-12-1.png" width="80%" style="display: block; margin: auto;" />
+<br>
+Now take another look at the formula for covariance:</p>
+<p><span class="math display">\[\mathrm{cov}(x,y)=\frac{\sum_{i=1}^n (x_{i}-\bar{x})(y_{i}-\bar{y})}{n-1}\]</span></p>
+<p>It is the sum of all these products divided by <span class="math inline">\(n-1\)</span>. It is the average of the products!</p>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<div id="correlation---r" class="section level2">
+<h2>Correlation - <span class="math inline">\(r\)</span></h2>
+<div class="yellow">
+<p>You can think of correlation as a standardized covariance. It has a scale from negative one to one, on which the distance from zero indicates the strength of the relationship.<br />
+Just like covariance, positive/negative values reflect the nature of the relationship.</p>
+<p>The <strong>correlation coefficient</strong> is a standardised number which quantifies the strength and direction of the <strong>linear</strong> relationship between two variables. In a population it is denoted by <span class="math inline">\(\rho\)</span>, and in a sample it is denoted by <span class="math inline">\(r\)</span>.</p>
+<p>We can calculate <span class="math inline">\(r\)</span> using the following formula:<br />
+<span class="math display">\[
+r_{(x,y)}=\frac{\mathrm{cov}(x,y)}{s_xs_y}
+\]</span></p>
+<p>We can actually rearrange this formula to show that the correlation is simply the covariance, but with the values <span class="math inline">\((x_i - \bar{x})\)</span> divided by the standard deviation (<span class="math inline">\(s_x\)</span>), and the values <span class="math inline">\((y_i - \bar{y})\)</span> divided by <span class="math inline">\(s_y\)</span>:
+<span class="math display">\[
+r_{(x,y)}=\frac{1}{n-1} \sum_{i=1}^n \left( \frac{x_{i}-\bar{x}}{s_x} \right) \left( \frac{y_{i}-\bar{y}}{s_y} \right)
+\]</span>
+<br>
+The correlation is the simply the covariance of <strong>standardised</strong> variables (variables expressed as the distance <em>in standard deviations</em> from the mean).</p>
+<p><strong>Properties of correlation coefficients</strong></p>
+<ul>
+<li><span class="math inline">\(-1 \leq r \leq 1\)</span></li>
+<li>The sign indicates the direction of association
+<ul>
+<li><em>positive association</em> (<span class="math inline">\(r &gt; 0\)</span>) means that values of one variable tend to be higher when values of the other variable are higher</li>
+<li><em>negative association</em> (<span class="math inline">\(r &lt; 0\)</span>) means that values of one variable tend to be lower when values of the other variable are higher</li>
+<li><em>no linear association</em> (<span class="math inline">\(r \approx 0\)</span>) means that higher/lower values of one variable do not tend to occur with higher/lower values of the other variable</li>
+</ul></li>
+<li>The closer <span class="math inline">\(r\)</span> is to <span class="math inline">\(\pm 1\)</span>, the stronger the linear association</li>
+<li><span class="math inline">\(r\)</span> has no units and does not depend on the units of measurement</li>
+<li>The correlation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is the same as the correlation between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span></li>
+</ul>
+<p><strong>In R</strong><br />
+Just like R has a <code>cov()</code> function for calculating covariance, there is a <code>cor()</code> function for calculating correlation:</p>
+<pre class="r"><code>cor(x = recalldata$recall_accuracy, y = recalldata$recall_confidence)</code></pre>
+<pre><code>## [1] 0.6993654</code></pre>
+</div>
+<div class="optional-begin">
+Optional: Manually calculating correlation<span id="opt-start-59" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-59&#39;, &#39;opt-start-59&#39;)"></span>
+</div>
+<div id="opt-body-59" class="optional-body" style="display: none;">
+<p>We calculated above that <span class="math inline">\(\mathrm{cov}(\texttt{recall_accuracy}, \texttt{recall_confidence})\)</span> = 118.077.</p>
+<p>To calculate the <em>correlation</em>, we can simply divide this by the standard deviations of the two variables <span class="math inline">\(s_{\texttt{recall_accuracy}} \times s_{\texttt{recall_confidence}}\)</span></p>
+<pre class="r"><code>recalldata %&gt;% summarise(
+  s_ra = sd(recall_accuracy),
+  s_rc = sd(recall_confidence)
+)</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##    s_ra  s_rc
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1  14.5  11.6</code></pre>
+<pre class="r"><code>118.08 / (14.527 * 11.622)</code></pre>
+<pre><code>## [1] 0.6993902</code></pre>
+<p>Which is the same result as using <code>cor()</code>:</p>
+<pre class="r"><code>cor(x = recalldata$recall_accuracy, y = recalldata$recall_confidence)</code></pre>
+<pre><code>## [1] 0.6993654</code></pre>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<div id="correlation-test" class="section level2">
+<h2>Correlation Test</h2>
+<p>Now that we’ve seen the formulae for <em>covariance</em> and <em>correlation</em>, as well as how to quickly calculate them in R using <code>cov()</code> and <code>cor()</code>, we can use a statistical test to establish the probability of finding an association this strong by chance alone.</p>
+<div class="yellow">
+<p><strong>Hypotheses</strong></p>
+<p><em>Remember</em>, hypotheses are about the <em>population</em> parameter (in this case the correlation between the two variables in the population - i.e., <span class="math inline">\(\rho\)</span>).</p>
+<div style="margin-left:15px">
+<p><strong>Null Hypothesis</strong></p>
+<ul>
+<li>There is <em>not</em> a linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the population.<br><span class="math inline">\(H_0: \rho = 0\)</span></li>
+</ul>
+<p><br>
+<strong>Alternative Hypothesis</strong></p>
+<ol style="list-style-type: lower-roman">
+<li>There is a <em>positive</em> linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the population.<br><span class="math inline">\(H_1: \rho &gt; 0\)</span><br />
+</li>
+<li>There is a <em>negative</em> linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the population.<br><span class="math inline">\(H_1: \rho &lt; 0\)</span><br />
+</li>
+<li>There is a linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the population.<br><span class="math inline">\(H_1: \rho \neq 0\)</span><br />
+</li>
+</ol>
+</div>
+<p><strong>Test statistic</strong></p>
+<p>Our test statistic here is <em>another</em> <span class="math inline">\(t\)</span> statistic, the formula for which depends on both the observed correlation (<span class="math inline">\(r\)</span>) and the sample size (<span class="math inline">\(n\)</span>):</p>
+<p><span class="math display">\[t = r \sqrt{\frac{n-2}{1-r^2}}\]</span></p>
+<p><strong><span class="math inline">\(p\)</span>-value</strong></p>
+<p>We calculate the p-value for our <span class="math inline">\(t\)</span>-statistic as the long-run probability of a <span class="math inline">\(t\)</span>-statistic with <span class="math inline">\(n-2\)</span> degrees of freedom being less than, greater than, or more extreme in either direction (depending on the direction of our alternative hypothesis) than our observed <span class="math inline">\(t\)</span>-statistic.</p>
+<p><strong>Assumptions</strong></p>
+<ul>
+<li>Both variables are quantitative</li>
+<li>Both variables should be drawn from normally distributed populations.</li>
+<li>The relationship between the two variables should be linear.</li>
+</ul>
+<p><strong>In R</strong><br />
+We can test the significance of the correlation coefficient really easily with the function <code>cor.test()</code>:</p>
+<pre class="r"><code>cor.test(recalldata$recall_accuracy, recalldata$recall_confidence)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  recalldata$recall_accuracy and recalldata$recall_confidence
+## t = 4.1512, df = 18, p-value = 0.0005998
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3719603 0.8720125
+## sample estimates:
+##       cor 
+## 0.6993654</code></pre>
+</div>
+<div class="optional-begin">
+Optional: Manually conducting the correlation test<span id="opt-start-60" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-60&#39;, &#39;opt-start-60&#39;)"></span>
+</div>
+<div id="opt-body-60" class="optional-body" style="display: none;">
+<p>Or, if we want to calculate our test statistic manually:</p>
+<pre class="r"><code>#calculate r
+r = cor(recalldata$recall_accuracy, recalldata$recall_confidence)
+
+#get n
+n = nrow(recalldata)
+
+#calculate t    
+tstat = r * sqrt((n - 2) / (1 - r^2))
+
+#calculate p-value for t, with df = n-2 
+2*(1-pt(tstat, df=n-2))</code></pre>
+<pre><code>## [1] 0.0005998222</code></pre>
+</div>
+<p class="optional-end">
+</p>
+</div>
+<div id="cautions" class="section level2 unnumbered">
+<h2>Cautions!</h2>
+<p>Correlation is an invaluable tool for quantifying relationships between variables, but <strong>must be used with care</strong>.</p>
+<p>Below are a few things to be aware of when we talk about correlation.</p>
+<div class="optional-begin">
+Correlation can be heavily affected by outliers. Always plot your data!<span id="opt-start-61" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-61&#39;, &#39;opt-start-61&#39;)"></span>
+</div>
+<div id="opt-body-61" class="optional-body" style="display: none;">
+<p>The two plots below only differ with respect to the inclusion of <em>one</em> observation. However, the correlation coefficient for the two sets of observations is markedly different.<br />
+<img src="05_covcor_files/figure-html/unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+r = 0 means no linear association. The variables could still be otherwise associated. Always plot your data!<span id="opt-start-62" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-62&#39;, &#39;opt-start-62&#39;)"></span>
+</div>
+<div id="opt-body-62" class="optional-body" style="display: none;">
+<p>The correlation coefficient in Figure <a href="#fig:joface">1</a> below is negligible, suggesting no <em>linear</em> association. The word “linear” here is crucial - the data are very clearly related.</p>
+<div class="figure" style="text-align: center"><span id="fig:joface"></span>
+<img src="05_covcor_files/figure-html/joface-1.png" alt="Unrelated data?" width="80%" />
+<p class="caption">
+Figure 1: Unrelated data?
+</p>
+</div>
+Similarly, take look at all the sets of data in Figure <a href="#fig:datasaurus">2</a> below. The summary statistics (means and standard deviations of each variable, and the correlation) are almost identical, but the visualisations suggest that the data are very different from one another.
+<div class="figure" style="text-align: center"><span id="fig:datasaurus"></span>
+<img src="https://media1.giphy.com/media/UN2kVJQeMFUje/source.gif" alt="Datasaurus! " width="80%" />
+<p class="caption">
+Figure 2: Datasaurus!
+</p>
+</div>
+<p><strong>Source:</strong> Matejka, J., &amp; Fitzmaurice, G. (2017, May). Same stats, different graphs: generating datasets with varied appearance and identical statistics through simulated annealing. In <em>Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems</em> (pp. 1290-1294).</p>
+</div>
+<p class="optional-end">
+</p>
+<div class="optional-begin">
+Correlation does not imply causation!<span id="opt-start-63" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-63&#39;, &#39;opt-start-63&#39;)"></span>
+</div>
+<div id="opt-body-63" class="optional-body" style="display: none;">
+<div class="figure" style="text-align: center"><span id="fig:xkcdcor"></span>
+<img src="images/covcor/corcaus.jpeg" alt="https://twitter.com/quantitudepod/status/1309135514839248896" width="80%" />
+<p class="caption">
+Figure 3: <a href="https://twitter.com/quantitudepod/status/1309135514839248896" class="uri">https://twitter.com/quantitudepod/status/1309135514839248896</a>
+</p>
+</div>
+<p>You will have likely heard the phrase “correlation does not imply causation”. There is even a whole <a href="https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation">wikipedia entry</a> devoted to the topic.</p>
+<p><strong>Just because you observe an association between x and y, we should not deduce that x causes y</strong></p>
+<p>An often cited paper (See Figure <a href="#fig:choco">4</a>) which appears to fall foul of this error took a correlation between a country’s chocolate consumption and its number of nobel prize winners to suggest a <em>causal relationship</em> between the two:</p>
+<div class="figure" style="text-align: center"><span id="fig:choco"></span>
+<img src="images/covcor/choco.jpeg" alt="Chocolate consumption causes more Nobel Laureates?" width="80%" />
+<p class="caption">
+Figure 4: Chocolate consumption causes more Nobel Laureates?
+</p>
+</div>
+<p><em>“since chocolate consumption has been documented to improve cognitive function, it seems most likely that in a dose-dependent way, chocolate intake provides the abundant fertile ground needed for the sprouting of Nobel laureates”</em><br />
+[Messerli, Franz. Chocolate Consumption, Cognitive Function, and Nobel Laureates. The New England Journal of Medicine 2012; 367:1562-4, (<a href="http://www.nejm.org/doi/full/10.1056/NEJMon1211064" class="uri">http://www.nejm.org/doi/full/10.1056/NEJMon1211064</a>)]</p>
+</div>
+<p class="optional-end">
+</p>
+</div>
+</div>
+<div id="game-guess-the-r" class="section level1 unnumbered">
+<h1><b>Game:</b> Guess the <span class="math inline">\(r\)</span></h1>
+<p>Take a break and play this “guess the correlation” game to get an idea of what different strengths and directions of <span class="math inline">\(r\)</span> can look like.<br />
+(if the game is not showing, try <a href="http://guessthecorrelation.com/" class="uri">http://guessthecorrelation.com/</a>).</p>
+<iframe src="http://guessthecorrelation.com/" width="80%" height="650px">
+</iframe>
+<p><strong>source: <a href="http://guessthecorrelation.com/">http://guessthecorrelation.com/</a></strong></p>
+</div>
+<div id="exercises-correlation" class="section level1">
+<h1>Exercises: Correlation</h1>
+<div id="sleep-levels-and-daytime-functioning" class="section level3 unnumbered">
+<h3>Sleep levels and daytime functioning</h3>
+<blockquote>
+<p>A researcher is interested in the relationship between hours slept per night and self-rated effects of sleep on daytime functioning. She recruited 50 healthy adults, and collected data on the Total Sleep Time (TST) over the course of a seven day period via sleep-tracking devices.<br />
+At the end of the seven day period, participants completed a Daytime Functioning (DTF) questionnaire. This involved participants rating their agreement with ten statements (see Table <a href="#tab:sleepitems">1</a>). Agreement was measured on a scale from 1-5. An overall score of daytime functioning can be calculated by:</p>
+<ol style="list-style-type: decimal">
+<li>reversing the scores for items 4,5 and 6 (because those items reflect agreement with <em>positive</em> statements, whereas the other ones are agreement with <em>negative</em> statement);</li>
+<li>summing the scores on each item; and</li>
+<li>subtracting the sum score from 50 (the max possible score). This will make higher scores reflect better perceived daytime functioning.</li>
+</ol>
+<p>The data is available at <a href="https://uoepsy.github.io/data/sleepdtf.csv" class="uri">https://uoepsy.github.io/data/sleepdtf.csv</a>.</p>
+</blockquote>
+<table>
+<caption>
+<span id="tab:sleepitems">Table 1: </span>Daytime Functioning Questionnaire
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Item
+</th>
+<th style="text-align:left;">
+Statement
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Item_1
+</td>
+<td style="text-align:left;">
+I often felt an inability to concentrate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_2
+</td>
+<td style="text-align:left;">
+I frequently forgot things
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_3
+</td>
+<td style="text-align:left;">
+I found thinking clearly required a lot of effort
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_4
+</td>
+<td style="text-align:left;">
+I often felt happy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_5
+</td>
+<td style="text-align:left;">
+I had lots of energy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_6
+</td>
+<td style="text-align:left;">
+I worked efficiently
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_7
+</td>
+<td style="text-align:left;">
+I often felt irritable
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_8
+</td>
+<td style="text-align:left;">
+I often felt stressed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_9
+</td>
+<td style="text-align:left;">
+I often felt sleepy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Item_10
+</td>
+<td style="text-align:left;">
+I often felt fatigued
+</td>
+</tr>
+</tbody>
+</table>
+<div class="question-begin">
+Question A1
+</div>
+<div class="question-body">
+<p>Read in the data, and calculate the overall daytime functioning score, following the criteria outlined above. Make this a new column in your dataset.</p>
+<p><em>Hints:</em></p>
+<ul>
+<li>To reverse items 4, 5 and 6, we we need to make all the scores of 1 become 5, scores of 2 become 4, and so on… What number satisfies all of these equations: <code>? - 5 = 1</code>, <code>? - 4 = 2</code>, <code>? - 3 = 3</code>?</li>
+<li>To quickly sum accross rows, you can use the <code>rowSums()</code> function.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-64" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-64&#39;, &#39;sol-start-64&#39;)"></span>
+</div>
+<div id="sol-body-64" class="solution-body" style="display: none;">
+<pre class="r"><code>sleepdtf &lt;- read_csv(&quot;https://uoepsy.github.io/data/sleepdtf.csv&quot;)
+summary(sleepdtf)</code></pre>
+<pre><code>##       TST             item_1         item_2         item_3         item_4    
+##  Min.   : 4.900   Min.   :1.00   Min.   :1.00   Min.   :1.00   Min.   :1.00  
+##  1st Qu.: 7.225   1st Qu.:1.00   1st Qu.:2.00   1st Qu.:1.25   1st Qu.:1.00  
+##  Median : 7.900   Median :1.00   Median :2.00   Median :2.00   Median :1.00  
+##  Mean   : 8.004   Mean   :1.58   Mean   :2.46   Mean   :2.38   Mean   :1.26  
+##  3rd Qu.: 9.025   3rd Qu.:2.00   3rd Qu.:3.00   3rd Qu.:3.00   3rd Qu.:1.00  
+##  Max.   :11.200   Max.   :3.00   Max.   :5.00   Max.   :5.00   Max.   :3.00  
+##      item_5         item_6         item_7         item_8        item_9    
+##  Min.   :1.00   Min.   :1.00   Min.   :1.00   Min.   :1.0   Min.   :1.00  
+##  1st Qu.:2.00   1st Qu.:2.00   1st Qu.:1.00   1st Qu.:2.0   1st Qu.:2.00  
+##  Median :2.00   Median :3.00   Median :2.00   Median :2.5   Median :3.00  
+##  Mean   :2.36   Mean   :2.78   Mean   :2.04   Mean   :2.5   Mean   :2.96  
+##  3rd Qu.:3.00   3rd Qu.:4.00   3rd Qu.:3.00   3rd Qu.:3.0   3rd Qu.:4.00  
+##  Max.   :4.00   Max.   :5.00   Max.   :4.00   Max.   :4.0   Max.   :5.00  
+##     item_10    
+##  Min.   :1.00  
+##  1st Qu.:2.00  
+##  Median :3.00  
+##  Mean   :2.54  
+##  3rd Qu.:3.00  
+##  Max.   :5.00</code></pre>
+<pre class="r"><code># To reverse the items, we can simply do 6 minus the score.   
+sleepdtf &lt;- 
+  sleepdtf %&gt;% mutate(
+    item_4=6-item_4,
+    item_5=6-item_5,
+    item_6=6-item_6
+  ) 
+
+# Now using rowSums(), and subtracting it from 50 (the max score)
+sleepdtf$dtf = 50-rowSums(sleepdtf[, 2:11])</code></pre>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A2
+</div>
+<div class="question-body">
+<p>Calculate the correlation between the total sleep time (<code>TST</code>) and the overall daytime functioning score.<br />
+Conduct a test to establish the probability of observing a correlation this strong in a sample of this size assuming the true correlation to be 0.<br />
+<br>
+Write a sentence or two summarising the results.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-65" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-65&#39;, &#39;sol-start-65&#39;)"></span>
+</div>
+<div id="sol-body-65" class="solution-body" style="display: none;">
+<pre class="r"><code>cor.test(sleepdtf$TST, sleepdtf$dtf)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  sleepdtf$TST and sleepdtf$dtf
+## t = 6.244, df = 48, p-value = 1.062e-07
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.4807039 0.7989417
+## sample estimates:
+##       cor 
+## 0.6694741</code></pre>
+<div class="int">
+<p>There was a strong positive correlation between total sleep time and self-reported daytime functioning score (<span class="math inline">\(r\)</span> = 0.67, <span class="math inline">\(t(48)\)</span> = 6.24, <span class="math inline">\(p &lt; .001\)</span>) in the current sample. As total sleep time increased, levels of self-reported daytime functioning increased.</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question A3
+</div>
+<div class="question-body">
+<p><strong>Open-ended:</strong> Think about this relationship in terms of <em>causation</em>.<br />
+<br>
+Claim: <em>Less sleep causes poorer daytime functioning.</em><br />
+<br>
+Why might it be inappropriate to make the claim above based on these data alone? Think about what sort of study could provide stronger evidence for such a claim.</p>
+<p>Things to think about:</p>
+<ul>
+<li>comparison groups.<br />
+</li>
+<li>random allocation.<br />
+</li>
+<li>measures of daytime functioning.<br />
+</li>
+<li>measures of sleep time.<br />
+</li>
+<li>other (unmeasured) explanatory variables.</li>
+</ul>
+<p class="question-end">
+</p>
+</div>
+</div>
+</div>
+<div id="exercises-functions-and-models" class="section level1">
+<h1>Exercises: Functions and Models</h1>
+<div class="question-begin">
+Question B1
+</div>
+<div class="question-body">
+<p>The Scottish National Gallery kindly provided us with measurements of side and perimeter (in metres) for a sample of 10 square paintings.</p>
+<p>The data are provided below:</p>
+<pre class="r"><code>sng &lt;- tibble(
+  side = c(1.3, 0.75, 2, 0.5, 0.3, 1.1, 2.3, 0.85, 1.1, 0.2),
+  perimeter = c(5.2, 3.0, 8.0, 2.0, 1.2, 4.4, 9.2, 3.4, 4.4, 0.8)
+)</code></pre>
+<p>Plot the data from the Scottish National Gallery using <code>ggplot()</code>.</p>
+<p>We know that there is a mathematical model for the relationship between the side-length and perimeter of squares: <span class="math inline">\(perimeter = 4 \times \ side\)</span>.<br />
+Try adding the following line to your plot:</p>
+<pre class="r"><code>  stat_function(fun = ~.x * 4)</code></pre>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-66" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-66&#39;, &#39;sol-start-66&#39;)"></span>
+</div>
+<div id="sol-body-66" class="solution-body" style="display: none;">
+<pre class="r"><code>sng &lt;- tibble(
+  side = c(1.3, 0.75, 2, 0.5, 0.3, 1.1, 2.3, 0.85, 1.1, 0.2),
+  perimeter = c(5.2, 3.0, 8.0, 2.0, 1.2, 4.4, 9.2, 3.4, 4.4, 0.8)
+)
+
+ggplot(data = sng, aes(x = side, y = perimeter)) +
+  geom_point(colour = &#39;black&#39;, alpha = 0.5, size = 3) +
+  labs(x = &#39;Side (m)&#39;, y = &#39;Perimeter (m)&#39;)+
+  stat_function(fun = ~.x * 4)</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:squares-scatterplot"></span>
+<img src="05_covcor_files/figure-html/squares-scatterplot-1.png" alt="The exact relationship between side and perimeter of squares." width="80%" />
+<p class="caption">
+Figure 5: The exact relationship between side and perimeter of squares.
+</p>
+</div>
+<p>The above plot shows perfect agreement between the observed data and the model.</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B2
+</div>
+<div class="question-body">
+<p>Use our mathematical model to predict the perimeter of a painting with a side of 1.5 metres.<br />
+We do not have a painting with a side of 1.5 metres within the random sample of paintings from the Scottish National Gallery.
+We predict the perimeter of an unobserved squared painting having a 1.5 metre side using the mathematical model.</p>
+<p>You can obtain this prediction either using a visual approach or an algebraic one.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-67" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-67&#39;, &#39;sol-start-67&#39;)"></span>
+</div>
+<div id="sol-body-67" class="solution-body" style="display: none;">
+<p><strong>Visual approach</strong></p>
+<p><img src="05_covcor_files/figure-html/unnamed-chunk-23-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Sometimes we can directly read a predicted value from the graph of the functional relationship.</p>
+<p>Consider the plot created in the previous question. First, we need to check where x = 1.5. Then, we draw a vertical dashed line until it meets the blue line. The y value corresponding to x = 1.5 can be read off the y-axis.</p>
+<p>However, in this case it is not that easy to read it from the drawing… Let’s try the next approach.</p>
+<p><br>
+<strong>Algebraic approach</strong></p>
+<p>You can substitute the x value in the formula and calculate the corresponding y value.
+<span class="math display">\[
+y = 4 \times \ x = 4 \times \ (1.5) = 6
+\]</span></p>
+<p><br>
+We might write this up as:</p>
+<div class="int">
+<p>The predicted perimeter of squared paintings having a 1.5m side is 6m.</p>
+</div>
+<p><strong>NOTE</strong>: Don’t forget to always include the measurement units when reporting/writing-up results!</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B3
+</div>
+<div class="question-body">
+<p>Consider now the relationship between height (in inches) and handspan (in cm). <span class="citation">Utts and Heckard (<a href="#ref-Utts2015" role="doc-biblioref">2015</a>)</span> provides data for a sample of 167 students who reported their height and handspan as part of a class survey.</p>
+<div class="optional-begin">
+Data: handheight.csv<span id="opt-start-68" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-68&#39;, &#39;opt-start-68&#39;)"></span>
+</div>
+<div id="opt-body-68" class="optional-body" style="display: none;">
+<p><strong>Download link</strong></p>
+<p><a href="https://uoepsy.github.io/data/handheight.csv" target="_blank">Download the data here</a></p>
+<p><strong>Description</strong></p>
+<p>The data set records the height and handspan reported by a random sample of 167 students as part of a class survey <span class="citation">(Utts and Heckard <a href="#ref-Utts2015" role="doc-biblioref">2015</a>)</span>.</p>
+<p>The variables are:</p>
+<ul>
+<li><code>height</code>, measured in inches</li>
+<li><code>handspan</code>, measured in centimetres</li>
+</ul>
+<p><strong>Preview</strong></p>
+<p>The first six rows of the data are:</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+height
+</th>
+<th style="text-align:center;">
+handspan
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;width: 10em; ">
+68
+</td>
+<td style="text-align:center;width: 10em; ">
+21.5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 10em; ">
+71
+</td>
+<td style="text-align:center;width: 10em; ">
+23.5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 10em; ">
+73
+</td>
+<td style="text-align:center;width: 10em; ">
+22.5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 10em; ">
+64
+</td>
+<td style="text-align:center;width: 10em; ">
+18.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 10em; ">
+68
+</td>
+<td style="text-align:center;width: 10em; ">
+23.5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;width: 10em; ">
+59
+</td>
+<td style="text-align:center;width: 10em; ">
+20.0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="optional-end">
+</p>
+<p>Read the handheight data into R, and investigate how handspan varies as a function of height for the students in the sample.</p>
+<p>Do you notice any outliers or points that do not fit with the pattern in the rest of the data?</p>
+<p>Comment on any main differences you notice between this relationship and the relationship between sides and perimeter of squares.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-69" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-69&#39;, &#39;sol-start-69&#39;)"></span>
+</div>
+<div id="sol-body-69" class="solution-body" style="display: none;">
+<p>The <code>handheight</code> data set contains two variables, height and handspan, which are both numeric and continuous. We display the relationship between two numeric variables with a scatterplot.</p>
+<p>We can also add marginal boxplots for each variable using the package <code>ggExtra</code>. Before using the package, make sure you have it installed via <code>install.packages('ggExtra')</code>.</p>
+<pre class="r"><code>handheight &lt;- read_csv(file = &#39;https://uoepsy.github.io/data/handheight.csv&#39;)
+
+library(ggExtra)
+
+plt &lt;- ggplot(handheight, aes(x = height, y = handspan)) +
+  geom_point(size = 3, alpha = 0.5) +
+  labs(x = &#39;Height (in.)&#39;, y = &#39;Handspan (cm)&#39;)
+
+ggMarginal(plt, type = &#39;boxplot&#39;)</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:handheight-scatterplot"></span>
+<img src="05_covcor_files/figure-html/handheight-scatterplot-1.png" alt="The statistical relationship between height and handspan." width="80%" />
+<p class="caption">
+Figure 6: The statistical relationship between height and handspan.
+</p>
+</div>
+<p>Outliers are extreme observations that do not seem to fit with the rest of the data. This could either be:</p>
+<ul>
+<li><em>marginally</em> along one axis: points that have an unusual (too high or too low) x-coordinate or y-coordinate;</li>
+<li><em>jointly</em>: observations that do not fit with the rest of the point cloud.</li>
+</ul>
+<p>The boxplots in Figure <a href="#fig:handheight-scatterplot">6</a> do not highlight any outliers in the marginal distributions of height and handspan.
+Furthermore, from the scatterplot we do not notice any extreme observations or points that do not fit with the rest of the point cloud.</p>
+<p>We notice a moderate, positive (that is, increasing) linear relationship between height and handspan.</p>
+<p>Recall Figure <a href="#fig:squares-scatterplot">5</a>, displaying the relationship between side and perimeters of squares.
+In the plot we notice two points on top of each other, reflecting the fact that two squares having the same side will always have the same perimeter.
+In fact, the data from the Scottish National Gallery include two squared paintings with a side of 1.1m, both having a measured perimeter of 4.4m.</p>
+<p>Figure <a href="#fig:handheight-scatterplot">6</a>, instead, displays the relationship between height and handspan of a sample of students. The first thing that grabs our attention is the fact that students having the same height do not necessarily have the same handspan. Rather, we clearly see a variety of handspan values for students all having a height of, for example, 70in. To be more precise, the seven students who are 70 in. tall all have differing handspans.</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="question-begin">
+Question B4
+</div>
+<div class="question-body">
+<p>Using the following command, superimpose on top of your scatterplot a best-fit line describing how handspan varies as a function of height.
+For the moment, the argument <code>se = FALSE</code> tells R to not display uncertainty bands.</p>
+<pre><code>geom_smooth(method = lm, se = FALSE)</code></pre>
+<p>Comment on any differences you notice with the line summarising the linear relationship between side and perimeter.</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-70" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-70&#39;, &#39;sol-start-70&#39;)"></span>
+</div>
+<div id="sol-body-70" class="solution-body" style="display: none;">
+<pre class="r"><code>ggplot(handheight, aes(x = height, y = handspan)) +
+  geom_point(size = 3, alpha = 0.5) +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = &#39;Height (in.)&#39;, y = &#39;Handspan (cm)&#39;)</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:handheight-fitted-model"></span>
+<img src="05_covcor_files/figure-html/handheight-fitted-model-1.png" alt="The best-fit line." width="80%" />
+<p class="caption">
+Figure 7: The best-fit line.
+</p>
+</div>
+<p>The line representing the relationship between side and perimeter of squares is able to predict the actual perimeter value from the measurement of the side of a square.
+This is possible because the relationship between side and perimeter is an <strong>exact</strong> one.
+That is, any squares having the same side will have the same perimeter, and there will be no variation in those values.</p>
+<p>The line that best fits the relationship between height and handspan, instead, is only able to predict the <strong>average</strong> handspan for a given value of height.
+This is because there will be a distribution of handspans at each value of height.
+The line will fit the trend/pattern in the values, but there will be individual-to-individual variability that we must accept around that average pattern.</p>
+</div>
+<p class="solution-end">
+</p>
+<div class="frame">
+<p>The <em>mathematical</em> model <span class="math inline">\(Perimeter = 4 \times \ Side\)</span> represents the <strong>exact</strong> relationship between side-length and perimeter of squares.</p>
+<p>In contrasts, the relationship between height and handspan shows deviations from an “average pattern”. Hence, we need to create a model that allows for deviations from the linear relationship. This is called a <em>statistical</em> model.</p>
+<p>A statistical model includes <strong>both</strong> a deterministic function and a random error term:
+<span class="math display">\[
+Handspan = \beta_0 + \beta_1 \ Height + \epsilon
+\]</span>
+or, in short,
+<span class="math display">\[
+y = \underbrace{\beta_0 + \beta_1 \ x}_{f(x)} + \underbrace{\epsilon}_{\text{random error}}
+\]</span></p>
+<p>The deterministic function need not be linear if the scatterplot displays signs of nonlinearity.
+In the equation above, the terms <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are numbers specifying where the line going through the data meets the y-axis and its slope (rate of increase/decrease).</p>
+</div>
+<div class="question-begin">
+Question B5
+</div>
+<div class="question-body">
+<p>The line of best-fit is given by:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+<span class="math display">\[
+\widehat{Handspan} = -3 + 0.35 \ Height
+\]</span></p>
+<p>What is your best guess for the handspan of a student who is 73in tall?</p>
+<p>And for students who are 5in?</p>
+<p class="question-end">
+</p>
+</div>
+<div class="solution-begin">
+Solution <span id="sol-start-71" class="fa fa-plus solution-icon clickable" onclick="toggle_visibility(&#39;sol-body-71&#39;, &#39;sol-start-71&#39;)"></span>
+</div>
+<div id="sol-body-71" class="solution-body" style="display: none;">
+<p>The predicted average handspan for students who are 73in tall is <span class="math inline">\(-3 + 0.35 * 73 = 22.55\)</span>cm.</p>
+<p>The predicted average handspan for students who are 5in tall is <span class="math inline">\(-3 + 0.35 * 5 = -1.25\)</span>cm.
+But wait, handspan can not be negative… This does not make any sense!
+That’s right, we went too far off the range of the available data on heights, which were between 57in and 78in. We extrapolated. This is very dangerous…</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-26"></span>
+<img src="https://imgs.xkcd.com/comics/extrapolating.png" alt="Source: Randall Munroe, xkcd.com" width="80%" />
+<p class="caption">
+Figure 8: Source: Randall Munroe, xkcd.com
+</p>
+</div>
+</div>
+<p class="solution-end">
+</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+<div id="refs" class="references hanging-indent">
+<div id="ref-Utts2015">
+<p>Utts, Jessica M, and Robert F Heckard. 2015. <em>Mind on Statistics</em>. Cengage Learning.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Yes, the error term is gone. This is because the line of best-fit gives you the prediction of the average handspan for a given height, and not the individual handspan of a person, which will almost surely be different from the prediction of the line.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+<div>
+  <hr/>
+  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br/>
+  This workbook was written by Josiah King, Umberto Noe, and Martin
+  Corley, and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
