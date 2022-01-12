@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 7: The Linear Model</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 7: The Linear Model</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: inverse, center, middle
+
+# Part 1:  Correlation++
+
+
+---
+# Back on the Road
+
+.pull-left[
+![](lecture_6_files/figure-html/frecap-1.svg)&lt;!-- --&gt;
+
+.center[
+`\(r= 0.4648\)`, `\(p = 0.0007\)`
+]
+]
+.pull-right[
+![](lecture_6_files/img/playmo_police.jpg)
+]
+???
+- is there anything more the police' data about blood alcohol and reaction time can tell us?
+
+- so far we know they're correlated, but it would be good if we could something about _how bad_ blood alcohol is
+
+  + how much worse does drinking more make things?
+---
+# Back on the Road (2)
+
+.pull-left[
+![](lecture_6_files/figure-html/frecap2-1.svg)&lt;!-- --&gt;
+
+.tc[
+"for every extra 0.01% blood alcohol, reaction time slows down by around 32 ms"
+]
+]
+.pull-right[
+![](lecture_6_files/img/playmo_police.jpg)
+
+]
+???
+- this kind of information is based on the assumption that the relationship between blood alcohol and RT is _linear_
+
+- that is, that each additional unit of blood alcohol affects reaction time by the same amount
+
+
+---
+# The Only Equation You Will Ever Need
+
+.br3.pa2.f2.white.bg-gray[
+$$ \textrm{outcome}_i = (\textrm{model})_i + \textrm{error}_i $$
+]
+
+.center.pt2[
+![:scale 25%](lecture_6_files/img/model_error.svg)
+]
+
+---
+count: false
+# The Only Equation You Will Ever Need
+
+.br3.pa2.f2.white.bg-gray[
+$$ \textrm{outcome}_i = (\textrm{model})_i + \textrm{error}_i $$
+]
+
+- to get any further, we need to make _assumptions_
+
+- nature of the **model** .tr[
+(linear)
+]
+
+- nature of the **errors** .tr[
+(normal)
+]
+
+---
+# A Linear Model
+
+.flex.items-top[
+.w-40.pa2[
+$$ \color{red}{\textrm{outcome}_i} = \color{blue}{(\textrm{model})_i} + \textrm{error}_i $$
+$$ \color{red}{y_i} = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} + \epsilon_i $$
+.center[
+so the linear model itself is...
+]
+
+$$ \hat{y}_i = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} $$
+.center[
+![:scale 30%](lecture_6_files/img/formula.svg)
+]
+]
+.w-60[
+&amp;nbsp;
+]]
+---
+count: false
+# A Linear Model
+
+.flex.items-top[
+.w-40.pa2[
+$$ \color{red}{\textrm{outcome}_i} = \color{blue}{(\textrm{model})_i} + \textrm{error}_i $$
+$$ \color{red}{y_i} = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} + \epsilon_i $$
+.center[
+so the linear model itself is...
+]
+
+$$ \hat{y}_i = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} $$
+.center[
+![:scale 30%](lecture_6_files/img/formula.svg)
+]]
+.w-60.pa2[
+![](lecture_6_files/figure-html/bb-1.svg)&lt;!-- --&gt;
+
+]]
+---
+count: false
+# A Linear Model
+
+.flex.items-top[
+.w-40.pa2[
+$$ \color{red}{\textrm{outcome}_i} = \color{blue}{(\textrm{model})_i} + \textrm{error}_i $$
+$$ \color{red}{y_i} = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} + \epsilon_i $$
+.center[
+so the linear model itself is...
+]
+
+$$ \hat{y}_i = \color{blue}{b_0 \cdot{} 1 + b_1 \cdot{} x_i} $$
+.center[
+![:scale 30%](lecture_6_files/img/formula.svg)
+]
+.br3.pa3.bg-light-yellow[
+$$ \hat{y} = \color{blue}{b_0 + b_1 \cdot{} x_i} $$
+.center[
+![:scale 30%](lecture_6_files/img/formula2.svg)
+]]
+]
+.w-60.pa2[
+![](lecture_6_files/figure-html/bb2-1.svg)&lt;!-- --&gt;
+
+]]
+---
+# Take An Observation
+
+.flex.items-top[
+.w-40.pa2[
+
+.br3.bg-gray.white.f2.pa2.tc[
+x&lt;sub&gt;i&lt;/sub&gt; = 1.2, y&lt;sub&gt;i&lt;/sub&gt; = 9.9
+]
+
+ 
+$$ \hat{y}_i = b_0 + b_1\cdot{}x_i = 7.4 $$ 
+$$ y_i = \hat{y}_i + \epsilon_i = 7.4 + \color{red}{2.5} $$
+
+]
+.w-60.pa2[
+![](lecture_6_files/figure-html/errplot-1.svg)&lt;!-- --&gt;
+]
+]
+???
+- `\(\hat{y}_i\)` is what the model _predicts_ for `\(x_i\)`
+
+- `\(y_i\)` is the actual value that was observed for `\(x_i\)`
+
+- why would we care?
+
+  + for one thing, the model can predict `\(\hat{y}\)` for values of `\(x\)` that we have never observed
+
+---
+# Simplifying the Data
+
+.pull-left[
+- **NB** we're doing this for illustrative purposes only
+
+
+```r
+ourDat &lt;- dat %&gt;% sample_n(20)
+  # take 20 data points
+```
+
+
+
+]
+.pull-right[
+![](lecture_6_files/figure-html/plot1-1.svg)&lt;!-- --&gt;
+]
+
+---
+count: false
+# Simplifying the Data
+.pull-left[
+- **NB** we're doing this for illustrative purposes only
+
+
+```r
+ourDat &lt;- dat %&gt;% sample_n(20)
+  # take 20 data points
+```
+
+```r
+ourDat &lt;- ourDat %&gt;% 
+  mutate(BloodAlc = BloodAlc*100)
+```
+
+
+
+]
+.pull-right[
+![](lecture_6_files/figure-html/plot3-1.svg)&lt;!-- --&gt;
+]
+---
+count: false
+# Simplifying the Data
+.pull-left[
+- **NB** we're doing this for illustrative purposes only
+
+
+```r
+ourDat &lt;- dat %&gt;% sample_n(20)
+  # take 20 data points
+```
+
+```r
+ourDat &lt;- ourDat %&gt;% 
+  mutate(BloodAlc = BloodAlc*100)
+```
+.center[
+"for every extra unit blood alcohol, reaction time slows down by around 33 ms"
+]
+
+]
+.pull-right[
+![](lecture_6_files/figure-html/plot2-1.svg)&lt;!-- --&gt;
+]
+
+--
+
+.center.f3.pt3[
+but how can we evaluate our model?
+]
+---
+# Linear Models in R
+
+
+```r
+mod &lt;- lm(RT ~ BloodAlc, data=ourDat)
+```
+
+---
+count: false
+# Linear Models in R
+
+
+```r
+mod &lt;- lm(RT ~ BloodAlc, data=ourDat)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = RT ~ BloodAlc, data = ourDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -121.18  -39.10   -4.71   44.55  121.14 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+*## (Intercept)    322.6      158.0    2.04    0.056 .
+*## BloodAlc        32.7       15.4    2.12    0.048 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 61.7 on 18 degrees of freedom
+## Multiple R-squared:   0.2,	Adjusted R-squared:  0.156 
+## F-statistic: 4.51 on 1 and 18 DF,  p-value: 0.0479
+```
+
+---
+# Intercept and Slope Again
+
+$$ b_0= 322.6; \quad b_1= 32.7 $$
+.center[
+![](lecture_6_files/figure-html/git-1.svg)&lt;!-- --&gt;
+]
+???
+- `\(b_0\)` is the the predicted value, `\(\bar{y}\)`, when `\(x=0\)`.  Here I've represented it as a line, so where the top is the intercept value of 322.629
+---
+count: false
+# Intercept and Slope Again
+
+$$ b_0= 322.6; \quad b_1= 32.7 $$
+.center[
+![](lecture_6_files/figure-html/git2-1.svg)&lt;!-- --&gt;
+]
+---
+count: false
+# Intercept and Slope Again
+
+$$ b_0= 322.6; \quad b_1= 32.7 $$
+.center[
+![](lecture_6_files/figure-html/git3-1.svg)&lt;!-- --&gt;
+]
+---
+count: false
+# Intercept and Slope Again
+
+$$ b_0= 322.6; \quad b_1= 32.7 $$
+.center[
+![](lecture_6_files/figure-html/git4-1.svg)&lt;!-- --&gt;
+]
+???
+- note that the intercept is really very far from the data we're interested in.
+
+- it may be pretty meaningless to talk about the reaction time of someone with zero blood alcohol
+---
+class: inverse, center, middle, animated, fadeInDownBig
+# End of Part 1
+
+---
+class: inverse, center, middle
+
+# Part 2
+## Significance
+---
+# Intercept and Slope
+
+
+```r
+mod &lt;- lm(RT ~ BloodAlc, data=ourDat)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = RT ~ BloodAlc, data = ourDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -121.18  -39.10   -4.71   44.55  121.14 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+*## (Intercept)    322.6      158.0    2.04    0.056 .
+*## BloodAlc        32.7       15.4    2.12    0.048 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 61.7 on 18 degrees of freedom
+## Multiple R-squared:   0.2,	Adjusted R-squared:  0.156 
+## F-statistic: 4.51 on 1 and 18 DF,  p-value: 0.0479
+```
+
+---
+# Are We Impressed?
+
+
+
+- we have an intercept of 322.6 and a slope of 32.7
+
+- in NHST world, our pressing question is
+
+--
+
+.pt4[
+&amp;nbsp;
+]
+
+.br3.bg-gray.pa2.white.tc[
+how likely would we have been to find these parameters under the null hypothesis?
+]
+
+---
+# Testing Chance
+
+.center[
+![](lecture_6_files/figure-html/chanceg-1.svg)&lt;!-- --&gt;
+]
+
+- repeatedly sampling 20~datapoints from the population
+
+  + variability in _height_ of line = variability in intercept ( `\(b_0\)` )
+  + variability in _angle_ of line = variability in slope ( `\(b_1\)` )
+---
+# We've Seen This Before
+
+.center[
+![](lecture_6_files/figure-html/figfig-1.svg)&lt;!-- --&gt;
+]
+- shaded area represents "95% confidence interval"
+
+  + if we repeatedly sampled 20 items from the population...
+  + assumes that the 20 we have are the _best estimate_ of the population
+
+???
+- if you were able to lay these graphs over each other, they wouldn't be the same
+- in the simulation graph, we _know_ the entire population (of 50 drink-drivers) we're repeatedly sampling 20 from
+- in this graph, the only information we have is that our 20 drink-drivers represent "the population" but we have no other information about that population
+  + so the 20 are our "best estimate" of the population
+  + **just like means and standard errors** (here the edges of the grey regions are 2.1009 standard errors from the line)
+
+
+---
+
+# The Good Old _t_-Test
+
+
+```
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)    322.6      158.0    2.04    0.056 .
+## BloodAlc        32.7       15.4    2.12    0.048 *
+```
+
+
+- for each model parameter we are interested in whether it is _different from zero_
+
+- **intercept**: just like a mean
+
+- **slope**: does the best-fit line differ from horizontal?
+
+--
+
+- these are just (two-tailed) one-sample `\(t\)`-tests
+
+  + **standard error** is the standard deviation of doing these lots of times
+  + **t value** is `\(\frac{\textrm{Estimate}}{\textrm{Std. Error}}\)`
+  + to calculate `\(p\)`, we need to know the _degrees of freedom_
+  
+---
+# Degrees of Freedom
+
+.center[
+![](lecture_6_files/figure-html/plotdat-1.svg)&lt;!-- --&gt;
+]
+---
+count: false
+# Degrees of Freedom
+
+.center[
+![](lecture_6_files/figure-html/dfplots2-1.svg)&lt;!-- --&gt;
+]
+
+???
+- we can always add in two points to make the straight line that we want to see
+- this is one way of showing that for `\(n\)` data points, there are `\(n-2\)` degrees of freedom
+---
+# Degrees of Freedom
+
+- in fact we subtract 2 degrees of freedom because we "know" two things
+
+  + intercept ( `\(b_0\)` )
+  
+  + slope ( `\(b_1\)` )
+
+- the remaining degrees of freedom are the _residual_ degrees of freedom
+
+--
+
+- the _model_ also has associated degrees of freedom
+
+  + 2 (intercept, slope) - 1 (knowing one affects the other)
+  
+.br3.bg-gray.pa2.white.tc[
+the models we have been looking at have 20 observations and 1 predictor
+
+**(1, 18)** degrees of freedom
+]  
+---
+# Linear Models in R
+
+
+```r
+mod &lt;- lm(RT ~ BloodAlc, data=ourDat)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = RT ~ BloodAlc, data = ourDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -121.18  -39.10   -4.71   44.55  121.14 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)    322.6      158.0    2.04    0.056 .
+## BloodAlc        32.7       15.4    2.12    0.048 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 61.7 on 18 degrees of freedom
+*## Multiple R-squared:   0.2,	Adjusted R-squared:  0.156 
+*## F-statistic: 4.51 on 1 and 18 DF,  p-value: 0.0479
+```
+
+---
+# Total Sum of Squares
+
+$$ \textrm{total SS}=\sum{(y - \bar{y})^2} $$
+
+.pull-left[
+- sum of squares between observed `\(y\)` and mean `\(\bar{y}\)`
+
+- represents the total amount of variance in the model
+
+- how much does the observed data vary from a model which says "there is no effect of `\(x\)`" (**null model**)?
+]
+.pull-right[
+![](lecture_6_files/figure-html/totss-1.svg)&lt;!-- --&gt;
+
+]
+---
+# Residual Sum of Squares
+
+$$ \textrm{residual SS} = \sum{(y - \hat{y})^2} $$
+.pull-left[
+- sum of squared differences between observed `\(y\)` and predicted `\(\hat{y}\)`
+
+- represents the unexplained variance in the model
+
+- how much does the observed data vary from the existing model?
+]
+.pull-right[
+![](lecture_6_files/figure-html/residp-1.svg)&lt;!-- --&gt;
+]
+---
+# Model Sum of Squares
+
+$$ \textrm{model SS} = \sum{(\hat{y} - \bar{y})^2} $$
+
+.pull-left[
+- sum of squared differences between predicted `\(\hat{y}\)` and mean `\(\bar{y}\)`
+
+- represents the additional variance explained by the current model over the null model
+]
+.pull-right[
+![](lecture_6_files/figure-html/modp-1.svg)&lt;!-- --&gt;
+
+]
+
+---
+# Testing the Model: _R_&lt;sup&gt;2&lt;/sup&gt;
+
+.pull-left[
+$$ R^2 = \frac{\textrm{model SS}}{\textrm{total SS}} = \frac{\sum{(\hat{y}-\bar{y})^2}}{\sum{(y-\bar{y})^2}} $$
+
+
+
+"how much the model improves over the null"
+
+
+.pt3[
+- `\(0 \le R^2 \le 1\)`
+
+- we want `\(R^2\)` to be large
+
+- for a single predictor, `\(\sqrt{R^2} = |r|\)`
+
+]]
+
+.pull-right[
+![](lecture_6_files/figure-html/unnamed-chunk-1-1.svg)&lt;!-- --&gt;
+
+]
+---
+# Testing the Model: _F_
+
+.pull-left[
+`\(F\)` ratio depends on **mean squares** &lt;br/&gt;
+.tc[
+( `\(\textrm{MS}_x = \textrm{SS}_x/\textrm{df}_x\)` )
+]
+
+`$$F=\frac{\textrm{model MS}}{\textrm{residual MS}}=\frac{\sum{(\hat{y}-\bar{y})^2}/\textrm{df}_m}{\sum{(y-\hat{y})^2}/\textrm{df}_r}$$`
+
+
+
+"how much the model improves over chance"
+
+
+.pt3[
+- `\(0 &lt; F\)`
+
+- we want `\(F\)` to be large
+
+- significance of `\(F\)` does not always equate to a large (or theoretically sensible) effect
+
+]]
+
+.pull-right[
+![](lecture_6_files/figure-html/unnamed-chunk-2-1.svg)&lt;!-- --&gt;
+
+]
+
+
+---
+# A Linear Model for 20 Drinkers
+
+.center[
+![](lecture_6_files/figure-html/mod-1.svg)&lt;!-- --&gt;
+]
+
+- a linear model describes the **best-fit line** through the data
+
+- minimises the error terms `\(\epsilon\)` or **residuals**
+---
+# Two Types of Significance
+
+
+```r
+mod &lt;- lm(RT ~ BloodAlc, data=ourDat)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = RT ~ BloodAlc, data = ourDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -121.18  -39.10   -4.71   44.55  121.14 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+*## (Intercept)    322.6      158.0    2.04    0.056 .
+*## BloodAlc        32.7       15.4    2.12    0.048 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 61.7 on 18 degrees of freedom
+*## Multiple R-squared:   0.2,	Adjusted R-squared:  0.156 
+*## F-statistic: 4.51 on 1 and 18 DF,  p-value: 0.0479
+```
+---
+# The Good, the Bad, and the Ugly
+
+.flex.items-center[
+.w-50.br3.bg-washed-green.pa2[
+- we can easily extend this approach
+
+  + use more than one predictor
+  
+  + generalised linear model
+]
+.w-50.br3.bg-washed-red.pa2[
+- not a panacea
+
+  + depends on _assumptions_ about the data
+  
+  + depends on _decisions_ about analysis
+]]
+
+--
+
+.flex.items-center[
+.w-70.br3.pa2.bg-gray.white[
+- like other statistics, linear models don't tell you "about" your data
+
+- they simply assess what is (un)likely to be due to chance
+
+- the key to good statistics is _common sense and good interpretation_
+]
+.w-30.center[
+![:scale 70%](lecture_6_files/img/playmo_clown.jpg)
+]
+]
+
+---
+class: inverse, center, middle, animated, fadeInDownBig
+
+# End
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

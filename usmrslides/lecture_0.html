@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 0: Welcome</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 0: Welcome</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: center, middle
+# Welcome to USMR
+
+---
+# Univariate Statistics...
+
+
+
+
+```r
+heights
+```
+
+```
+## # A tibble: 102 × 4
+##    gender    HEIGHT submitted           Token                           
+##    &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;                           
+##  1 Female       173 02/10/2019 08:03:18 fo8qg8m4w53yil2nzufo8qxzpjkgzj0l
+##  2 Female       159 02/10/2019 08:03:19 5jjo15xpzs23gdt5esks7jd7ol3uug8p
+##  3 Female       164 02/10/2019 08:03:20 q2i04mqiaigqv6w82skh8orq2i04mujp
+##  4 Male         187 02/10/2019 08:03:25 2n3x6kpuqjfhv3x2n3x63g7sqs3oshym
+##  5 Female       183 02/10/2019 08:03:26 xsi090b2wfjb61xeryhxsi0q867xls2i
+##  6 NonBinary    173 02/10/2019 08:03:27 feg5s1kerz3dw5090qfeg5s1keg6x08w
+##  7 Female       168 02/10/2019 08:03:27 ph3e74tai0l3urg26ph34qfsavvxkq5g
+##  8 Female       170 02/10/2019 08:03:30 dbzsfmoir3mkwtlvi7udbz0iw53p0r83
+##  9 Male         175 02/10/2019 08:03:36 qt2vujoe9ka2867o28sqt2vujm9cz1h9
+## 10 Male         165 02/10/2019 08:03:36 cvnzmtez3ej4oa54jfbpcvnzmqcgr3jx
+## # … with 92 more rows
+```
+
+- one row represents one set of observations
+???
+Univariate statistics refer to statistics where there's one source of variation.
+
+Typically in Psychology this would be the identity of the person being measured:
+
+In the example here, height is affected by identity (different people have different heights).
+
+As statisticians, we're interested in whether there are systematic differences beyond the individual:
+
+For example, is height affected by gender?
+---
+# ...and Methodology...
+
+.pull-left.pt4[
+- how do we measure height?
+
+- how do we determine gender?
+
+- how do we collect data in a way that is generalisable?
+]
+.pull-right[
+![](lecture_0_files/img/playmo2.jpg)
+]
+
+---
+# ...Using R...
+.flex.items-top[
+.w-65.pa2[
+
+```r
+heights %&gt;% ggplot(aes(x=HEIGHT,color=gender,fill=gender)) +
+  geom_density(size=2,alpha=0.4)
+```
+]
+
+.w-35.pa2[
+![](lecture_0_files/figure-html/dens-1.svg)
+]]
+
+---
+#...to Form Conclusions
+
+
+```r
+heights_t &lt;- heights %&gt;% filter(gender %in% c('Male','Female'))
+t.test(heights_t$HEIGHT ~ heights_t$gender)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  heights_t$HEIGHT by heights_t$gender
+## t = -9, df = 29, p-value = 6e-10
+## alternative hypothesis: true difference in means between group Female and group Male is not equal to 0
+## 95 percent confidence interval:
+##  -16.26 -10.25
+## sample estimates:
+## mean in group Female   mean in group Male 
+##                165.7                179.0
+```
+
+
+---
+# What you will learn
+
+.pull-left[
+### Statistics
+
+- foundations of Null Hypothesis Significance Testing
+- probability
+- samples and distributions
+- the normal and the binomial distributions
+- testing for significance
+  + `\(F\)`-ratio, `\(\chi^2\)`, `\(t\)`-test, others
+- the linear model
+- multiple linear regression
+- assumptions, models, model criticism
+- logit regression (generalized linear model)
+]
+
+--
+.pull-right[
+### R
+
+- basic programming
+- using libraries
+- using an IDE (**RStudio**)
+- data types
+  + data manipulation
+  + visualisation (graphs)
+- functions
+- running statisical models
+- **RMarkdown**
+  + literate programming
+  + document creation
+]
+
+---
+# Shape of the Course
+
+
+.flex.items-center[.w-20.pa1[![:scale 25%](lecture_0_files/img/lecture.svg)] .f2.w-80.pa1[Lectures (online)]]
+
+.flex.items-center[.w-20.pa1[![:scale 25%](lecture_0_files/img/labs.svg)] .f2.w-80.pa1[Labs (instructions online)]]
+
+.flex.items-center[.w-20.pa1[![:scale 25%](lecture_0_files/img/coding.svg)] .f2.w-80.pa1[Live Coding]]
+
+.flex.items-center[.w-20.pa1[![:scale 25%](lecture_0_files/img/forum.svg)] .f2.w-80.pa1[Discussions and support]]
+
+.flex.items-center[.w-20.pa1[![:scale 25%](lecture_0_files/img/exam.svg)] .f2.w-80.pa1[Assessment]]
+
+???
+As soon as we can, we'll offer discussions and help on campus.
+
+We might be able to offer labs on campus as the situation changes, and we hope to do so.
+
+Lectures are likely to remain online throughout the course.
+
+---
+.pull-left[
+# Lectures
+
+- broadly, about _concepts_
+
+  + statistics
+  
+  + coding
+  
+- prerecorded, follow in your own time
+
+  + videos
+  
+  + everything you need online
+]
+
+--
+
+.pull-right[
+# Labs
+
+- broadly, _how to_
+
+  + coding
+
+  + data manipulation
+  
+  + statistics
+
+- online workbook with instructions
+
+  + lab work should be done in **RStudio**
+  
+  + can either install on your own laptop or use online
+]
+
+
+---
+# Discussions
+
+.tc[
+![](lecture_0_files/img/forum_ss.png)
+]
+
+- piazza discussion forums for the course on Learn
+
+  + ask questions, share experiences, talk to the course team
+  
+  + post anonymously if preferred
+  
+  + an important way to keep in touch
+  
+---
+# Live Support
+
+&lt;!-- FIXME image of zoom/teams session --&gt;
+
+.pt4.pull-left[![](lecture_0_files/img/playmo3.jpg)]
+.pt5.pull-right[
+- we are here to help you
+
+- live coding:  most Wednesdays
+  + see Learn for details
+
+- lab sessions:  every Wed, Thu, Fri
+  + see Learn for details
+
+- piazza discussion forums: any time
+]
+
+???
+we will be moving live support and help on-campus when it becomes possible
+
+this will be the first activity to move; labs may follow
+
+---
+.flex.items-center[.w-10.pa2[![:scale 80%](lecture_0_files/img/exam.svg)] .f1.w-80.pa2[Interim Assessments (20%)]]
+
+- three online multiple-choice quizzes
+
+- only the best two quiz marks will count towards final grade
+
+- for each quiz, **one attempt** which must be completed within 60 min
+
+.pt4[.br3.center.pa2.bg-gray.white.f3[
+quizzes released on Mon Oct 4, Mon Oct 18, Mon Nov 8
+
+must be completed within 12 days of release
+]]
+
+
+---
+.flex.items-center[.w-10.pa2[![:scale 80%](lecture_0_files/img/exam.svg)] .f1.w-80.pa2[Final Assessment (80%)]]
+
+&lt;!-- FIXME --&gt;
+
+- check a dataset for consistency
+
+- explore hypotheses about how variables are related
+  + conduct and interpret appropriate statistical tests
+
+- produce suitable graphics
+
+- present your workings and conclusions in a markdown document
+---
+count: false
+.flex.items-center[.w-10.pa2[![:scale 80%](lecture_0_files/img/exam.svg)] .f1.w-80.pa2[Final Assessment (80%)]]
+
+&lt;!-- FIXME --&gt;
+
+- .red[check] a dataset for consistency
+
+- .red[explore] hypotheses about how variables are related
+  + conduct and .red[interpret] appropriate statistical tests
+
+- produce .red[suitable] graphics
+
+- present your workings and .red[conclusions] in a markdown document
+
+???
+note that these are matters of _judgement_
+
+statistics is not an 'exact science'
+
+it's careful and principled story-telling
+--
+
+.br3.center.pa2.bg-red.white.f3[
+coursework released: 18 Nov 2021
+
+coursework submission deadline: 16 Dec 2021
+]
+
+---
+# Tips for survival
+
+1. keep on top of the coursework
+
+1. use the piazza forums and other forms of support whenever you need them
+
+1. remember that some things will feel difficult at first
+
+  + what's hard for you may be easy for others
+
+  + what's easy for you may be hard for others
+  
+1. most importantly, _don't give up_
+
+---
+# Tips for improving the course
+
+- this is a very unusual year(!)
+
+- we have worked hard to make this course work, but some things will undoubtedly still be improvable
+
+- please feed back to us!
+  + you can do it via email, in the forums, or anonymously on Learn via "Have Your Say"
+  
+- please bear with us!
+  + we are doing our very best 
+
+- any good course is a _conversation_ between teachers and learners
+  + this year, that's more important than ever, but it will only work with your help
+---
+class: center, middle
+
+# first task
+
+## help us get to know you
+---
+class: inverse, center, middle, animated, heartBeat
+
+# End
+
+---
+class: middle
+
+# Acknowledgements
+
+- icons by Becris, tezar tantula, ProSymbols, Arjan Farzkenari, Econceptive from the [Noun Project](https://thenounproject.com/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

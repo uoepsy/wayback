@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 11: Some Kind of End to the Course</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 11: Some Kind of End to the Course</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: inverse, center, middle
+# Part 1
+## ANOVA and GLM
+
+---
+# ANOVA and GLM
+
+&gt; If you should say to a mathematical statistician that you have discovered that linear multiple regression and the analysis of variance (and covariance) are identical systems, he would mutter something like "Of course&amp;mdash;general linear model," and you might have trouble maintaining his attention.  If you should say this to a typical psychologist, you would be met with incredulity, or worse.  Yet it is true, and in its truth lie possibilities for more relevant and therefore more powerful research data.
+.tr[
+Cohen (1968)
+]
+
+---
+# History
+
+.pull-left[
+.br3.pa2.bg-gray.white[
+### .white[Multiple Regression]
+
+- introduced c. 1900 in biological and behavioural sciences
+
+- aligned to "natural variation" in observations
+
+- tells us that means `\((\bar{y})\)` are related to groups `\((g_1,g_2,\ldots,g_n)\)`
+]]
+.pull-right[
+.br3.pa2.bg-gray.white[
+### .white[ANOVA]
+
+- introduced c. 1920 in agricultural research
+
+- aligned to experimentation and manipulation
+
+- tells us that groups `\((g_1,g_2,\ldots,g_n)\)` have different means `\((\bar{y})\)`
+]]
+
+.pt2[
+- both produce `\(F\)`-ratios, discussed in different language, but identical
+]
+---
+# Why Teach GLM/Regression?
+
+- GLM has less restrictive assumptions
+
+  + especially true for unbalanced designs/missing data
+  
+- GLM is far better at dealing with covariates
+
+  + can arbitrarily mix continuous and discrete predictors
+  
+- GLM is the gateway to other powerful tools
+
+  + mixed models and factor analysis (→ MSMR)
+
+  + structural equation models
+
+---
+# ANOVA in R
+
+.pull-left.center[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#mgshirejte .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mgshirejte .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mgshirejte .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mgshirejte .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mgshirejte .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mgshirejte .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mgshirejte .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mgshirejte .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mgshirejte .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mgshirejte .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mgshirejte .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mgshirejte .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mgshirejte .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mgshirejte .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mgshirejte .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mgshirejte .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mgshirejte .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#mgshirejte .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mgshirejte .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#mgshirejte .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mgshirejte .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mgshirejte .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mgshirejte .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mgshirejte .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mgshirejte .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#mgshirejte .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mgshirejte .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#mgshirejte .gt_left {
+  text-align: left;
+}
+
+#mgshirejte .gt_center {
+  text-align: center;
+}
+
+#mgshirejte .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mgshirejte .gt_font_normal {
+  font-weight: normal;
+}
+
+#mgshirejte .gt_font_bold {
+  font-weight: bold;
+}
+
+#mgshirejte .gt_font_italic {
+  font-style: italic;
+}
+
+#mgshirejte .gt_super {
+  font-size: 65%;
+}
+
+#mgshirejte .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="mgshirejte" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">type</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">UTILITY</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_center">zing</td>
+      <td class="gt_row gt_right">3.2</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">playmo</td>
+      <td class="gt_row gt_right">5.2</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">lego</td>
+      <td class="gt_row gt_right">3.7</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">zing</td>
+      <td class="gt_row gt_right">2.8</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">playmo</td>
+      <td class="gt_row gt_right">7.8</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">lego</td>
+      <td class="gt_row gt_right">3.1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">zing</td>
+      <td class="gt_row gt_right">4.5</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">playmo</td>
+      <td class="gt_row gt_right">9.3</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">lego</td>
+      <td class="gt_row gt_right">1.7</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_center">zing</td>
+      <td class="gt_row gt_right">3.2</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]
+.pull-right[
+![](lecture_10_files/img/playmo_3.jpg)
+]
+
+---
+# GLM vs ANOVA
+
+
+```r
+l.mod &lt;- lm(UTILITY~type, data=toys)
+*anova(l.mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: UTILITY
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)   
+## type       2   40.5   20.24    7.38 0.0081 **
+## Residuals 12   32.9    2.74                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+a.mod &lt;- aov(UTILITY~type, data=toys)
+*summary(a.mod)
+```
+
+```
+##             Df Sum Sq Mean Sq F value Pr(&gt;F)   
+## type         2   40.5   20.24    7.38 0.0081 **
+## Residuals   12   32.9    2.74                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+---
+# GLM vs ANOVA
+
+
+```r
+*summary(l.mod)
+```
+
+```
+## ...
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    4.000      0.741    5.40  0.00016 ***
+## typeplaymo     2.600      1.047    2.48  0.02884 *  
+## typelego      -1.360      1.047   -1.30  0.21853    
+## ...
+```
+
+
+```r
+*model.tables(a.mod)
+```
+
+```
+## Tables of effects
+## 
+##  type 
+## type
+##    zing  playmo    lego 
+## -0.4133  2.1867 -1.7733
+```
+
+???
+- the (default) model table shows you the differences from the grand mean, which is 4.4133
+
+- so in the linear model summary the mean value for playmos is 4 + 2.6 or 6.6
+
+- in the anova summary the mean value for playmos is 4.4133 + 2.1867 or 6.6
+
+- however in the model table (from ANOVA) we don't know what differences are statistically significant, and we don't have diagnostics such as `\(R^2\)`
+
+---
+background-image: url(lecture_10_files/img/elephant.jpg)
+background-size: cover
+class: bottom, animated, fadeIn
+
+.f1.white.pa3.tc[
+Repeated Measures
+]
+
+---
+# Repeated Measures
+
+- so far, _every_ model we've looked at has been "one observation per participant"
+
+- however, most experiments have a _structure_
+
+- some observations are "more related" to each other than others
+
+- for example, because they come from the same person (repeated measures)
+
+
+---
+![:scale 5%](lecture_10_files/img/danger.svg)&amp;nbsp;&amp;nbsp; .f1[Mixed Models]
+
+
+
+.br3.bg-gray.white.pa2[
+`$$y_{ij}=b_{0j}+b_{1j}x_{1ij}+\epsilon_{ij}$$`
+
+.pt3[
+`$$b_{0j}=\gamma_{00}+\nu_{0j}$$`
+`$$b_{1j}=\gamma_{01}+\nu_{1j}$$`
+
+]]
+
+- relatedness accounted for by more regression equations
+
+- all part of the linear model .right[NEXT TERM]
+
+---
+# ANOVA reading
+
+- brief introduction: Navarro (pp. 523-534, v0.5)
+
+- Cohen, J. (1968). Multiple Regression as a General Data-Analytic System. _Psychological Bulletin, 70,_ 426-443.
+
+- Chapter 16 of Howell, D. C. (2002).  _Statistical Methods for Psychology,_ 5th Edn. Duxbury, CA: Duxbury Thomson Learning.
+---
+class: center, middle, inverse, animated, flipInY
+## End of Part 1
+
+# For Parts 2 and 3:
+
+# please read the example coursework
+---
+class: center, middle, inverse
+# Part 2
+
+## Analysis and Reporting
+
+
+---
+# Analytical Steps
+
+.pull-left[
+1. specify research questions and hypotheses
+
+1. operationalize variables
+
+1. clean and prepare data
+
+1. describe and visualize data
+
+1. select and run statistics
+
+1. check and test data assumptions
+
+1. report and interpret results
+]
+.pull-right.center[
+![:scale 80%](lecture_10_files/img/playmo_analyse.jpg)
+]
+
+???
+- these are the typical steps you would take for an analysis
+---
+# 1. Research Questions and Hypotheses
+
+.pt4[
+&gt; Does time of day and speed of driving predict the blood alcohol content over and above driver's age?
+
+- several variables "predicting" one variable
+
+- variables need to be operationalized
+]
+---
+# 2. Operationalize Variables
+
+.pull-left[
+### predictors (IVs)
+
+&gt; Age of driver (in years)
+
+&gt; Speed when stopped by police (mph)
+
+- continuous
+
+&gt; Whether or not the incident occurred at night
+
+- binary
+
+]
+.pull-right[
+### outcome (DV)
+
+&gt; Blood Alcohol Content (%) as measured by breathalyser
+
+- continuous
+]
+
+---
+# 3. Clean and Prepare Data
+
+1. are there any impossible values?
+
+  - clean and recode them as something sensible, often `NA`
+  
+1. are there any outliers?
+
+  - often can't be sure unless we've measured _influence_
+  
+1. are categorical variables appropriately encoded?
+
+  - does R recognise them as `factor`s?
+  
+  - how are the levels labelled?  (which is the intercept level?)
+
+---
+# 4. Describe and Visualize Data
+
+.pt4[
+- descriptions depend on variable types
+
+- `age`, `speed`: continuous → mean, SD, histogram or density?
+
+- `nighttime`: binary → frequencies, mosaic plot?
+]
+---
+# 5. Statistics
+
+- **t-test**: mean difference
+
+- **correlation**: association
+
+- **regression**: "prediction"
+
+.pt2[
+- choice depends on relational statement in question
+
+- calculation depends on DV type etc.
+]
+
+--
+
+.pt2[
+- how does this method treat missing data? (`na.rm=T` ?)
+
+- what is the key output (from `summary()`, for example?)
+]
+
+---
+# 6. Checking Assumptions:  Linear Models
+
+.pull-left[
+### required
+
+- linearity of relationship
+
+- for the _residuals_:
+  + normality
+  + homogeneity of variance
+  + independence
+]
+.pull-right[
+### desirable
+- uncorrelated predictors
+
+- no "bad" (overly influential) observations
+]
+
+---
+# 6. Checking Assumptions:  Logit Models
+
+.pull-left[
+### required
+
+- linearity of relationship .red[between IVs and log-odds]
+
+- for the _residuals_:
+  + .red[~~normality~~]
+  + .red[~~homogeneity of variance~~]
+  + independence
+]
+.pull-right[
+### desirable
+- uncorrelated predictors
+
+- no "bad" (overly influential) observations
+
+- .red[large samples (due to maximum likelihood fitting)]
+]
+
+
+---
+# EXAM INFO
+
+.pt5[
+- for the exam, we do not expect a full set of assumption checks for any `glm(..., family=binomial)` regressions you do
+
+- please provide a rationale for using these regressions based on the types of the variables you are analysing
+]
+
+---
+# 6. Interpretation
+
+.center[
+![:scale 70%](lecture_10_files/img/extrapolating.png)
+]
+???
+- remember that statistics are no substitute for common sense
+
+---
+# 6. Interpretation (see week 9)
+
+1. is the intercept meaningful?
+
+  - can I make it meaningful using scaling? 
+  
+1. do the units of `\(x_n\)` and `\(y\)` aid interpretation?
+
+  - can I help interpretability using standardisation? 
+
+  - often useful to report `\(b\)`s and `\(\beta\)`s
+
+1. is the coding of nominal variables sensible?
+
+  - right intercept?
+  
+  - .gray[could I use a better coding?]
+
+
+---
+# 7. Reporting Results:  General Formatting
+
+- primary source for psychology (and empirical linguistics) is the _American Psychology Association Publication Manual_, 7th Edn.&lt;sup&gt;1&lt;/sup&gt;
+
+- plenty of material at http://www.apastyle.org/
+
+- there are formal ways to present statistical results
+
+- plenty of good resources, e.g., http://my.ilstu.edu/~jhkahn/apastats.html
+
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt;&amp;nbsp;most people are still using the 6th Edn.
+]
+---
+# Reporting Results: Tables
+
+1. if you have fewer than 2 rows/columns, you don't need a table
+
+1. number tables sequentially and refer to them in the text
+
+  + _table 1 contains descriptive statistics..._
+  
+1. be consistent in your formatting
+
+  + consistency is more important than exactly matching APA standards
+  
+1. include a brief informative title/caption above the table
+
+---
+# Example Table
+
+.center[
+.f4.tl[
+Table X: Proportions of trials in which participants referred disfluently to disfluency images for experiments 1 and 2.  Standard errors are given in parentheses.
+]
+
+.pt2[
+![](lecture_10_files/img/apa_table.png)
+]
+
+]
+---
+# Reporting Results: Figures
+
+.center.pt2[
+![:scale 90%](lecture_10_files/img/axes.png)
+]
+---
+# Reporting Results: Figures
+
+1. figures include all illustrations that aren't tables (chart, graph, photograph, drawing...)
+
+1. number figures sequentially and refer to them in text
+
+  + tables and figures have different numbering
+  
+1. for graphs, make sure
+
+  + axes are labelled appropriately
+  
+  + legends are included where necessary
+  
+1. include a brief informative title/caption below the figure
+---
+# Example Figure and Caption
+
+.center[
+![:scale 80%](lecture_10_files/img/stutter_fig.png)
+.f4.tl[Figure Y: Scatterplots showing, for each PWS, total number of onset
+  errors (x axis) plotted against self ratings of difficulty speaking
+  fluently in 10 commonly occurring speaking situation (y axis). From
+  left to right, the three plots show raw numbers of onset errors in
+  (1) inner speech; (2) overt speech (self-reports); and (3) overt
+  speech (experimenter ratings). The unbroken regression line depicts
+  the relationship between the two variables when two outliers (marked
+  with `\(\circ\)`) are excluded.]
+]
+---
+# Reporting Results
+
+1. don't repeat information
+
+1. be concise
+
+1. provide rationales for the decisions you make
+
+1. be consistent
+
+1. describe all your steps, but only include diagnostic information for key analyses
+
+---
+class: inverse, center, middle, animated, flipInY
+# End of Part 2
+
+---
+class: inverse, center, middle
+# Part 3
+## Report Writing
+
+---
+background-image: url(lecture_10_files/img/playmo_goodbye.jpg)
+background-size: contain
+
+# Goodbye!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

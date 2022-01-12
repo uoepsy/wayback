@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 3: Testing Statistical Hypotheses</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 3: Testing Statistical Hypotheses</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: inverse, center, middle
+
+# Part 1
+
+---
+# More about Height
+
+.pull-left[
+- last time we simulated the heights of a population of 10,000 people
+
+- mean height ( `\(\bar{x}\)` ) was 170; standard deviation ( `\(\sigma\)` ) was 12.
+  
+
+```r
+curve(dnorm(x,170,12),from = 120, to = 220)
+```
+
+![](lecture_3_files/figure-html/pop-1.svg)&lt;!-- --&gt;
+]
+.pull-right[
+.center[
+![:scale 70%](lecture_3_files/img/playmo_tms.jpg)
+]]
+
+
+---
+# How Unusual is Casper?
+
+
+.pull-left[
+- in his socks, Casper is 198 cm tall
+
+- how likely would we be to find someone Casper's height in our population?
+]
+.pull-right[
+![](lecture_3_files/figure-html/normvline-1.svg)&lt;!-- --&gt;
+]
+???
+- we can mark Casper's height on our normal curve
+- but we can't do anything with this information
+  + technically the line has "no width" so we can't calculate area
+  + we need to reformulate the question
+---
+# How Unusual is Casper (Take 2)?
+
+.pull-left[
+- in his socks, Casper is 198 cm tall
+
+- how likely would we be to find someone Casper's height _or more_ in our population?
+]
+.pull-right[
+![](lecture_3_files/figure-html/normarea-1.svg)&lt;!-- --&gt;
+]
+
+
+---
+count: false
+# How Unusual is Casper (Take 2)?
+
+.pull-left[
+- in his socks, Casper is 198 cm tall
+
+- how likely would we be to find someone Casper's height _or more_ in our population?
+
+- the area is 0.0098
+
+- so the probability of finding someone in the population of Casper's height or greater is 0.0098 (or, `\(p=0.0098\)` )
+]
+.pull-right[
+![](lecture_3_files/figure-html/normarea2-1.svg)&lt;!-- --&gt;
+]
+
+---
+# Area under the Curve
+
+.pull-left[
+- so now we know that the area under the curve can be used to quantify **probability**
+
+- but how do we calculate area under the curve?
+
+- luckily, R has us covered, using (in this case) the `pnorm()` function
+
+
+```r
+pnorm(198, mean = 170, sd=12,
+      lower.tail = FALSE)
+```
+
+```
+## [1] 0.009815
+```
+
+]
+.pull-right[
+![](lecture_3_files/figure-html/tails-1.svg)&lt;!-- --&gt;
+
+]
+---
+# Tailedness
+
+.pull-left[
+- we kind of knew that Casper was _tall_
+  + it made sense to ask what the likelihood of finding someone 198 cm _or greater_ was
+    + this is called a **one-tailed hypothesis** (we're not expecting Casper to be well below average height!)
+  
+- often our hypothesis might be vaguer
+  + we expect Casper to be "different", but we're not sure how
+    + we can capture this using a **two-tailed hypothesis**
+]
+.pull-right[
+![](lecture_3_files/figure-html/normtwo-1.svg)&lt;!-- --&gt;
+]
+
+---
+count: false
+
+# Tailedness
+
+.pull-left[
+- we kind of knew that Casper was _tall_
+  + it made sense to ask what the likelihood of finding someone 198 cm _or greater_ was
+    + this is called a **one-tailed hypothesis** (we're not expecting Casper to be well below average height!)
+  
+- often our hypothesis might be vaguer
+  + we expect Casper to be "different", but we're not sure how
+    + we can capture this using a **two-tailed hypothesis**
+]
+.pull-right[
+- for a two-tailed hypothesis we need to sum the relevant upper and lower areas
+
+- since the normal curve is symmetrical, this is easy!
+
+
+```r
+2 * pnorm(198, 170, 12, lower.tail = FALSE)
+```
+
+```
+## [1] 0.01963
+```
+
+
+]
+
+---
+# So: Is Casper Special?
+
+- how surprised should we be that Casper is 198 cm tall?
+
+- given the population he's in, the probability that he's 28cm or more taller than the mean of 170 is 0.0098 
+  + NB., this is according to a _one-tailed hypothesis_
+  
+--
+
+- a more accurate way of saying this is that 0.0098 is the probability of selecting him (or someone even taller than him) from the population at random
+
+---
+# A Judgement Call
+
+.pull-left[
+- if a 1% probability is _small enough_
+.center[
+![:scale 55%](lecture_3_files/img/playmo_good.jpg)
+]]
+???
+if a 1% probability of selecting someone 28cm or more above the mean is enough to surprise us, then we should be surprised
+
+if, on the other hand, we think 1% isn't particularly low, then we shouldn't be surprised
+--
+
+.pull-right[
+.center[
+- if a 1% chance doesn't impress us much
+.center[
+![:scale 55%](lecture_3_files/img/playmo_bad.jpg)
+]]
+
+]
+
+- in either case, we have nothing (mathematical) to say about the _reasons_ for Casper's height
+
+???
+when it comes to comparing means, we'll see that there are conventions for the criteria we use, but they are just that:  conventions, because this is a judgement call.
+
+And importantly, none of the maths we have done will tell us anything about the _reasons_ for Casper's height&amp;mdash;that's for us to reason about.
+
+Perhaps he's so tall because he's weightless, or perhaps he had a lot of milk in his diet:  That's the substance of the scientific paper we're going to write:  The statistical calculation just tells us that he's mildly unusual.
+
+In the next part, we're going to look at how this works for group means as opposed to individuals, but the TL;DR is:  pretty much the same.
+
+---
+class: inverse, center, middle, animated, rubberBand
+
+# End of Part 1
+
+---
+class: inverse, center, middle
+
+# Part Two
+
+### Group Means
+
+---
+# Investment Strategies
+
+.br3.pa2.pt2.bg-gray.white.f3[
+The Playmo Investors' Circle have been pursuing a special investment strategy over the past year.  By no means everyone has made a profit.  Is the strategy worth advertising to others?
+]
+
+![](lecture_3_files/figure-html/invest-1.svg)&lt;!-- --&gt;
+---
+# Information About the Investments
+
+.pull-left[
+- there are 12 investors
+
+- the mean profit is £11.98
+
+- the standard deviation is £20.14
+
+- the standard error is `\(\sigma/\sqrt{12}\)` which is 5.8148
+
+.pt2[
+- we are interested in the _probability of 12 people making at least a mean £11.98 profit_
+
+  + assuming that they come from the same population
+]]
+
+.pull-right[
+![:scale 70%](lecture_3_files/img/playmo_investors.jpg)
+]
+
+---
+# Using Standard Error
+
+.pull-left[
+- together with the mean, the standard error describes a normal distribution
+
+- "likely distribution of means for other samples of 12"
+]
+
+.pull-right[
+![](lecture_3_files/figure-html/segraph-1.svg)&lt;!-- --&gt;
+]
+
+---
+# Using Standard Error (2)
+
+.pull-left[
+- last time, our **null hypothesis** ("most likely outcome") was "Casper is of average height"
+
+- this time, our null hypothesis is "there was no profit"
+
+- easiest way to operationalize this:
+
+  + "the average profit was zero"
+  
+- so redraw the normal curve with _the same standard error_ and a _mean of zero_
+]
+
+.pull-right[
+![](lecture_3_files/figure-html/segraph2-1.svg)&lt;!-- --&gt;
+]
+
+---
+# Using Standard Error (3)
+
+.pull-left[
+- null hypothesis: `\(\mu=0\)`
+
+- probability of making a mean profit of £11.98 or more:
+
+  + _one-tailed_ hypothesis
+  
+  + evaluated as relevant area under the curve
+  
+
+```r
+se=sd(profit)/sqrt(12)
+
+pnorm(mean(profit), mean=0, sd=se,
+      lower.tail=FALSE)
+```
+
+```
+## [1] 0.01969
+```
+]
+
+.pull-right[
+![](lecture_3_files/figure-html/segraph3-1.svg)&lt;!-- --&gt;
+]
+
+---
+# The Standardized Version
+
+.flex.items-center[
+.w-60[
+- last week we talked about the _standard normal curve_
+  + mean = 0; standard deviation = 1
+- our investors' curve is very easy to transform
+  + mean is _already_ 0; divide by standard error  
+
+```r
+pnorm(mean(profit),0,se,lower.tail=FALSE)
+```
+
+```
+## [1] 0.01969
+```
+
+```r
+pnorm(mean(profit)/se,0,1,lower.tail=FALSE)
+```
+
+```
+## [1] 0.01969
+```
+- `mean(profit)/se` (2.0603) is "number of standard errors from zero"
+]
+.w-40.pa2[
+![](lecture_3_files/figure-html/snc-1.svg)&lt;!-- --&gt;
+
+]]
+---
+# The Standardised Version
+
+- you can take _any_ mean, and _any_ standard deviation, and produce "number of standard errors from the mean"
+
+  + `\(z=\bar{x}/\sigma\)`
+  
+- here, the standard deviation is a _standard error_, but needn't be
+
+  + the point of the calculation is to compare to the **standard normal curve**
+  
+  + made "looking up probability" easier in the days of printed tables
+ 
+--
+
+- usual practice is to refer to standardised statistics
+
+  + _the name chosen for them comes from the relevant distribution_
+  
+- `\(z\)` is assessed using the normal distribution
+---
+# Which Means...
+- for `\(z=2.0603\)`, `\(p=0.0197\)`
+
+.br3.pa2.pt2.bg-gray.white.f3[
+If you picked 12 people at random from a population of investors who were making no profit, there would be a 2% chance that their average profit would be £11.98 or more.
+]
+
+.pt2[
+- is 2% low enough for you to believe that the mean profit probably wasn't due to chance?
+
+  + again, it's a _judgement call_
+  
+  + but before we make that judgement...
+]
+???
+obviously here our "population of investors" means "investors like the Playmo Investors' Circle.
+
+One important thing about statistics is that you can only extrapolate to the relevant population (but it's a matter of interpretation what the relevant population is!)
+---
+class: inverse, middle, center, animated, rubberBand
+
+# End of Part 2
+
+---
+class: inverse, middle, center
+
+# Part 3
+
+### The `\(t\)`-test
+
+---
+# A Small Confession
+
+.pull-left[
+![:scale 70%](lecture_3_files/img/playmo_liar.jpg)
+]
+
+.pull-right[
+### Part Two wasn't entirely true
+
+- all of the principles are correct, but for smaller `\(n\)` the normal curve isn't the best estimate
+
+- for that we use the `\(t\)` distribution
+]
+
+
+---
+# The `\(t\)` Distribution
+
+.pull-left[
+.center[
+![:scale 40%](lecture_3_files/img/gossett.jpg)
+
+"A. Student", or William Sealy Gossett
+]]
+
+.pull-right[
+![](lecture_3_files/figure-html/normvst-1.svg)&lt;!-- --&gt;
+
+]
+
+.pt2[
+- note that the shape changes according to _degrees of freedom_, hence `\(t(11)\)`
+]
+???
+The official name for the `\(t\)`-distribution is "Student's t-distribution", after William Gossett's pen-name
+
+Gossett specialised in statistics for relatively small numbers of observations, working with Pearson, Fisher, and others
+
+---
+# The `\(t\)` Distribution
+
+.flex.items-top[
+.w-60.pa2[
+- conceptually, the `\(t\)` distribution increases uncertainty when the sample is small
+
+  + the probability of more extreme values is slightly higher
+  
+- exact shape of distribution depends on sample size
+  
+- the degrees of freedom are inherited from the standard error
+
+$$ \textrm{se} = \frac{\sigma}{\sqrt{n}} = \frac{\sqrt{\frac{\sum{(\bar{x}-x)^2}}{\color{red}{n-1}}}}{\sqrt{n}} $$
+]
+
+.w-40.pa2[
+![](lecture_3_files/figure-html/ts-1.svg)&lt;!-- --&gt;
+]]
+
+???
+here, I'm only showing the right-hand side of each distribution, so that you can see the differences between different degrees of freedom
+
+the distributions are, of course, symmetrical
+---
+# Using the `\(t\)` Distribution
+
+- in part 2, we calculated the mean profit for the group as £11.98 and the standard error as 5.8148
+
+- we used the formula `\(z=\bar{x}/\sigma\)` to calculate `\(z\)`, and the standard normal curve to calculate probability
+
+--
+
+- **the formula for `\(t\)` is the same as the formula for `\(z\)` **
+
+  + what differs is the _distribution we are using to calculate probability_
+  
+  + we need to know the degrees of freedom (to get the right `\(t\)`-curve)
+  
+- so `\(t(\textrm{df}) = \bar{x}/\sigma\)`  
+
+- **in this case `\(t(11) = \bar{x}/\sigma\)`, where `\(\sigma\)` is the standard error**
+---
+# So What is the Probability of a £11.98 Profit?
+.pull-left[
+- for 12 people who made a mean profit of £11.98 with an se of 5.8148
+
+- `\(t(11) = 11.98/5.8148 = 2.0603\)`
+
+- instead of `pnorm()` we use `pt()` for the `\(t\)` distribution
+  
+- `pt()` requires the degrees of freedom
+  
+
+```r
+pt(mean(profit)/se,df=11,lower.tail=FALSE)
+```
+
+```
+## [1] 0.03192
+```
+]
+
+
+.pull-right[
+![](lecture_3_files/figure-html/tgraph-1.svg)&lt;!-- --&gt;
+
+]
+---
+# Did We Have to Do All That Work?
+
+.flex.items-top[
+.w-70.pa2[
+
+```r
+head(profit)
+```
+
+```
+## [1]  15.76  -0.83  -3.07  26.43 -10.00  11.09
+```
+
+```r
+t.test(profit, mu=0, alternative = "greater")
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  profit
+## t = 2.1, df = 11, p-value = 0.03
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  1.537   Inf
+## sample estimates:
+## mean of x 
+##     11.98
+```
+
+]
+.w-30.pa2[
+- **one-sample** `\(t\)`-test
+
+- compares a single sample against a hypothetical mean (`mu`)
+
+- usually zero
+  
+]]
+
+???
+note the use of "alternative = greater" here.
+
+we'll talk about that on the next slide.
+---
+# Types of Hypothesis
+
+
+```r
+t.test(profit, mu=0, alternative = "greater")
+```
+
+- note the use of `alternative="greater"`
+
+- we've talked about the _null hypothesis_ (also **H&lt;sub&gt;0&lt;/sub&gt;**)
+
+  + there is no profit (mean profit = 0)
+  
+- the **alternative hypothesis** (**H&lt;sub&gt;1&lt;/sub&gt;**, **experimental hypothesis**) is the hypothesis we're interested in
+
+  + here, that the profit is reliably £11.98 _or more_ (_one-tailed_ hypothesis)
+  
+  + could also use `alternative = "less"` or `alternative = "two.sided"`
+
+---
+# Putting it Together
+
+- for `\(t(11)=2.0603\)`, `\(p=0.0319\)`
+
+.br3.pa2.pt2.bg-gray.white.f3[
+If you picked 12 people at random from a population of investors who were making no profit, there would be a 3% chance that their average profit would be £11.98 or more.
+]
+
+.pt2[
+- is 3% low enough for you to believe that the mean profit probably wasn't due to chance?
+
+- perhaps we'd better face up to this question!
+
+]
+
+---
+# Setting the Alpha Level
+
+.pull-left[
+- the `\(\alpha\)` level is a criterion for `\(p\)`
+
+- if `\(p\)` is lower than the `\(\alpha\)` level
+
+  + we can (decide to) _reject H&lt;sub&gt;0&lt;/sub&gt;_
+
+  + we can (implicitly) _accept H&lt;sub&gt;1&lt;/sub&gt;_
+
+- what we set `\(\alpha\)` to is a _matter of convention_
+
+- typically, in Psychology, `\(\color{red}{\alpha}\)` .red[is set to .05]
+
+- important to set _before_ any statistical analysis
+]
+.pull-right[
+![](lecture_3_files/figure-html/twonorms-1.svg)&lt;!-- --&gt;
+]
+???
+I've shown you here on the normal curve because it's a more general distribution than the `\(t\)` distribution, which requires degrees of freedom, but the graphs would look quite similar, as you know
+
+- if we're testing a medicine, with possible side-effects, we want alpha to be low
+
+- for general psychology, meh...
+
+- no leading zeroes because `\(p\)` is always less than 1
+
+- no cheating now!fl
+
+---
+# `\(p &lt; .05\)`
+
+- the `\(p\)`-value is the probability of finding our results under H&lt;sub&gt;0&lt;/sub&gt;, the null hypothesis
+
+- H&lt;sub&gt;0&lt;/sub&gt; is essentially "&amp;#128169; happens"
+  
+- `\(\alpha\)` is the maximum level of `\(p\)` at which we are prepared to conclude that H&lt;sub&gt;0&lt;/sub&gt; is false (and argue for H&lt;sub&gt;1&lt;/sub&gt;)
+
+--
+
+.flash.animated[
+## there is a 5% probability of falsely rejecting H&lt;sub&gt;0&lt;/sub&gt;
+]
+
+- wrongly rejecting H&lt;sub&gt;0&lt;/sub&gt; (false positive) is a **type 1 error**
+
+- wrongly accepting H&lt;sub&gt;0&lt;/sub&gt; (false negative) is a **type 2 error**
+???
+---
+# Most Experiments Involve Differences
+
+.pull-left[
+- but of course "profit" _is_ a difference between **paired samples**
+
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#dmdhclnvql .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dmdhclnvql .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dmdhclnvql .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dmdhclnvql .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dmdhclnvql .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dmdhclnvql .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dmdhclnvql .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dmdhclnvql .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dmdhclnvql .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dmdhclnvql .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dmdhclnvql .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dmdhclnvql .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dmdhclnvql .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#dmdhclnvql .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmdhclnvql .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmdhclnvql .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dmdhclnvql .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#dmdhclnvql .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dmdhclnvql .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#dmdhclnvql .gt_left {
+  text-align: left;
+}
+
+#dmdhclnvql .gt_center {
+  text-align: center;
+}
+
+#dmdhclnvql .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dmdhclnvql .gt_font_normal {
+  font-weight: normal;
+}
+
+#dmdhclnvql .gt_font_bold {
+  font-weight: bold;
+}
+
+#dmdhclnvql .gt_font_italic {
+  font-style: italic;
+}
+
+#dmdhclnvql .gt_super {
+  font-size: 65%;
+}
+
+#dmdhclnvql .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="dmdhclnvql" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">before</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">after</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">profit</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_right">&#163;362.68</td>
+      <td class="gt_row gt_right">&#163;378.44</td>
+      <td class="gt_row gt_right">&#163;15.76</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">&#163;370.28</td>
+      <td class="gt_row gt_right">&#163;369.45</td>
+      <td class="gt_row gt_right">&minus;&#163;0.83</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">&#163;165.38</td>
+      <td class="gt_row gt_right">&#163;162.31</td>
+      <td class="gt_row gt_right">&minus;&#163;3.07</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">&#163;633.64</td>
+      <td class="gt_row gt_right">&#163;660.07</td>
+      <td class="gt_row gt_right">&#163;26.43</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">&#163;579.65</td>
+      <td class="gt_row gt_right">&#163;569.65</td>
+      <td class="gt_row gt_right">&minus;&#163;10.00</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">&#163;314.22</td>
+      <td class="gt_row gt_right">&#163;325.31</td>
+      <td class="gt_row gt_right">&#163;11.09</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]
+
+.pull-right[
+- doesn't matter whether _values_ are approx. normal as long as _differences_ are
+
+
+```r
+hist(before)
+```
+
+![](lecture_3_files/figure-html/hist-1.svg)&lt;!-- --&gt;
+]
+---
+# Equivalent `\(t\)`-tests
+
+.pull-left[
+
+```r
+t.test(profit, mu=0, 
+       alternative="greater")
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  profit
+## t = 2.1, df = 11, p-value = 0.03
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  1.537   Inf
+## sample estimates:
+## mean of x 
+##     11.98
+```
+
+]
+.pull-right[
+
+```r
+t.test(after, before, paired=TRUE,
+       alternative="greater")
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  after and before
+## t = 2.1, df = 11, p-value = 0.03
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  1.537   Inf
+## sample estimates:
+## mean of the differences 
+##                   11.98
+```
+]
+.flex.items-center[
+.w-5.pa1[
+![:scale 70%](lecture_1_files/img/danger.svg)
+]
+.w-95.pa1[
+- note that a paired-samples `\(t\)`-test is actually (kind of) _multivariate_ (&gt;1 measure per person)
+]]
+
+???
+- note that the `\(t\)`-values have different signs
+
+- this is essentially irrelevant
+
+  + it just reflects which column was subtracted from which
+
+
+---
+class: inverse, center, middle, animated, rubberBand
+
+# End
+
+---
+# Acknowledgements
+
+- icons by Diego Lavecchia from the [Noun Project](https://thenounproject.com/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

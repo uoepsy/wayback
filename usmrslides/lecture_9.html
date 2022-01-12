@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 10: The Generalized Linear Model</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding/plotly.js"></script>
+    <script src="libs/typedarray/typedarray.min.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 10: The Generalized Linear Model</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: inverse, center, middle
+# Part 1
+## Bigger and Better
+
+---
+# Learning to Read
+
+.pull-left.pulse.animated[
+![](lecture_8_files/img/playmo_teach.jpg)
+]
+.pull-right[
+.center[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#fgbihcsvbz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fgbihcsvbz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fgbihcsvbz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fgbihcsvbz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fgbihcsvbz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fgbihcsvbz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fgbihcsvbz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fgbihcsvbz .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fgbihcsvbz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fgbihcsvbz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fgbihcsvbz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fgbihcsvbz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fgbihcsvbz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#fgbihcsvbz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fgbihcsvbz .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fgbihcsvbz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fgbihcsvbz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#fgbihcsvbz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fgbihcsvbz .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#fgbihcsvbz .gt_left {
+  text-align: left;
+}
+
+#fgbihcsvbz .gt_center {
+  text-align: center;
+}
+
+#fgbihcsvbz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fgbihcsvbz .gt_font_normal {
+  font-weight: normal;
+}
+
+#fgbihcsvbz .gt_font_bold {
+  font-weight: bold;
+}
+
+#fgbihcsvbz .gt_font_italic {
+  font-style: italic;
+}
+
+#fgbihcsvbz .gt_super {
+  font-size: 65%;
+}
+
+#fgbihcsvbz .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="fgbihcsvbz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">age</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">hrs_wk</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">method</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">R_AGE</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_right">10.115</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.971</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">14.272</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">9.940</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.677</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">13.692</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">6.060</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.619</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">10.353</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">9.269</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.894</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">12.744</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">10.991</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.035</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">15.353</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">6.535</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.272</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.798</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">8.150</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.871</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.691</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">7.941</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.053</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.988</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">8.233</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.474</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.713</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">6.219</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.038</td>
+      <td class="gt_row gt_center" style="background-color: rgba(208,217,255,0.8); color: #000000;">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.908</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]]
+
+---
+count: false
+# Learning to Read
+
+.pull-left[
+![](lecture_9_files/img/playmo_teach.jpg)
+]
+.pull-right[
+![](lecture_9_files/figure-html/plotme1-1.svg)&lt;!-- --&gt;
+
+]
+
+---
+# Learning to Read
+
+.pull-left[
+![](lecture_9_files/img/playmo_teach.jpg)
+]
+.pull-right[
+.center[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#xzcpgitrva .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#xzcpgitrva .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#xzcpgitrva .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#xzcpgitrva .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#xzcpgitrva .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#xzcpgitrva .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#xzcpgitrva .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#xzcpgitrva .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xzcpgitrva .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xzcpgitrva .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xzcpgitrva .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xzcpgitrva .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xzcpgitrva .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#xzcpgitrva .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzcpgitrva .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xzcpgitrva .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#xzcpgitrva .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#xzcpgitrva .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xzcpgitrva .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#xzcpgitrva .gt_left {
+  text-align: left;
+}
+
+#xzcpgitrva .gt_center {
+  text-align: center;
+}
+
+#xzcpgitrva .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xzcpgitrva .gt_font_normal {
+  font-weight: normal;
+}
+
+#xzcpgitrva .gt_font_bold {
+  font-weight: bold;
+}
+
+#xzcpgitrva .gt_font_italic {
+  font-style: italic;
+}
+
+#xzcpgitrva .gt_super {
+  font-size: 65%;
+}
+
+#xzcpgitrva .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="xzcpgitrva" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">age</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">hrs_wk</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">method</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">R_AGE</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">10.115</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.971</td>
+      <td class="gt_row gt_center">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">14.272</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">9.940</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.677</td>
+      <td class="gt_row gt_center">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">13.692</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.060</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.619</td>
+      <td class="gt_row gt_center">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">10.353</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">9.269</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.894</td>
+      <td class="gt_row gt_center">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">12.744</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">10.991</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.035</td>
+      <td class="gt_row gt_center">phonics</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">15.353</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.535</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.272</td>
+      <td class="gt_row gt_center">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.798</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.150</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.871</td>
+      <td class="gt_row gt_center">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.691</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">7.941</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.053</td>
+      <td class="gt_row gt_center">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.988</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.233</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.474</td>
+      <td class="gt_row gt_center">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">8.713</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">6.219</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">4.038</td>
+      <td class="gt_row gt_center">word</td>
+      <td class="gt_row gt_right" style="background-color: rgba(208,217,255,0.8); color: #000000;">5.908</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]]
+
+---
+count: false
+# Learning to Read
+
+.pull-left[
+![](lecture_9_files/img/playmo_teach.jpg)
+]
+.pull-right[
+<div id="htmlwidget-2b0c06170b08799f88e4" style="width:504px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2b0c06170b08799f88e4">{"x":{"visdat":{"7eb2131ebab0":["function () ","plotlyVisDat"]},"cur_data":"7eb2131ebab0","attrs":{"7eb2131ebab0":{"x":{},"y":{},"z":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"surface"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"age"},"yaxis":{"title":"practise"},"zaxis":{"title":"READING AGE"},"aspectmode":"cube"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"colorbar":{"title":"R_AGE","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333334","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"x":[5.11944827530533,5.24177221310674,5.36409615090815,5.48642008870956,5.60874402651098,5.73106796431239,5.8533919021138,5.97571583991521,6.09803977771662,6.22036371551803,6.34268765331944,6.46501159112086,6.58733552892227,6.70965946672368,6.83198340452509,6.9543073423265,7.07663128012791,7.19895521792932,7.32127915573074,7.44360309353215,7.56592703133356,7.68825096913497,7.81057490693638,7.93289884473779,8.0552227825392,8.17754672034062,8.29987065814203,8.42219459594344,8.54451853374485,8.66684247154626,8.78916640934767,8.91149034714908,9.03381428495049,9.15613822275191,9.27846216055332,9.40078609835473,9.52311003615614,9.64543397395755,9.76775791175896,9.89008184956037,10.0124057873618,10.1347297251632,10.2570536629646,10.379377600766,10.5017015385674,10.6240254763688,10.7463494141703,10.8686733519717,10.9909972897731],"y":[3.35322649897779,3.42984787870193,3.50646925842607,3.5830906381502,3.65971201787434,3.73633339759848,3.81295477732262,3.88957615704676,3.9661975367709,4.04281891649503,4.11944029621917,4.19606167594331,4.27268305566745,4.34930443539159,4.42592581511573,4.50254719483986,4.579168574564,4.65578995428814,4.73241133401228,4.80903271373642,4.88565409346056,4.96227547318469,5.03889685290883,5.11551823263297,5.19213961235711,5.26876099208125,5.34538237180539,5.42200375152952,5.49862513125366,5.5752465109778,5.65186789070194,5.72848927042608,5.80511065015022,5.88173202987435,5.95835340959849,6.03497478932263,6.11159616904677,6.18821754877091,6.26483892849505,6.34146030821918,6.41808168794332,6.49470306766746,6.5713244473916,6.64794582711574,6.72456720683987,6.80118858656401,6.87780996628815,6.95443134601229,7.03105272573643],"z":[[7.50447639097793,7.4661995051501,7.42792261932226,7.38964573349442,7.35136884766658,7.31309196183874,7.2748150760109,7.23653819018307,7.19826130435523,7.15998441852739,7.12170753269955,7.08343064687171,7.04515376104387,7.00687687521604,6.9685999893882,6.93032310356036,6.89204621773252,6.85376933190468,6.81549244607684,6.77721556024901,6.73893867442117,6.70066178859333,6.66238490276549,6.62410801693765,6.58583113110981,6.54755424528198,6.50927735945414,6.4710004736263,6.43272358779846,6.39444670197062,6.35616981614278,6.31789293031494,6.27961604448711,6.24133915865927,6.20306227283143,6.16478538700359,6.12650850117575,6.08823161534791,6.04995472952008,6.01167784369224,5.9734009578644,5.93512407203656,5.89684718620872,5.85857030038088,5.82029341455304,5.78201652872521,5.74373964289737,5.70546275706953,5.66718587124169],[7.53391542842977,7.50036068100981,7.46680593358984,7.43325118616988,7.39969643874992,7.36614169132995,7.33258694390999,7.29903219649003,7.26547744907007,7.2319227016501,7.19836795423014,7.16481320681018,7.13125845939021,7.09770371197025,7.06414896455029,7.03059421713033,6.99703946971036,6.9634847222904,6.92992997487044,6.89637522745048,6.86282048003051,6.82926573261055,6.79571098519059,6.76215623777062,6.72860149035066,6.6950467429307,6.66149199551073,6.62793724809077,6.59438250067081,6.56082775325085,6.52727300583088,6.49371825841092,6.46016351099096,6.42660876357099,6.39305401615103,6.35949926873107,6.32594452131111,6.29238977389114,6.25883502647118,6.22528027905122,6.19172553163126,6.15817078421129,6.12461603679133,6.09106128937137,6.05750654195141,6.02395179453144,5.99039704711148,5.95684229969151,5.92328755227155],[7.5633544658816,7.53452185686951,7.50568924785742,7.47685663884534,7.44802402983325,7.41919142082116,7.39035881180908,7.36152620279699,7.3326935937849,7.30386098477281,7.27502837576073,7.24619576674864,7.21736315773655,7.18853054872446,7.15969793971238,7.13086533070029,7.1020327216882,7.07320011267612,7.04436750366403,7.01553489465194,6.98670228563985,6.95786967662777,6.92903706761568,6.90020445860359,6.87137184959151,6.84253924057942,6.81370663156733,6.78487402255524,6.75604141354316,6.72720880453107,6.69837619551898,6.6695435865069,6.64071097749481,6.61187836848272,6.58304575947063,6.55421315045855,6.52538054144646,6.49654793243437,6.46771532342228,6.4388827144102,6.41005010539811,6.38121749638602,6.35238488737394,6.32355227836185,6.29471966934976,6.26588706033767,6.23705445132559,6.2082218423135,6.17938923330141],[7.59279350333343,7.56868303272922,7.54457256212501,7.52046209152079,7.49635162091658,7.47224115031237,7.44813067970816,7.42402020910395,7.39990973849974,7.37579926789553,7.35168879729131,7.3275783266871,7.30346785608289,7.27935738547868,7.25524691487447,7.23113644427026,7.20702597366605,7.18291550306183,7.15880503245762,7.13469456185341,7.1105840912492,7.08647362064499,7.06236315004077,7.03825267943656,7.01414220883235,6.99003173822814,6.96592126762393,6.94181079701971,6.9177003264155,6.89358985581129,6.86947938520708,6.84536891460287,6.82125844399866,6.79714797339444,6.77303750279024,6.74892703218602,6.72481656158181,6.7007060909776,6.67659562037339,6.65248514976918,6.62837467916496,6.60426420856075,6.58015373795654,6.55604326735233,6.53193279674812,6.50782232614391,6.48371185553969,6.45960138493548,6.43549091433127],[7.62223254078526,7.60284420858892,7.58345587639259,7.56406754419625,7.54467921199992,7.52529087980358,7.50590254760724,7.48651421541091,7.46712588321457,7.44773755101824,7.4283492188219,7.40896088662556,7.38957255442923,7.37018422223289,7.35079589003656,7.33140755784022,7.31201922564388,7.29263089344755,7.27324256125121,7.25385422905488,7.23446589685854,7.2150775646622,7.19568923246587,7.17630090026953,7.1569125680732,7.13752423587686,7.11813590368052,7.09874757148419,7.07935923928785,7.05997090709151,7.04058257489518,7.02119424269884,7.00180591050251,6.98241757830617,6.96302924610983,6.9436409139135,6.92425258171716,6.90486424952083,6.88547591732449,6.86608758512815,6.84669925293182,6.82731092073548,6.80792258853915,6.78853425634281,6.76914592414647,6.74975759195014,6.7303692597538,6.71098092755747,6.69159259536113],[7.65167157823709,7.63700538444863,7.62233919066017,7.60767299687171,7.59300680308325,7.57834060929479,7.56367441550633,7.54900822171787,7.53434202792941,7.51967583414095,7.50500964035249,7.49034344656403,7.47567725277557,7.46101105898711,7.44634486519865,7.43167867141019,7.41701247762172,7.40234628383326,7.3876800900448,7.37301389625634,7.35834770246788,7.34368150867942,7.32901531489096,7.3143491211025,7.29968292731404,7.28501673352558,7.27035053973712,7.25568434594866,7.2410181521602,7.22635195837174,7.21168576458328,7.19701957079482,7.18235337700636,7.1676871832179,7.15302098942944,7.13835479564098,7.12368860185252,7.10902240806405,7.09435621427559,7.07969002048714,7.06502382669867,7.05035763291021,7.03569143912175,7.02102524533329,7.00635905154483,6.99169285775637,6.97702666396791,6.96236047017945,6.94769427639099],[7.68111061568893,7.67116656030834,7.66122250492775,7.65127844954717,7.64133439416659,7.631390338786,7.62144628340541,7.61150222802483,7.60155817264425,7.59161411726366,7.58167006188308,7.57172600650249,7.56178195112191,7.55183789574132,7.54189384036074,7.53194978498015,7.52200572959957,7.51206167421898,7.5021176188384,7.49217356345781,7.48222950807723,7.47228545269664,7.46234139731606,7.45239734193547,7.44245328655489,7.4325092311743,7.42256517579372,7.41262112041313,7.40267706503255,7.39273300965196,7.38278895427138,7.37284489889079,7.36290084351021,7.35295678812962,7.34301273274904,7.33306867736845,7.32312462198787,7.31318056660728,7.3032365112267,7.29329245584611,7.28334840046553,7.27340434508494,7.26346028970436,7.25351623432377,7.24357217894319,7.23362812356261,7.22368406818202,7.21374001280144,7.20379595742085],[7.71054965314076,7.70532773616805,7.70010581919534,7.69488390222263,7.68966198524992,7.68444006827721,7.6792181513045,7.67399623433179,7.66877431735908,7.66355240038637,7.65833048341366,7.65310856644095,7.64788664946824,7.64266473249553,7.63744281552283,7.63222089855012,7.62699898157741,7.6217770646047,7.61655514763199,7.61133323065928,7.60611131368657,7.60088939671386,7.59566747974115,7.59044556276844,7.58522364579573,7.58000172882302,7.57477981185031,7.56955789487761,7.5643359779049,7.55911406093219,7.55389214395947,7.54867022698677,7.54344831001406,7.53822639304135,7.53300447606864,7.52778255909593,7.52256064212322,7.51733872515051,7.5121168081778,7.50689489120509,7.50167297423238,7.49645105725968,7.49122914028696,7.48600722331426,7.48078530634155,7.47556338936884,7.47034147239613,7.46511955542342,7.45989763845071],[7.73998869059259,7.73948891202775,7.73898913346292,7.73848935489809,7.73798957633325,7.73748979776842,7.73699001920358,7.73649024063875,7.73599046207392,7.73549068350908,7.73499090494425,7.73449112637942,7.73399134781458,7.73349156924975,7.73299179068492,7.73249201212008,7.73199223355525,7.73149245499041,7.73099267642558,7.73049289786075,7.72999311929591,7.72949334073108,7.72899356216625,7.72849378360141,7.72799400503658,7.72749422647174,7.72699444790691,7.72649466934208,7.72599489077724,7.72549511221241,7.72499533364757,7.72449555508274,7.72399577651791,7.72349599795307,7.72299621938824,7.72249644082341,7.72199666225857,7.72149688369374,7.72099710512891,7.72049732656407,7.71999754799924,7.71949776943441,7.71899799086957,7.71849821230474,7.7179984337399,7.71749865517507,7.71699887661023,7.7164990980454,7.71599931948057],[7.76942772804442,7.77365008788746,7.7778724477305,7.78209480757354,7.78631716741658,7.79053952725963,7.79476188710267,7.79898424694571,7.80320660678875,7.80742896663179,7.81165132647484,7.81587368631788,7.82009604616092,7.82431840600396,7.828540765847,7.83276312569004,7.83698548553309,7.84120784537613,7.84543020521917,7.84965256506221,7.85387492490525,7.8580972847483,7.86231964459134,7.86654200443438,7.87076436427742,7.87498672412046,7.87920908396351,7.88343144380655,7.88765380364959,7.89187616349263,7.89609852333567,7.90032088317872,7.90454324302176,7.9087656028648,7.91298796270784,7.91721032255088,7.92143268239393,7.92565504223697,7.92987740208001,7.93409976192305,7.93832212176609,7.94254448160913,7.94676684145218,7.95098920129522,7.95521156113826,7.9594339209813,7.96365628082434,7.96787864066738,7.97210100051043],[7.79886676549625,7.80781126374717,7.81675576199808,7.825700260249,7.83464475849992,7.84358925675084,7.85253375500176,7.86147825325267,7.87042275150359,7.87936724975451,7.88831174800542,7.89725624625634,7.90620074450726,7.91514524275818,7.92408974100909,7.93303423926001,7.94197873751093,7.95092323576185,7.95986773401276,7.96881223226368,7.9777567305146,7.98670122876552,7.99564572701643,8.00459022526735,8.01353472351827,8.02247922176919,8.0314237200201,8.04036821827102,8.04931271652194,8.05825721477286,8.06720171302377,8.07614621127469,8.08509070952561,8.09403520777652,8.10297970602744,8.11192420427836,8.12086870252928,8.1298132007802,8.13875769903111,8.14770219728203,8.15664669553295,8.16559119378387,8.17453569203479,8.1834801902857,8.19242468853662,8.20136918678753,8.21031368503845,8.21925818328937,8.22820268154029],[7.82830580294808,7.84197243960687,7.85563907626567,7.86930571292446,7.88297234958325,7.89663898624205,7.91030562290084,7.92397225955963,7.93763889621842,7.95130553287722,7.96497216953601,7.9786388061948,7.9923054428536,8.00597207951239,8.01963871617118,8.03330535282998,8.04697198948877,8.06063862614756,8.07430526280636,8.08797189946515,8.10163853612394,8.11530517278273,8.12897180944153,8.14263844610032,8.15630508275911,8.16997171941791,8.1836383560767,8.19730499273549,8.21097162939428,8.22463826605308,8.23830490271187,8.25197153937067,8.26563817602946,8.27930481268825,8.29297144934705,8.30663808600584,8.32030472266463,8.33397135932342,8.34763799598222,8.36130463264101,8.3749712692998,8.3886379059586,8.40230454261739,8.41597117927618,8.42963781593498,8.44330445259377,8.45697108925256,8.47063772591136,8.48430436257015],[7.85774484039991,7.87613361546658,7.89452239053325,7.91291116559992,7.93129994066659,7.94968871573325,7.96807749079992,7.98646626586659,8.00485504093326,8.02324381599993,8.0416325910666,8.06002136613327,8.07841014119994,8.0967989162666,8.11518769133327,8.13357646639994,8.15196524146661,8.17035401653328,8.18874279159995,8.20713156666662,8.22552034173328,8.24390911679995,8.26229789186662,8.28068666693329,8.29907544199996,8.31746421706663,8.3358529921333,8.35424176719997,8.37263054226664,8.3910193173333,8.40940809239997,8.42779686746664,8.44618564253331,8.46457441759998,8.48296319266665,8.50135196773331,8.51974074279998,8.53812951786665,8.55651829293332,8.57490706799999,8.59329584306666,8.61168461813333,8.6300733932,8.64846216826666,8.66685094333333,8.6852397184,8.70362849346667,8.72201726853334,8.74040604360001],[7.88718387785174,7.91029479132629,7.93340570480083,7.95651661827538,7.97962753174992,8.00273844522446,8.02584935869901,8.04896027217355,8.0720711856481,8.09518209912264,8.11829301259718,8.14140392607173,8.16451483954627,8.18762575302082,8.21073666649536,8.23384757996991,8.25695849344445,8.28006940691899,8.30318032039354,8.32629123386808,8.34940214734263,8.37251306081717,8.39562397429171,8.41873488776626,8.4418458012408,8.46495671471535,8.48806762818989,8.51117854166444,8.53428945513898,8.55740036861353,8.58051128208807,8.60362219556261,8.62673310903716,8.6498440225117,8.67295493598625,8.69606584946079,8.71917676293534,8.74228767640988,8.76539858988443,8.78850950335897,8.81162041683351,8.83473133030806,8.8578422437826,8.88095315725714,8.90406407073169,8.92717498420624,8.95028589768078,8.97339681115532,8.99650772462987],[7.91662291530358,7.944455967186,7.97228901906842,8.00012207095084,8.02795512283325,8.05578817471567,8.08362122659809,8.11145427848051,8.13928733036293,8.16712038224535,8.19495343412777,8.22278648601019,8.25061953789261,8.27845258977503,8.30628564165745,8.33411869353987,8.36195174542229,8.38978479730471,8.41761784918713,8.44545090106955,8.47328395295197,8.50111700483439,8.52895005671681,8.55678310859923,8.58461616048165,8.61244921236407,8.64028226424649,8.66811531612891,8.69594836801133,8.72378141989375,8.75161447177617,8.77944752365859,8.80728057554101,8.83511362742343,8.86294667930585,8.89077973118827,8.91861278307069,8.94644583495311,8.97427888683553,9.00211193871795,9.02994499060037,9.05777804248279,9.08561109436521,9.11344414624763,9.14127719813005,9.16911025001247,9.19694330189489,9.22477635377731,9.25260940565973],[7.94606195275541,7.9786171430457,8.011172333336,8.04372752362629,8.07628271391659,8.10883790420688,8.14139309449718,8.17394828478747,8.20650347507777,8.23905866536807,8.27161385565836,8.30416904594866,8.33672423623895,8.36927942652925,8.40183461681954,8.43438980710984,8.46694499740013,8.49950018769043,8.53205537798072,8.56461056827102,8.59716575856131,8.62972094885161,8.66227613914191,8.6948313294322,8.7273865197225,8.75994171001279,8.79249690030309,8.82505209059338,8.85760728088368,8.89016247117397,8.92271766146427,8.95527285175456,8.98782804204486,9.02038323233515,9.05293842262545,9.08549361291575,9.11804880320604,9.15060399349634,9.18315918378663,9.21571437407693,9.24826956436722,9.28082475465752,9.31337994494781,9.34593513523811,9.37849032552841,9.4110455158187,9.44360070610899,9.47615589639929,9.50871108668959],[7.97550099020724,8.01277831890541,8.05005564760358,8.08733297630175,8.12461030499992,8.16188763369809,8.19916496239626,8.23644229109443,8.2737196197926,8.31099694849078,8.34827427718895,8.38555160588712,8.42282893458529,8.46010626328346,8.49738359198163,8.5346609206798,8.57193824937797,8.60921557807615,8.64649290677432,8.68377023547248,8.72104756417066,8.75832489286883,8.795602221567,8.83287955026517,8.87015687896334,8.90743420766151,8.94471153635969,8.98198886505785,9.01926619375603,9.0565435224542,9.09382085115237,9.13109817985054,9.16837550854871,9.20565283724688,9.24293016594505,9.28020749464322,9.3174848233414,9.35476215203956,9.39203948073773,9.42931680943591,9.46659413813408,9.50387146683225,9.54114879553042,9.57842612422859,9.61570345292676,9.65298078162493,9.6902581103231,9.72753543902128,9.76481276771944],[8.00494002765907,8.04693949476511,8.08893896187116,8.13093842897721,8.17293789608325,8.2149373631893,8.25693683029535,8.2989362974014,8.34093576450744,8.38293523161349,8.42493469871953,8.46693416582558,8.50893363293163,8.55093310003767,8.59293256714372,8.63493203424977,8.67693150135581,8.71893096846186,8.76093043556791,8.80292990267395,8.84492936978,8.88692883688604,8.92892830399209,8.97092777109814,9.01292723820419,9.05492670531023,9.09692617241628,9.13892563952233,9.18092510662837,9.22292457373442,9.26492404084046,9.30692350794651,9.34892297505256,9.3909224421586,9.43292190926465,9.4749213763707,9.51692084347675,9.55892031058279,9.60091977768884,9.64291924479489,9.68491871190093,9.72691817900698,9.76891764611303,9.81091711321907,9.85291658032512,9.89491604743117,9.93691551453721,9.97891498164326,10.0209144487493],[8.0343790651109,8.08110067062482,8.12782227613875,8.17454388165267,8.22126548716659,8.26798709268051,8.31470869819444,8.36143030370836,8.40815190922228,8.4548735147362,8.50159512025012,8.54831672576404,8.59503833127797,8.64175993679189,8.68848154230581,8.73520314781973,8.78192475333365,8.82864635884758,8.8753679643615,8.92208956987542,8.96881117538934,9.01553278090327,9.06225438641719,9.10897599193111,9.15569759744503,9.20241920295896,9.24914080847288,9.2958624139868,9.34258401950072,9.38930562501465,9.43602723052857,9.48274883604249,9.52947044155641,9.57619204707033,9.62291365258426,9.66963525809818,9.7163568636121,9.76307846912602,9.80980007463994,9.85652168015387,9.90324328566779,9.94996489118171,9.99668649669563,10.0434081022096,10.0901297077235,10.1368513132374,10.1835729187513,10.2302945242652,10.2770161297792],[8.06381810256273,8.11526184648453,8.16670559040633,8.21814933432812,8.26959307824992,8.32103682217172,8.37248056609352,8.42392431001532,8.47536805393711,8.52681179785891,8.57825554178071,8.62969928570251,8.68114302962431,8.7325867735461,8.7840305174679,8.8354742613897,8.8869180053115,8.93836174923329,8.98980549315509,9.04124923707689,9.09269298099869,9.14413672492048,9.19558046884228,9.24702421276408,9.29846795668588,9.34991170060768,9.40135544452948,9.45279918845127,9.50424293237307,9.55568667629487,9.60713042021666,9.65857416413846,9.71001790806026,9.76146165198206,9.81290539590386,9.86434913982566,9.91579288374745,9.96723662766925,10.018680371591,10.0701241155128,10.1215678594346,10.1730116033564,10.2244553472782,10.2758990912,10.3273428351218,10.3787865790436,10.4302303229654,10.4816740668872,10.533117810809],[8.09325714001456,8.14942302234424,8.20558890467391,8.26175478700358,8.31792066933326,8.37408655166293,8.4302524339926,8.48641831632228,8.54258419865195,8.59875008098162,8.6549159633113,8.71108184564097,8.76724772797064,8.82341361030032,8.87957949262999,8.93574537495966,8.99191125728933,9.04807713961901,9.10424302194868,9.16040890427836,9.21657478660803,9.2727406689377,9.32890655126738,9.38507243359705,9.44123831592672,9.49740419825639,9.55357008058607,9.60973596291574,9.66590184524542,9.72206772757509,9.77823360990476,9.83439949223444,9.89056537456411,9.94673125689378,10.0028971392235,10.0590630215531,10.1152289038828,10.1713947862125,10.2275606685422,10.2837265508718,10.3398924332015,10.3960583155312,10.4522241978608,10.5083900801905,10.5645559625202,10.6207218448499,10.6768877271795,10.7330536095092,10.7892194918389],[8.12269617746639,8.18358419820394,8.24447221894149,8.30536023967904,8.36624826041659,8.42713628115414,8.48802430189169,8.54891232262924,8.60980034336678,8.67068836410433,8.73157638484188,8.79246440557943,8.85335242631698,8.91424044705453,8.97512846779208,9.03601648852963,9.09690450926717,9.15779253000473,9.21868055074227,9.27956857147982,9.34045659221737,9.40134461295492,9.46223263369247,9.52312065443002,9.58400867516757,9.64489669590512,9.70578471664267,9.76667273738022,9.82756075811777,9.88844877885531,9.94933679959286,10.0102248203304,10.071112841068,10.1320008618055,10.1928888825431,10.2537769032806,10.3146649240182,10.3755529447557,10.4364409654933,10.4973289862308,10.5582170069684,10.6191050277059,10.6799930484434,10.740881069181,10.8017690899185,10.8626571106561,10.9235451313936,10.9844331521312,11.0453211728687],[8.15213521491822,8.21774537406365,8.28335553320908,8.3489656923545,8.41457585149992,8.48018601064535,8.54579616979077,8.6114063289362,8.67701648808162,8.74262664722705,8.80823680637247,8.8738469655179,8.93945712466332,9.00506728380875,9.07067744295417,9.13628760209959,9.20189776124502,9.26750792039044,9.33311807953587,9.39872823868129,9.46433839782672,9.52994855697214,9.59555871611756,9.66116887526299,9.72677903440841,9.79238919355384,9.85799935269926,9.92360951184469,9.98921967099011,10.0548298301355,10.120439989281,10.1860501484264,10.2516603075718,10.3172704667172,10.3828806258627,10.4484907850081,10.5141009441535,10.5797111032989,10.6453212624444,10.7109314215898,10.7765415807352,10.8421517398806,10.9077618990261,10.9733720581715,11.0389822173169,11.1045923764623,11.1702025356078,11.2358126947532,11.3014228538986],[8.18157425237006,8.25190654992336,8.32223884747666,8.39257114502996,8.46290344258326,8.53323574013656,8.60356803768986,8.67390033524316,8.74423263279646,8.81456493034976,8.88489722790306,8.95522952545636,9.02556182300966,9.09589412056296,9.16622641811626,9.23655871566956,9.30689101322286,9.37722331077616,9.44755560832946,9.51788790588276,9.58822020343606,9.65855250098936,9.72888479854266,9.79921709609596,9.86954939364926,9.93988169120256,10.0102139887559,10.0805462863092,10.1508785838625,10.2212108814158,10.2915431789691,10.3618754765224,10.4322077740757,10.502540071629,10.5728723691823,10.6432046667356,10.7135369642889,10.7838692618422,10.8542015593955,10.9245338569488,10.9948661545021,11.0651984520554,11.1355307496087,11.205863047162,11.2761953447153,11.3465276422686,11.4168599398219,11.4871922373752,11.5575245349285],[8.21101328982189,8.28606772578306,8.36112216174424,8.43617659770542,8.51123103366659,8.58628546962777,8.66133990558894,8.73639434155012,8.81144877751129,8.88650321347247,8.96155764943364,9.03661208539482,9.111666521356,9.18672095731717,9.26177539327835,9.33682982923952,9.4118842652007,9.48693870116188,9.56199313712305,9.63704757308422,9.7121020090454,9.78715644500658,9.86221088096775,9.93726531692893,10.0123197528901,10.0873741888513,10.1624286248125,10.2374830607736,10.3125374967348,10.387591932696,10.4626463686572,10.5377008046183,10.6127552405795,10.6878096765407,10.7628641125019,10.837918548463,10.9129729844242,10.9880274203854,11.0630818563466,11.1381362923077,11.2131907282689,11.2882451642301,11.3632996001913,11.4383540361524,11.5134084721136,11.5884629080748,11.663517344036,11.7385717799971,11.8136262159583],[8.24045232727372,8.32022890164277,8.40000547601182,8.47978205038087,8.55955862474992,8.63933519911897,8.71911177348803,8.79888834785708,8.87866492222613,8.95844149659518,9.03821807096423,9.11799464533328,9.19777121970233,9.27754779407138,9.35732436844044,9.43710094280949,9.51687751717854,9.59665409154759,9.67643066591664,9.75620724028569,9.83598381465474,9.9157603890238,9.99553696339285,10.0753135377619,10.1550901121309,10.2348666865,10.3146432608691,10.3944198352381,10.4741964096072,10.5539729839762,10.6337495583453,10.7135261327143,10.7933027070834,10.8730792814524,10.9528558558215,11.0326324301905,11.1124090045596,11.1921855789286,11.2719621532977,11.3517387276667,11.4315153020358,11.5112918764048,11.5910684507739,11.6708450251429,11.750621599512,11.830398173881,11.9101747482501,11.9899513226191,12.0697278969882],[8.26989136472555,8.35439007750248,8.43888879027941,8.52338750305633,8.60788621583326,8.69238492861019,8.77688364138711,8.86138235416404,8.94588106694097,9.03037977971789,9.11487849249482,9.19937720527175,9.28387591804867,9.3683746308256,9.45287334360253,9.53737205637945,9.62187076915638,9.70636948193331,9.79086819471023,9.87536690748716,9.95986562026409,10.044364333041,10.1288630458179,10.2133617585949,10.2978604713718,10.3823591841487,10.4668578969256,10.5513566097026,10.6358553224795,10.7203540352564,10.8048527480334,10.8893514608103,10.9738501735872,11.0583488863641,11.1428475991411,11.227346311918,11.3118450246949,11.3963437374718,11.4808424502488,11.5653411630257,11.6498398758026,11.7343385885796,11.8188373013565,11.9033360141334,11.9878347269103,12.0723334396873,12.1568321524642,12.2413308652411,12.325829578018],[8.29933040217738,8.38855125336218,8.47777210454699,8.56699295573179,8.65621380691659,8.74543465810139,8.8346555092862,8.923876360471,9.0130972116558,9.1023180628406,9.19153891402541,9.28075976521021,9.36998061639501,9.45920146757982,9.54842231876462,9.63764316994942,9.72686402113422,9.81608487231902,9.90530572350383,9.99452657468863,10.0837474258734,10.1729682770582,10.262189128243,10.3514099794278,10.4406308306126,10.5298516817974,10.6190725329822,10.708293384167,10.7975142353519,10.8867350865367,10.9759559377215,11.0651767889063,11.1543976400911,11.2436184912759,11.3328393424607,11.4220601936455,11.5112810448303,11.6005018960151,11.6897227471999,11.7789435983847,11.8681644495695,11.9573853007543,12.0466061519391,12.1358270031239,12.2250478543087,12.3142687054935,12.4034895566783,12.4927104078631,12.5819312590479],[8.32876943962921,8.42271242922189,8.51665541881457,8.61059840840725,8.70454139799993,8.7984843875926,8.89242737718528,8.98637036677796,9.08031335637064,9.17425634596332,9.26819933555599,9.36214232514867,9.45608531474135,9.55002830433403,9.64397129392671,9.73791428351938,9.83185727311206,9.92580026270474,10.0197432522974,10.1136862418901,10.2076292314828,10.3015722210755,10.3955152106681,10.4894582002608,10.5834011898535,10.6773441794462,10.7712871690388,10.8652301586315,10.9591731482242,11.0531161378169,11.1470591274096,11.2410021170022,11.3349451065949,11.4288880961876,11.5228310857803,11.6167740753729,11.7107170649656,11.8046600545583,11.898603044151,11.9925460337437,12.0864890233363,12.180432012929,12.2743750025217,12.3683179921144,12.4622609817071,12.5562039712997,12.6501469608924,12.7440899504851,12.8380329400778],[8.35820847708104,8.4568736050816,8.55553873308215,8.6542038610827,8.75286898908326,8.85153411708381,8.95019924508437,9.04886437308492,9.14752950108547,9.24619462908603,9.34485975708658,9.44352488508713,9.54219001308769,9.64085514108824,9.7395202690888,9.83818539708935,9.9368505250899,10.0355156530905,10.134180781091,10.2328459090916,10.3315110370921,10.4301761650927,10.5288412930932,10.6275064210938,10.7261715490943,10.8248366770949,10.9235018050954,11.022166933096,11.1208320610965,11.2194971890971,11.3181623170977,11.4168274450982,11.5154925730988,11.6141577010993,11.7128228290999,11.8114879571004,11.910153085101,12.0088182131015,12.1074833411021,12.2061484691026,12.3048135971032,12.4034787251037,12.5021438531043,12.6008089811049,12.6994741091054,12.798139237106,12.8968043651065,12.9954694931071,13.0941346211076],[8.38764751453288,8.49103478094131,8.59442204734974,8.69780931375816,8.80119658016659,8.90458384657502,9.00797111298345,9.11135837939188,9.21474564580031,9.31813291220874,9.42152017861717,9.5249074450256,9.62829471143403,9.73168197784246,9.83506924425088,9.93845651065932,10.0418437770677,10.1452310434762,10.2486183098846,10.352005576293,10.4553928427015,10.5587801091099,10.6621673755183,10.7655546419268,10.8689419083352,10.9723291747436,11.075716441152,11.1791037075605,11.2824909739689,11.3858782403773,11.4892655067858,11.5926527731942,11.6960400396026,11.799427306011,11.9028145724195,12.0062018388279,12.1095891052363,12.2129763716448,12.3163636380532,12.4197509044616,12.52313817087,12.6265254372785,12.7299127036869,12.8332999700953,12.9366872365038,13.0400745029122,13.1434617693206,13.246849035729,13.3502363021375],[8.41708655198471,8.52519595680101,8.63330536161732,8.74141476643362,8.84952417124993,8.95763357606623,9.06574298088254,9.17385238569884,9.28196179051515,9.39007119533145,9.49818060014776,9.60629000496406,9.71439940978036,9.82250881459667,9.93061821941297,10.0387276242293,10.1468370290456,10.2549464338619,10.3630558386782,10.4711652434945,10.5792746483108,10.6873840531271,10.7954934579434,10.9036028627597,11.011712267576,11.1198216723923,11.2279310772086,11.3360404820249,11.4441498868412,11.5522592916575,11.6603686964739,11.7684781012902,11.8765875061065,11.9846969109228,12.0928063157391,12.2009157205554,12.3090251253717,12.417134530188,12.5252439350043,12.6333533398206,12.7414627446369,12.8495721494532,12.9576815542695,13.0657909590858,13.1739003639021,13.2820097687184,13.3901191735347,13.498228578351,13.6063379831673],[8.44652558943654,8.55935713266072,8.6721886758849,8.78502021910908,8.89785176233326,9.01068330555744,9.12351484878162,9.2363463920058,9.34917793522998,9.46200947845416,9.57484102167834,9.68767256490252,9.8005041081267,9.91333565135088,10.0261671945751,10.1389987377992,10.2518302810234,10.3646618242476,10.4774933674718,10.590324910696,10.7031564539201,10.8159879971443,10.9288195403685,11.0416510835927,11.1544826268169,11.267314170041,11.3801457132652,11.4929772564894,11.6058087997136,11.7186403429378,11.831471886162,11.9443034293861,12.0571349726103,12.1699665158345,12.2827980590587,12.3956296022829,12.508461145507,12.6212926887312,12.7341242319554,12.8469557751796,12.9597873184038,13.0726188616279,13.1854504048521,13.2982819480763,13.4111134913005,13.5239450345247,13.6367765777488,13.749608120973,13.8624396641972],[8.47596462688837,8.59351830852042,8.71107199015248,8.82862567178454,8.94617935341659,9.06373303504865,9.1812867166807,9.29884039831276,9.41639407994482,9.53394776157687,9.65150144320893,9.76905512484099,9.88660880647304,10.0041624881051,10.1217161697372,10.2392698513692,10.3568235330013,10.4743772146333,10.5919308962654,10.7094845778974,10.8270382595295,10.9445919411615,11.0621456227936,11.1796993044257,11.2972529860577,11.4148066676898,11.5323603493218,11.6499140309539,11.7674677125859,11.885021394218,12.00257507585,12.1201287574821,12.2376824391142,12.3552361207462,12.4727898023783,12.5903434840103,12.7078971656424,12.8254508472744,12.9430045289065,13.0605582105386,13.1781118921706,13.2956655738027,13.4132192554347,13.5307729370668,13.6483266186988,13.7658803003309,13.8834339819629,14.000987663595,14.1185413452271],[8.5054036643402,8.62767948438013,8.74995530442007,8.87223112446,8.99450694449993,9.11678276453986,9.23905858457979,9.36133440461972,9.48361022465965,9.60588604469959,9.72816186473952,9.85043768477945,9.97271350481938,10.0949893248593,10.2172651448992,10.3395409649392,10.4618167849791,10.584092605019,10.706368425059,10.8286442450989,10.9509200651388,11.0731958851788,11.1954717052187,11.3177475252586,11.4400233452986,11.5622991653385,11.6845749853784,11.8068508054184,11.9291266254583,12.0514024454982,12.1736782655381,12.2959540855781,12.418229905618,12.5405057256579,12.6627815456979,12.7850573657378,12.9073331857777,13.0296090058177,13.1518848258576,13.2741606458975,13.3964364659375,13.5187122859774,13.6409881060173,13.7632639260573,13.8855397460972,14.0078155661371,14.1300913861771,14.252367206217,14.3746430262569],[8.53484270179203,8.66184066023984,8.78883861868765,8.91583657713545,9.04283453558326,9.16983249403107,9.29683045247888,9.42382841092668,9.55082636937449,9.6778243278223,9.8048222862701,9.93182024471791,10.0588182031657,10.1858161616135,10.3128141200613,10.4398120785091,10.5668100369569,10.6938079954048,10.8208059538526,10.9478039123004,11.0748018707482,11.201799829196,11.3287977876438,11.4557957460916,11.5827937045394,11.7097916629872,11.836789621435,11.9637875798828,12.0907855383306,12.2177834967784,12.3447814552262,12.4717794136741,12.5987773721219,12.7257753305697,12.8527732890175,12.9797712474653,13.1067692059131,13.2337671643609,13.3607651228087,13.4877630812565,13.6147610397043,13.7417589981521,13.8687569565999,13.9957549150477,14.1227528734955,14.2497508319434,14.3767487903912,14.503746748839,14.6307447072868],[8.56428173924386,8.69600183609955,8.82772193295523,8.95944202981091,9.0911621266666,9.22288222352228,9.35460232037796,9.48632241723364,9.61804251408933,9.74976261094501,9.88148270780069,10.0132028046564,10.1449229015121,10.2766429983677,10.4083630952234,10.5400831920791,10.6718032889348,10.8035233857905,10.9352434826462,11.0669635795018,11.1986836763575,11.3304037732132,11.4621238700689,11.5938439669246,11.7255640637802,11.8572841606359,11.9890042574916,12.1207243543473,12.252444451203,12.3841645480587,12.5158846449143,12.64760474177,12.7793248386257,12.9110449354814,13.0427650323371,13.1744851291928,13.3062052260484,13.4379253229041,13.5696454197598,13.7013655166155,13.8330856134712,13.9648057103269,14.0965258071825,14.2282459040382,14.3599660008939,14.4916860977496,14.6234061946053,14.755126291461,14.8868463883166],[8.59372077669569,8.73016301195925,8.86660524722281,9.00304748248637,9.13948971774993,9.27593195301349,9.41237418827705,9.5488164235406,9.68525865880416,9.82170089406772,9.95814312933128,10.0945853645948,10.2310275998584,10.367469835122,10.5039120703855,10.6403543056491,10.7767965409126,10.9132387761762,11.0496810114397,11.1861232467033,11.3225654819669,11.4590077172304,11.595449952494,11.7318921877575,11.8683344230211,12.0047766582847,12.1412188935482,12.2776611288118,12.4141033640753,12.5505455993389,12.6869878346024,12.823430069866,12.9598723051296,13.0963145403931,13.2327567756567,13.3691990109202,13.5056412461838,13.6420834814474,13.7785257167109,13.9149679519745,14.051410187238,14.1878524225016,14.3242946577651,14.4607368930287,14.5971791282923,14.7336213635558,14.8700635988194,15.0065058340829,15.1429480693465],[8.62315981414753,8.76432418781896,8.9054885614904,9.04665293516183,9.18781730883326,9.3289816825047,9.47014605617613,9.61131042984756,9.752474803519,9.89363917719043,10.0348035508619,10.1759679245333,10.3171322982047,10.4582966718762,10.5994610455476,10.740625419219,10.8817897928905,11.0229541665619,11.1641185402333,11.3052829139048,11.4464472875762,11.5876116612476,11.7287760349191,11.8699404085905,12.0111047822619,12.1522691559334,12.2934335296048,12.4345979032762,12.5757622769477,12.7169266506191,12.8580910242905,12.999255397962,13.1404197716334,13.2815841453048,13.4227485189763,13.5639128926477,13.7050772663191,13.8462416399906,13.987406013662,14.1285703873335,14.2697347610049,14.4108991346763,14.5520635083478,14.6932278820192,14.8343922556906,14.9755566293621,15.1167210030335,15.2578853767049,15.3990497503764],[8.65259885159936,8.79848536367867,8.94437187575798,9.09025838783729,9.23614489991659,9.38203141199591,9.52791792407522,9.67380443615452,9.81969094823384,9.96557746031315,10.1114639723925,10.2573504844718,10.4032369965511,10.5491235086304,10.6950100207097,10.840896532789,10.9867830448683,11.1326695569476,11.2785560690269,11.4244425811062,11.5703290931856,11.7162156052649,11.8621021173442,12.0079886294235,12.1538751415028,12.2997616535821,12.4456481656614,12.5915346777407,12.73742118982,12.8833077018993,13.0291942139786,13.175080726058,13.3209672381373,13.4668537502166,13.6127402622959,13.7586267743752,13.9045132864545,14.0503997985338,14.1962863106131,14.3421728226924,14.4880593347717,14.6339458468511,14.7798323589304,14.9257188710097,15.071605383089,15.2174918951683,15.3633784072476,15.5092649193269,15.6551514314062],[8.68203788905119,8.83264653953837,8.98325519002556,9.13386384051274,9.28447249099993,9.43508114148711,9.5856897919743,9.73629844246149,9.88690709294867,10.0375157434359,10.188124393923,10.3387330444102,10.4893416948974,10.6399503453846,10.7905589958718,10.941167646359,11.0917762968461,11.2423849473333,11.3929935978205,11.5436022483077,11.6942108987949,11.8448195492821,11.9954281997693,12.1460368502564,12.2966455007436,12.4472541512308,12.597862801718,12.7484714522052,12.8990801026924,13.0496887531796,13.2002974036667,13.3509060541539,13.5015147046411,13.6521233551283,13.8027320056155,13.9533406561027,14.1039493065899,14.254557957077,14.4051666075642,14.5557752580514,14.7063839085386,14.8569925590258,15.007601209513,15.1582098600001,15.3088185104873,15.4594271609745,15.6100358114617,15.7606444619489,15.9112531124361],[8.71147692650302,8.86680771539808,9.02213850429314,9.1774692931882,9.33280008208326,9.48813087097833,9.64346165987338,9.79879244876845,9.9541232376635,10.1094540265586,10.2647848154536,10.4201156043487,10.5754463932437,10.7307771821388,10.8861079710339,11.0414387599289,11.196769548824,11.3521003377191,11.5074311266141,11.6627619155092,11.8180927044042,11.9734234932993,12.1287542821944,12.2840850710894,12.4394158599845,12.5947466488795,12.7500774377746,12.9054082266697,13.0607390155647,13.2160698044598,13.3714005933548,13.5267313822499,13.682062171145,13.83739296004,13.9927237489351,14.1480545378301,14.3033853267252,14.4587161156203,14.6140469045153,14.7693776934104,14.9247084823054,15.0800392712005,15.2353700600956,15.3907008489906,15.5460316378857,15.7013624267808,15.8566932156758,16.0120240045709,16.1673547934659],[8.74091596395485,8.90096889125779,9.06102181856073,9.22107474586366,9.3811276731666,9.54118060046953,9.70123352777247,9.8612864550754,10.0213393823783,10.1813923096813,10.3414452369842,10.5014981642872,10.6615510915901,10.821604018893,10.981656946196,11.1417098734989,11.3017628008018,11.4618157281048,11.6218686554077,11.7819215827106,11.9419745100136,12.1020274373165,12.2620803646195,12.4221332919224,12.5821862192253,12.7422391465283,12.9022920738312,13.0623450011341,13.2223979284371,13.38245085574,13.5425037830429,13.7025567103459,13.8626096376488,14.0226625649518,14.1827154922547,14.3427684195576,14.5028213468606,14.6628742741635,14.8229272014664,14.9829801287694,15.1430330560723,15.3030859833752,15.4631389106782,15.6231918379811,15.783244765284,15.943297692587,16.1033506198899,16.2634035471929,16.4234564744958],[8.77035500140668,8.93513006711749,9.09990513282831,9.26468019853912,9.42945526424993,9.59423032996074,9.75900539567155,9.92378046138237,10.0885555270932,10.253330592804,10.4181056585148,10.5828807242256,10.7476557899364,10.9124308556472,11.0772059213581,11.2419809870689,11.4067560527797,11.5715311184905,11.7363061842013,11.9010812499121,12.0658563156229,12.2306313813337,12.3954064470445,12.5601815127554,12.7249565784662,12.889731644177,13.0545067098878,13.2192817755986,13.3840568413094,13.5488319070202,13.713606972731,13.8783820384419,14.0431571041527,14.2079321698635,14.3727072355743,14.5374823012851,14.7022573669959,14.8670324327067,15.0318074984175,15.1965825641283,15.3613576298392,15.52613269555,15.6909077612608,15.8556828269716,16.0204578926824,16.1852329583932,16.350008024104,16.5147830898148,16.6795581555257],[8.79979403885851,8.9692912429772,9.13878844709589,9.30828565121458,9.47778285533326,9.64728005945195,9.81677726357064,9.98627446768933,10.155771671808,10.3252688759267,10.4947660800454,10.6642632841641,10.8337604882828,11.0032576924015,11.1727548965201,11.3422521006388,11.5117493047575,11.6812465088762,11.8507437129949,12.0202409171136,12.1897381212323,12.3592353253509,12.5287325294696,12.6982297335883,12.867726937707,13.0372241418257,13.2067213459444,13.3762185500631,13.5457157541818,13.7152129583005,13.8847101624191,14.0542073665378,14.2237045706565,14.3932017747752,14.5626989788939,14.7321961830126,14.9016933871313,15.07119059125,15.2406877953686,15.4101849994873,15.579682203606,15.7491794077247,15.9186766118434,16.0881738159621,16.2576710200808,16.4271682241994,16.5966654283181,16.7661626324368,16.9356598365555],[8.82923307631035,9.00345241883691,9.17767176136347,9.35189110389003,9.5261104464166,9.70032978894316,9.87454913146972,10.0487684739963,10.2229878165228,10.3972071590494,10.571426501576,10.7456458441025,10.9198651866291,11.0940845291557,11.2683038716822,11.4425232142088,11.6167425567354,11.7909618992619,11.9651812417885,12.139400584315,12.3136199268416,12.4878392693682,12.6620586118947,12.8362779544213,13.0104972969479,13.1847166394744,13.358935982001,13.5331553245275,13.7073746670541,13.8815940095807,14.0558133521072,14.2300326946338,14.4042520371604,14.5784713796869,14.7526907222135,14.9269100647401,15.1011294072666,15.2753487497932,15.4495680923197,15.6237874348463,15.7980067773729,15.9722261198994,16.146445462426,16.3206648049526,16.4948841474791,16.6691034900057,16.8433228325322,17.0175421750588,17.1917615175854],[8.85867211376218,9.03761359469662,9.21655507563106,9.39549655656549,9.57443803749993,9.75337951843437,9.93232099936881,10.1112624803032,10.2902039612377,10.4691454421721,10.6480869231066,10.827028404041,11.0059698849754,11.1849113659099,11.3638528468443,11.5427943277788,11.7217358087132,11.9006772896476,12.0796187705821,12.2585602515165,12.437501732451,12.6164432133854,12.7953846943198,12.9743261752543,13.1532676561887,13.3322091371231,13.5111506180576,13.690092098992,13.8690335799265,14.0479750608609,14.2269165417953,14.4058580227298,14.5847995036642,14.7637409845987,14.9426824655331,15.1216239464675,15.300565427402,15.4795069083364,15.6584483892708,15.8373898702053,16.0163313511397,16.1952728320742,16.3742143130086,16.553155793943,16.7320972748775,16.9110387558119,17.0899802367464,17.2689217176808,17.4478631986152],[8.88811115121401,9.07177477055632,9.25543838989864,9.43910200924095,9.62276562858326,9.80642924792558,9.99009286726789,10.1737564866102,10.3574201059525,10.5410837252948,10.7247473446371,10.9084109639795,11.0920745833218,11.2757382026641,11.4594018220064,11.6430654413487,11.826729060691,12.0103926800334,12.1940562993757,12.377719918718,12.5613835380603,12.7450471574026,12.9287107767449,13.1123743960872,13.2960380154296,13.4797016347719,13.6633652541142,13.8470288734565,14.0306924927988,14.2143561121411,14.3980197314834,14.5816833508257,14.7653469701681,14.9490105895104,15.1326742088527,15.316337828195,15.5000014475373,15.6836650668796,15.8673286862219,16.0509923055643,16.2346559249066,16.4183195442489,16.6019831635912,16.7856467829335,16.9693104022758,17.1529740216181,17.3366376409605,17.5203012603028,17.7039648796451],[8.91755018866584,9.10593594641603,9.29432170416622,9.48270746191641,9.6710932196666,9.85947897741679,10.047864735167,10.2362504929172,10.4246362506674,10.6130220084175,10.8014077661677,10.9897935239179,11.1781792816681,11.3665650394183,11.5549507971685,11.7433365549187,11.9317223126689,12.1201080704191,12.3084938281693,12.4968795859194,12.6852653436696,12.8736511014198,13.06203685917,13.2504226169202,13.4388083746704,13.6271941324206,13.8155798901708,14.003965647921,14.1923514056712,14.3807371634213,14.5691229211715,14.7575086789217,14.9458944366719,15.1342801944221,15.3226659521723,15.5110517099225,15.6994374676727,15.8878232254229,16.0762089831731,16.2645947409232,16.4529804986734,16.6413662564236,16.8297520141738,17.018137771924,17.2065235296742,17.3949092874244,17.5832950451746,17.7716808029248,17.960066560675]],"type":"surface","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+]
+---
+# Bigger and Better
+
+- easy to build models including more predictors
+
+.br3.pa2.bg-gray.white[
+`$$\hat{y}_i=b_0+b_1x_{1i}+b_2x_{2i}+\ldots{}+b_nx_{ni}+\ldots{}+b_mx_{1i}x_{2i}+b_{m+1}x_{2i}x_{3i}+\ldots$$`
+]
+
+
+- for example
+
+
+
+```r
+mod.mm &lt;- lm(R_AGE ~ age + hrs_wk + method + hrs_wk:method + age:hrs_wk, data=reading)
+```
+
+--
+
+- NB., order of predictors matters (judgement is important)
+
+- first question:  is it worth it building such a complex model?
+
+---
+# Does Each New Predictor Improve Fit?
+
+```r
+anova(mod.mm)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: R_AGE
+##               Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## age            1  166.0   166.0  599.36 &lt; 2e-16 ***
+## hrs_wk         1   35.7    35.7  128.99 1.1e-14 ***
+## method         1  300.2   300.2 1083.79 &lt; 2e-16 ***
+## hrs_wk:method  1    2.8     2.8   10.25  0.0025 ** 
+## age:hrs_wk     1    0.1     0.1    0.27  0.6078    
+## Residuals     44   12.2     0.3                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+- adding `age:hrs_wk` doesn't improve the model any further over a model without it
+
+
+```r
+mod.mm &lt;- update(mod.mm, ~ . -age:hrs_wk)
+# equivalent
+# mod.mm &lt;- lm(R_AGE ~ age + hrs_wk + method + hrs_wk:method, data=reading)
+```
+???
+- I'm showing you the "update" command in part to show you how "-" can have a special meaning outside the I() function (in this case, it means "take this predictor out")
+
+---
+.center[
+![](lecture_9_files/figure-html/assumptions-1.svg)&lt;!-- --&gt;
+]
+---
+# The Model
+
+```
+## 
+## Call:
+## lm(formula = R_AGE ~ age + hrs_wk + method + hrs_wk:method, data = reading)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.3637 -0.2737  0.0288  0.2538  1.0491 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         0.6849     0.6114    1.12   0.2686    
+## age                 0.9076     0.0428   21.22  &lt; 2e-16 ***
+## hrs_wk              0.8785     0.1177    7.46  2.1e-09 ***
+## methodword         -2.1643     0.8724   -2.48   0.0169 *  
+## hrs_wk:methodword  -0.5599     0.1734   -3.23   0.0023 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.522 on 45 degrees of freedom
+## Multiple R-squared:  0.976,	Adjusted R-squared:  0.974 
+## F-statistic:  463 on 4 and 45 DF,  p-value: &lt;2e-16
+```
+
+
+
+---
+# The Model
+
+.pull-left[
+- not always convenient to draw 3d models!
+
+- graphs can show "interesting" results
+
+- here, `age` doesn't interact with anything
+
+- so show plot for _mean age_ (or some other meaningful value)
+]
+.pull-right[
+![](lecture_9_files/figure-html/pp-1.svg)&lt;!-- --&gt;
+.f5[_reading age predicted by practice hours per week for children of average age_]
+]
+
+
+---
+class: inverse, center, middle, animated, zoomInRight
+
+# End of Part 1
+
+
+---
+class: inverse, center, middle
+# Part 2
+## Probability, Odds, Log-Odds
+
+---
+# Aliens
+.center[
+&lt;video width= "70%" controls&gt;
+  &lt;source src="lecture_9_files/video/alien.mp4" type="video/mp4"&gt;
+  video not supported by this browser
+&lt;/video&gt;
+]
+
+
+---
+# A Binary World
+
+.center[
+![:scale 50%](lecture_9_files/img/playmo_aliens.jpg)
+]
+
+---
+count: false
+# A Binary World
+
+.center[
+![:scale 50%](lecture_9_files/img/playmo_aliens_splat.jpg)
+]
+
+---
+count: false
+# A Binary World
+
+.center[
+![:scale 50%](lecture_9_files/img/playmo_aliens_10.jpg)
+]
+
+---
+# 1,000 Aliens
+
+.pull-left[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#lmgxliziel .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lmgxliziel .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lmgxliziel .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lmgxliziel .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lmgxliziel .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lmgxliziel .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lmgxliziel .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lmgxliziel .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lmgxliziel .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lmgxliziel .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lmgxliziel .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lmgxliziel .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lmgxliziel .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#lmgxliziel .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lmgxliziel .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lmgxliziel .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lmgxliziel .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#lmgxliziel .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lmgxliziel .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#lmgxliziel .gt_left {
+  text-align: left;
+}
+
+#lmgxliziel .gt_center {
+  text-align: center;
+}
+
+#lmgxliziel .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lmgxliziel .gt_font_normal {
+  font-weight: normal;
+}
+
+#lmgxliziel .gt_font_bold {
+  font-weight: bold;
+}
+
+#lmgxliziel .gt_font_italic {
+  font-style: italic;
+}
+
+#lmgxliziel .gt_super {
+  font-size: 65%;
+}
+
+#lmgxliziel .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="lmgxliziel" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">quality</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">SPLATTED</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">The Great Odorjan of Erpod</td>
+      <td class="gt_row gt_center">84</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Hapetox Bron</td>
+      <td class="gt_row gt_center">34</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Loorn Molzeks</td>
+      <td class="gt_row gt_center">92</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Ba'lite Adrflen</td>
+      <td class="gt_row gt_center">49</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Tedlambo Garilltet</td>
+      <td class="gt_row gt_center">93</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Goraveola Grellorm</td>
+      <td class="gt_row gt_center">5</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Colonel Garqun</td>
+      <td class="gt_row gt_center">55</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Bosgogo Lurcat</td>
+      <td class="gt_row gt_center">64</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Osajed Voplily</td>
+      <td class="gt_row gt_center">45</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Subcommander Edorop</td>
+      <td class="gt_row gt_center">90</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]
+.pull-right[
+- `quality` = quality of singing
+
+- `SPLATTED` = whether splatted (1 or 0)
+]
+
+---
+# 1,000 Aliens
+
+.center[
+![](lecture_9_files/figure-html/plotm-1.svg)&lt;!-- --&gt;
+
+]
+---
+count: false
+# 1,000 Aliens
+
+.center[
+![](lecture_9_files/figure-html/plotme-1.svg)&lt;!-- --&gt;
+]
+- using `geom_jitter()`
+
+---
+# Binomial Regression, Conceptually
+
+- each alien either gets splatted or doesn't
+
+  + each observation is either a 1 or a 0
+  
+- underlyingly, there's a **binomial** distribution
+
+- for each value of "quality of singing" there's a _probability_ of getting splatted
+
+--
+
+.pt2[
+- for each alien, the outcome is deterministic
+
+- but it's the _probability_ we are ultimately interested in
+
+- we can approximate it by binning our data...
+]
+
+---
+# Binned Data
+
+.pull-left[
+
+```r
+singers &lt;- singers %&gt;% 
+  mutate(bin=cut_interval(quality,10))
+dat &lt;- singers %&gt;% group_by(bin) %&gt;%
+  summarise(prop=mean(SPLATTED))
+dat %&gt;% ggplot(aes(x=bin,y=prop)) +
+  xlab("bin") + ylab("prop splatted") +
+  geom_point(size=3) +
+  scale_x_discrete(label=1:10)
+```
+]
+.pull-right[
+![](lecture_9_files/figure-html/cut-1.svg)
+]
+
+
+---
+# Best Fit Lines
+
+.pull-left[
+- we can fit our data using a standard linear model
+
+- but there's something very wrong...
+]
+
+.pull-right[
+![](lecture_9_files/figure-html/with_line-1.svg)&lt;!-- --&gt;
+
+]
+
+---
+# The Problem with Probability
+
+.center[
+![](lecture_9_files/figure-html/bplot-1.svg)&lt;!-- --&gt;
+]
+
+---
+count: false
+# The Problem with Probability
+
+.center[
+![](lecture_9_files/figure-html/bplot2-1.svg)&lt;!-- --&gt;
+]
+
+- a _linear_ model predicts impossible values because probability isn't linear; it's **asymptotic**
+
+---
+# The Problem with Probability
+
+.center[
+![](lecture_9_files/figure-html/bplot3-1.svg)&lt;!-- --&gt;
+]
+
+- variance _necessarily_ covaries with probability
+
+---
+# Assumptions
+.center[
+![](lecture_9_files/figure-html/ass-1.svg)&lt;!-- --&gt;
+
+]
+
+---
+# Probability and Odds
+
+.br3.pa2.bg-gray.white.flex.items-center[
+.w-50.pa2[
+`$$\textrm{odds}(x)=\frac{p(x)}{1-p(x)}$$`
+]
+.w-50.pa2[
+`$$0&lt;p&lt;1$$`
+`$$0&lt;\textrm{odds}&lt;\infty$$`
+]]
+--
+.center[
+.flex.flex-column[
+.flex.items-center[
+.w-40[
+&amp;nbsp;
+]
+.w-20[
+`\(p(x)\)`
+]
+.w-20[
+`\(\textrm{odds}(x)\)`
+]
+]
+.flex.items-center[
+.w-40[
+throw heads
+]
+.w-20[
+`\(\frac{1}{2}\)`
+]
+.w-20[
+`\(\frac{1}{1}\)`
+]
+]
+.flex.items-center[
+.w-40[
+throw 8
+]
+.w-20[
+`\(\frac{5}{36}\)`
+]
+.w-20[
+`\(\frac{5}{31}\)`
+]
+]
+.flex.items-center[
+.w-40[
+get splatted
+]
+.w-20[
+`\(\frac{99}{100}\)`
+]
+.w-20[
+`\(\frac{99}{1}\)`
+]
+]
+]
+]
+---
+# Probability and Log-Odds
+
+- `\(\log(0)=-\infty\)`; `\(\log(\infty)=+\infty\)`
+- `\(\log(1)=0\)` where odds of 1 are exactly 50:50 ( `\(p=0.5\)` )
+
+.center[
+![](lecture_9_files/figure-html/threeg-1.svg)&lt;!-- --&gt;
+]
+
+--
+
+- if log-odds are _less than zero_, the odds go down (multiply by &lt;1)
+- if log-odds are _more than zero_, the odds go up (multiply by &gt;1)
+- high odds = high probability
+
+---
+class: inverse, center, middle, animated, zoomInRight
+# End of Part 2
+
+---
+class: inverse, center, middle
+
+# Part 3
+## The Generalized Linear Model
+
+---
+name: glm1
+# The Generalized Linear Model
+
+- generalises the linear model using mapping functions
+
+- coefficients are in **logit** (log-odds) units
+
+.pt2[
+
+- fit using **maximum likelihood**
+
+- coefficients use **Wald's `\(z\)` ** instead of `\(t\)`
+
+]
+---
+# Likelihood
+
+.flex.items-center[
+
+.w-20.pa2[
+![:scale 90%](lecture_9_files/img/50p.jpg)
+]
+.w-80[
+.center[
+![](lecture_9_files/figure-html/likely-1.svg)&lt;!-- --&gt;
+]]]
+- extent to which a sample provides support for a model
+
+---
+template: glm1
+
+- but actually it's all quite straightforward...
+
+---
+# Alien Singer Splat Probability
+
+.pull-left[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#nlmyoywoxj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nlmyoywoxj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nlmyoywoxj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nlmyoywoxj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nlmyoywoxj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nlmyoywoxj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nlmyoywoxj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nlmyoywoxj .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nlmyoywoxj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nlmyoywoxj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nlmyoywoxj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nlmyoywoxj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nlmyoywoxj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#nlmyoywoxj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nlmyoywoxj .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nlmyoywoxj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nlmyoywoxj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nlmyoywoxj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nlmyoywoxj .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nlmyoywoxj .gt_left {
+  text-align: left;
+}
+
+#nlmyoywoxj .gt_center {
+  text-align: center;
+}
+
+#nlmyoywoxj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nlmyoywoxj .gt_font_normal {
+  font-weight: normal;
+}
+
+#nlmyoywoxj .gt_font_bold {
+  font-weight: bold;
+}
+
+#nlmyoywoxj .gt_font_italic {
+  font-style: italic;
+}
+
+#nlmyoywoxj .gt_super {
+  font-size: 65%;
+}
+
+#nlmyoywoxj .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="nlmyoywoxj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">quality</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">SPLATTED</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">The Great Odorjan of Erpod</td>
+      <td class="gt_row gt_center">84</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Hapetox Bron</td>
+      <td class="gt_row gt_center">34</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Loorn Molzeks</td>
+      <td class="gt_row gt_center">92</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Ba'lite Adrflen</td>
+      <td class="gt_row gt_center">49</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Tedlambo Garilltet</td>
+      <td class="gt_row gt_center">93</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Goraveola Grellorm</td>
+      <td class="gt_row gt_center">5</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Colonel Garqun</td>
+      <td class="gt_row gt_center">55</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Bosgogo Lurcat</td>
+      <td class="gt_row gt_center">64</td>
+      <td class="gt_row gt_center">1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Osajed Voplily</td>
+      <td class="gt_row gt_center">45</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">Subcommander Edorop</td>
+      <td class="gt_row gt_center">90</td>
+      <td class="gt_row gt_center">0</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+]
+.pull-right[
+- use `glm()` instead of `lm()`
+
+- specify **link function** with `family = binomial`
+
+.pt2[
+
+```r
+mod.b &lt;- glm(SPLATTED ~ quality,
+             family = binomial, 
+             data=singers)
+```
+
+]
+
+
+.pt5.tc[
+![:scale 7%](lecture_9_files/img/danger.svg) &amp;nbsp;&amp;nbsp;can take a 2-level factor DV
+]]
+---
+# Evaluating the Model
+
+
+.pull-left[
+
+```r
+anova(mod.b)
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model: binomial, link: logit
+## 
+## Response: SPLATTED
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##         Df Deviance Resid. Df Resid. Dev
+## NULL                      999       1377
+*## quality  1      800       998        577
+```
+]
+.pull-right[
+- NB., no statistical test done by default
+
+- **deviance** compares the likelihood of the new model to that of the previous model
+
+  + a generalisation of sums of squares
+  
+- _high_ deviance and _low_ residual deviance is good
+]
+
+---
+![:scale 5%](lecture_9_files/img/danger.svg) &amp;nbsp;&amp;nbsp; .f1[Evaluating the Model]
+
+
+
+```
+## ...
+##         Df Deviance Resid. Df Resid. Dev
+## NULL                      999       1377
+## quality  1      800       998        577
+```
+
+- deviance is `\(-2\times\)` the **log-likelihood ratio** of the reduced compared to the full model
+
+
+```r
+mod.n &lt;- glm(SPLATTED~1,family=binomial,data=singers)
+logLik(mod.n)
+```
+
+```
+## 'log Lik.' -688.5 (df=1)
+```
+
+```r
+logLik(mod.b)
+```
+
+```
+## 'log Lik.' -288.6 (df=2)
+```
+
+```r
+-2 * (logLik(mod.n)-logLik(mod.b))
+```
+
+```
+*## 'log Lik.' 799.8 (df=1)
+```
+???
+- remember that because we're in log-world, a log-ratio is obtained by subtracting one log from another
+---
+# Evaluating the Model
+- model deviance maps to the `\(\chi^2\)` distribution
+
+- can specify a `\(\chi^2\)` test to statistically evaluate model in a similar way to `\(F\)` ratio
+
+
+```r
+anova(mod.b, test="Chisq")
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model: binomial, link: logit
+## 
+## Response: SPLATTED
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##         Df Deviance Resid. Df Resid. Dev Pr(&gt;Chi)    
+## NULL                      999       1377             
+*## quality  1      800       998        577   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+# Model Coefficients
+
+
+```
+## 
+## Call:
+## glm(formula = SPLATTED ~ quality, family = binomial, data = singers)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -2.987  -0.374  -0.113   0.333   3.279  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  5.08191    0.33410    15.2   &lt;2e-16 ***
+## quality     -0.10557    0.00642   -16.5   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1377.06  on 999  degrees of freedom
+## Residual deviance:  577.29  on 998  degrees of freedom
+## AIC: 581.3
+## 
+## Number of Fisher Scoring iterations: 6
+```
+???
+- note at the bottom that the residual deviance minus the null deviance is the model deviance
+
+- next slide
+---
+# Model Coefficients
+
+.flex.items-center[
+.w-70.pa2[
+#### coefficients are in **logits** (= log-odds)
+
+
+```
+## ...
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  5.08191    0.33410    15.2   &lt;2e-16 ***
+## quality     -0.10557    0.00642   -16.5   &lt;2e-16 ***
+## ...
+```
+- zero = "50/50" (odds of 1)
+
+- value below zero: probability of being splatted _decreases_ as quality increases
+]
+.w-30.pa2[
+![](lecture_9_files/figure-html/p3-1.svg)&lt;!-- --&gt;
+]]
+
+---
+# Log-Odds, Odds, and Probability
+
+```
+## ...
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  5.08191    0.33410    15.2   &lt;2e-16 ***
+## quality     -0.10557    0.00642   -16.5   &lt;2e-16 ***
+## ...
+```
+.pull-left[
+**quality** = 70
+
+- _log-odds_:  `\(5.08+-0.11\cdot70=\color{red}{-2.62}\)` 
+
+- _odds_: 
+`\(e^{-2.62}=\color{red}{0.0728}\)`
+
+- _probability_:
+`\(\frac{0.0728}{1+0.0728}=\color{red}{0.0679}\)`
+
+]
+.pull-right[
+&lt;br/&gt;
+`$$\hat{y}_i=b_0+b_1x_i$$`
+`$$\textrm{odds}=e^{\hat{y}_i}$$`
+`$$p=\frac{\textrm{odds}}{1+\textrm{odds}}$$`
+
+]
+---
+# A Useful Function
+
+- intuitive to think in probability
+
+- useful to write a function which takes a value in logits `l` and converts it to a probability `p`
+
+
+```r
+l2p &lt;- function(logits) {
+  odds = exp(logits)
+  prob = odds/(1+odds)
+  return(prob)
+}
+```
+.pull-left[
+- singing quality 70
+
+```r
+l2p(5.08+-0.11*70)
+```
+
+```
+## [1] 0.06786
+```
+]
+.pull-right[
+- singing quality 10
+
+```r
+l2p(5.08+-0.11*10)
+```
+
+```
+## [1] 0.9817
+```
+]
+
+---
+# Representing the Model Graphically
+
+
+
+```r
+singers %&gt;% ggplot(aes(x=quality,y=SPLATTED)) +
+  ylab("p(SPLATTED)") +
+  geom_jitter(size=3,width=0,height=.2,alpha=.1) +
+  geom_smooth(method="glm",method.args=list(family=binomial)) +
+* scale_y_continuous(breaks=seq(0,1,by=.2))
+```
+.center[
+![](lecture_9_files/figure-html/g-1.svg)
+]
+
+---
+# One Last Trick
+
+- so far we've looked at
+
+  + model _deviance_ and `\(\chi^2\)` (similar to sums of squares and `\(F\)`)
+  
+  + model _coefficients_ and how to map them to probability
+  
+- what about "explained variance" (similar to `\(R^2\)`)?
+
+- no really good way of doing this, many proposals
+
+- SPSS uses something called "accuracy" (how well does the model predict actual data?)
+
+- not very informative, but good for learning R
+
+---
+# Accuracy
+
+- first, what does the model predict (in logit units)?
+
+```r
+guess &lt;- predict(mod.b) # in logit units
+```
+- if the chance of being splatted is more than .5 (logit &gt; 0) call it a "splat"
+
+```r
+guess &lt;- ifelse(guess&gt;0,1,0)
+```
+- how well do predicted splats match actual splats?
+
+```r
+hits &lt;- sum(guess == singers$SPLATTED)
+hits/length(singers$SPLATTED)
+```
+
+```
+## [1] 0.879
+```
+
+- present model "correctly predicts" 87.9% of the observations
+
+---
+# Other Types of Data
+
+- logit regression is _one type_ of GLM
+
+- others make use of different **link functions** (through `family=...`)
+
+.pt2[
+
+- **poisson**: number of events in a time period
+
+- **inverse gaussian**: time to reach some criterion
+
+- ...
+]
+---
+# GLMs
+
+.flex[
+.w-50.br3.mr2.pa2.bg-gray.white[
+### Predictor Variables
+- linear
+
+- convertible to linear (use `log()` etc.)
+
+- non-convertible (use `contrasts()` etc. to map)
+
+- **don't affect the choice of model**
+
+]
+.w-50.br3.mr2.pa2.bg-gray.white[
+### Dependent Variables
+- linear
+
+- convertible to linear (use `log()` etc.)
+
+- non-convertible (use `glm()` with `family=...`)
+
+- **directly affect the choice of model**
+
+]]
+
+
+---
+class: inverse, center, middle, animated, zoomInRight
+# End
+
+---
+# Acknowledgements
+
+
+- icons by Diego Lavecchia from the [Noun Project](https://thenounproject.com/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

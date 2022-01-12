@@ -1,0 +1,45 @@
+---
+title: "USMR Coursework Example"
+author: "`r params$examnumber`"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+params:
+  examnumber: "B019239"
+---
+
+<!-- Beneath here is some code which will set everything up for you.  Please note that it will _empty your environment_ (removing any variables).   Anything that is needed to run your code should be explicitly set up below -->
+
+
+```{r setup, include=FALSE}
+# this line will mean that when you compile/knit your document,
+# the code will not show, but the output (e.g., plots) will!
+knitr::opts_chunk$set(echo = FALSE)
+# this line will read in the data for you 
+load(url("https://uoepsy.github.io/data/usmr_1920_assignment.RData"))
+
+# load any other packages that you require here:
+library(tidyverse)
+
+```
+
+
+
+## Question:  Driving speeds, night vs. day  
+
+Does time of day and speed of driving predict the blood alcohol content over and above driver's age? Fit appropriate model(s) to test this question, and report the results (you may add a figure or table if appropriate).
+
+<!-- If you have run the R code above this point (you can do this now by pressing Ctrl-Alt-P, or running the chunk above) then your data will be in a dataframe called `drinkdriving`. -->
+
+
+
+```{r cleaning, include = FALSE}
+# Neither output nor code from this chunk will be shown in the compiled document. 
+
+
+```
+
+
+

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 5: Correlations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 5: Correlations</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+class: inverse, center, middle
+
+# Part 1:  Correlation
+
+---
+# Blood Alcohol and Reaction Time
+
+.pull-left[
+![](lecture_5_files/figure-html/ba-1.svg)&lt;!-- --&gt;
+- data from 100 drivers
+- are blood alcohol and RT systematically related?
+
+]
+.pull-right[
+![](lecture_5_files/img/playmo_car.jpg)
+]
+???
+- the playmo crew have been out joyriding and were caught in a police speed trap
+
+- the police measured 100 people's blood alcohol and their reaction times
+
+- how would we go about telling whether two variables like this were related?
+---
+# A Simplified Case
+
+.center[
+![](lecture_5_files/figure-html/cor5-1.svg)&lt;!-- --&gt;
+]
+
+- does `\(y\)` vary with `\(x\)`?
+
+--
+
+- equivalent to asking "does `\(y\)` differ from its mean in the same way that `\(x\)` does?"
+
+---
+count: false
+# A Simplified Case
+
+.center[
+![](lecture_5_files/figure-html/cor5a-1.svg)&lt;!-- --&gt;
+]
+
+- does `\(y\)` vary with `\(x\)`?
+
+- equivalent to asking "does `\(y\)` differ from its mean in the same way that `\(x\)` does?"
+???
+here are the ways in which the values of `\(x\)` differ from `mean(x)`
+
+---
+count: false
+# A Simplified Case
+
+.center[
+![](lecture_5_files/figure-html/cor5b-1.svg)&lt;!-- --&gt;
+]
+
+- does `\(y\)` vary with `\(x\)`?
+
+- equivalent to asking "does `\(y\)` differ from its mean in the same way that `\(x\)` does?"
+???
+and here are the ways in which `\(y\)` varies from its mean
+---
+# Covariance
+.center[
+![](lecture_5_files/figure-html/covlines-1.svg)&lt;!-- --&gt;
+]
+
+- it's likely the variables are related **if observations differ proportionately from their means**
+
+---
+# Covariance
+
+### Variance
+.br3.white.bg-gray.pa1[
+$$ s^2 = \frac{\sum{(x-\bar{x})^2}}{n} = \frac{\sum{(x-\bar{x})(x-\bar{x})}}{n} $$
+]
+
+???
+- note that here we're using `\(n\)`, not `\(n-1\)`, because this is the whole population
+--
+
+### Covariance
+.br3.white.bg-gray.pa1[
+$$ \textrm{cov}(x,y) = \frac{\sum{(x-\bar{x})\color{red}{(y-\bar{y})}}}{n} $$
+]
+???
+- note that for any (x,y), `\(x-\bar{x}\)` might be positive and `\(y-\bar{y}\)` might be positive, so the covariance could be a negative number
+---
+# Covariance
+
+
+
+| `\(x-\bar{x}\)` | `\(y-\bar{y}\)` | `\((x-\bar{x})(y-\bar{y})\)` |
+|------------:|------------:|-------------------------:|
+| -0.3 | 1.66 |              -0.5 |
+| 0.81 | 2.21 |              1.79 |
+| -1.75 | -2.85 |              4.99 |
+| -0.14 | -3.58 |              0.49 |
+| 1.37 | 2.56 |              3.52 |
+|             |             |        **10.29** |
+
+.pt4[
+
+$$ \textrm{cov}(x,y) = \frac{\sum{(x-\bar{x})(y-\bar{y})}}{n} = \frac{10.29}{5} \simeq \color{red}{2.06} $$
+]
+
+???
+- I've rounded up the numbers at the end to make this a bit neater on the slide
+---
+# The Problem With Covariance
+
+.pull-left[
+
+**Miles**
+
+| `\(x-\bar{x}\)` | `\(y-\bar{y}\)` | `\((x-\bar{x})(y-\bar{y})\)` |
+|------------:|------------:|-------------------------:|
+| -0.3 | 1.66 |              -0.5 |
+| 0.81 | 2.21 |              1.79 |
+| -1.75 | -2.85 |              4.99 |
+| -0.14 | -3.58 |              0.49 |
+| 1.37 | 2.56 |              3.52 |
+|             |             |        **10.29** |
+
+$$ \textrm{cov}(x,y)=\frac{10.29}{5}\simeq 2.06 $$
+]
+
+.pull-right[
+**Kilometres**
+
+
+| `\(x-\bar{x}\)` | `\(y-\bar{y}\)` | `\((x-\bar{x})(y-\bar{y})\)` |
+|------------:|------------:|-------------------------:|
+| -0.48 | 2.68 |              -1.29 |
+| 1.3 | 3.56 |              4.64 |
+| -2.81 | -4.59 |              12.91 |
+| -0.22 | -5.77 |              1.27 |
+| 2.21 | 4.12 |              9.12 |
+|             |             |        **26.65** |
+
+$$ \textrm{cov}(x,y)=\frac{26.65}{5}\simeq 5.33 $$
+
+]
+???
+- these are exactly the same 'values' so they should each be as correlated as the other
+
+- so we need to divide covariance by something to represent the overall "scale" of the units
+
+---
+# Correlation Coefficient
+
+- the standardised version of covariance is the **correlation coefficient**, `\(r\)`
+
+$$ r = \frac{\textrm{covariance}(x,y)}{\textrm{standard deviation}(x)\cdot\textrm{standard deviation}(y)} $$
+
+--
+
+.pt3[
+$$ r=\frac{\frac{\sum{(x-\bar{x})(y-\bar{y})}}{\color{red}{N}}}{\sqrt{\frac{\sum{(x-\bar{x})^2}}{\color{red}{N}}}\sqrt{\frac{\sum{(y-\bar{y})^2}}{\color{red}{N}}}} $$
+]
+
+--
+.pt1[
+$$ r=\frac{\sum{(x-\bar{x})(y-\bar{y})}}{\sqrt{\sum{(x-\bar{x})^2}}\sqrt{\sum{(y-\bar{y})^2}}} $$
+]
+
+---
+# Correlation Coefficient
+
+- measure of _how related_ two variables are
+
+- `\(-1 \le r \le 1\)` ( `\(\pm 1\)` = perfect fit; `\(0\)` = no fit; sign shows direction of slope )
+.pull-left[
+![](lecture_5_files/figure-html/ba-1.svg)
+$$ r=0.4648 $$
+]
+.pull-right[
+![](lecture_5_files/figure-html/ba2-1.svg)&lt;!-- --&gt;
+
+$$ r=-0.4648 $$
+]
+???
+- on the left, we have the drunken drivers from our first slide, and you can see that there is a moderate positive correlation
+  + the higher your blood alcohol, the slower your RT
+  
+- on the right, we have a negative correlation: what the drivers _think_ happens
+  + the higher your blood alcohol, the _faster_ your RT
+---
+# What Does the Value of _r_ Mean?
+
+![](lecture_5_files/figure-html/lots-1.svg)&lt;!-- --&gt;
+
+
+---
+class: inverse, center, middle, animated, bounceInUp
+
+# Intermission
+
+---
+class: inverse, center, middle
+
+# Part 1a
+
+## Correlations Contd.
+
+---
+# Significance of a Correlation
+
+.pull-left[
+![](lecture_5_files/figure-html/ba-1.svg)
+$$ r = 0.4648 $$
+]
+.pull-right[
+![](lecture_5_files/img/playmo_police.jpg)
+]
+???
+- the police have stopped our friends and measured their blood alcohol
+
+- is their evidence sufficient to conclude that there is likely to be a relationship between blood alcohol and reaction time?
+---
+# Significance of a Correlation
+
+- we can measure a correlation using `\(r\)`
+
+- we want to know whether that correlation is **significant**
+
+  + i.e., whether the probability of finding it by chance is low enough
+  
+.pt2[
+- cardinal rule in NHST:  compare everything to chance
+
+- let's investigate...
+]
+---
+# Random Correlations
+
+- function to pick some pairs of numbers entirely at random, return correlation
+
+- arbitrarily, I've picked numbers uniformly distributed between 0 and 100
+
+
+```r
+x &lt;- runif(5, min=0, max=100)
+y &lt;- runif(5, min=0, max=100)
+cbind(x,y)
+```
+
+```
+##          x     y
+## [1,] 58.38 82.33
+## [2,] 77.90 17.03
+## [3,] 56.58 21.52
+## [4,] 47.06 27.70
+## [5,] 73.68 29.14
+```
+
+```r
+cor(x,y)
+```
+
+```
+## [1] -0.254
+```
+
+---
+count: false
+# Random Correlations
+
+- function to pick some pairs of numbers entirely at random, return correlation
+
+- arbitrarily, I've picked numbers uniformly distributed between 0 and 100
+
+.flex.items-top[
+.w-50.pa2[
+
+
+```r
+randomCor &lt;- function(size) {
+  x &lt;- runif(size, min=0, max=100)
+  y &lt;- runif(size, min=0, max=100)
+  cor(x,y) # calculate r
+}
+
+# then we can use the usual trick:
+rs &lt;- replicate(1000, randomCor(5))
+hist(rs)
+```
+
+]
+.w-50.pa2[
+![](lecture_5_files/figure-html/pcor-1.svg)
+]]
+
+---
+# Random Correlations
+
+.pull-left[
+
+![](lecture_5_files/figure-html/pcor2-1.svg)&lt;!-- --&gt;
+
+]
+.pull-right[
+![](lecture_5_files/figure-html/pcor3-1.svg)&lt;!-- --&gt;
+
+]
+---
+# Larger Sample Size
+
+.pull-left[
+![](lecture_5_files/figure-html/pcor4-1.svg)&lt;!-- --&gt;
+]
+.pull-right[
+- distribution of random `\(r\)`s is `\(t\)` distribution, with `\(n-2\)` df
+
+$$ t= r\sqrt{\frac{n-2}{1-r^2}} $$
+
+- makes it "easy" to calculate probability of getting `\(\ge{}r\)` for sample size `\(n\)` by chance
+]
+
+---
+# Pirates and Global Warming
+
+.center[
+![:scale 55%](lecture_5_files/img/fsm.png)
+]
+
+- clear _negative_ correlation between number of pirates and mean global temperature
+- we need pirates to combat global warming
+
+---
+# Simpson's Paradox
+
+.center[
+![](lecture_5_files/figure-html/simpson-1.svg)&lt;!-- --&gt;
+]
+
+- the more hours of exercise, the greater the risk of disease
+---
+# Simpson's Paradox
+
+.center[
+![](lecture_5_files/figure-html/simpson2-1.svg)&lt;!-- --&gt;
+]
+
+- age groups mixed together
+- an example of a _mediating variable_
+
+---
+# Interpreting Correlation
+
+- correlation does not imply causation
+
+- correlation simply suggests that two variables are related
+
+  + there may be mediating variables
+
+- interpretation of that relationship is key
+
+- never rely on statistics such as `\(r\)` without
+
+  + looking at your data
+
+  + thinking about the real world
+
+---
+class: inverse, center, middle, animated, bounceInUp
+
+# End of Part 1
+
+---
+class: inverse, center, middle
+
+# Part 2
+
+---
+# Has Statistics Got You Frazzled?
+
+.pull-left[
+![:scale 70%](lecture_5_files/img/playmo_frazzled.jpg)
+]
+
+.pull-right[
+- we've bandied a lot of terms around in quite a short time
+
+- we've tended to introduce them by example
+
+- time to step back...
+]
+---
+class: inverse, center, middle
+# Part Z:  The Zen of Stats
+
+.center[
+![:scale 70%](lecture_5_files/img/zen.png)
+]
+
+---
+# What is NHST all about?
+
+## **N**ull **H**ypothesis **S**tatistical **T**esting
+
+- two premises
+
+  1. much of the variation in the universe is due to _chance_
+
+  1. we can't _prove_ a hypothesis that something else is the cause
+
+---
+# Chance
+
+.pull-left[
+- when we say _chance_, what we really mean is "stuff we didn't measure"
+
+- we believe that "pure" chance conforms approximately to predictable patterns (like the normal and `\(t\)` distributions)
+
+  - if our data isn't in a predicted pattern, perhaps we haven't captured all of the non-chance elements
+]
+
+.pull-right[
+### pattens attributable to
+
+![](lecture_5_files/figure-html/chance-1.svg)&lt;!-- --&gt;
+]
+???
+- we'll come back to looking at the patterns later on; essentially there is always going to be some part of any variation we can't explain
+---
+# Proof
+
+.pull-left[
+![](lecture_5_files/img/playmo_sun.jpg)
+
+]
+.pull-right[
+- can't prove a hypothesis to be true
+
+- "the sun will rise tomorrow"
+]
+
+
+---
+count: false
+# Proof
+
+.pull-left[
+![](lecture_5_files/img/playmo_nosun.jpg)
+
+]
+.pull-right[
+- can't prove a hypothesis to be true
+
+- "the sun will rise tomorrow"
+
+- _just takes one counterexample_
+]
+
+---
+# Chance and Proof
+
+.br3.pa2.bg-gray.white[if the likelihood that the pattern of data we've observed would be found _by chance_ is low enough, propose an alternative explanation
+]
+
+- work from summaries of the data (e.g., `\(\bar{x}\)`, `\(\sigma\)`)
+
+- use these to approximate chance (e.g., `\(t\)` distribution)
+
+--
+
+  + catch: we can't estimate the probability of an exact value (this is an example of the measurement problem)
+  
+  + estimate the probability of finding the measured difference _or more_
+
+---
+# Alpha and Beta
+
+- we need an agreed "standard" for proposing an alternative explanation
+
+  + typically in psychology, we set `\(\alpha\)` to 0.05
+
+  + "if the probability of finding this difference or more under chance is `\(\alpha\)` (e.g., 5%) or less, propose an alternative"
+  
+- we also need to understand the quality of evidence we're providing
+
+  + can be measured using `\(\beta\)` (psychologists typically aim for 0.80)
+
+  + "given that an effect truly exists in a population, what is the probability of finding `\(p&lt;\alpha\)` in a sample (of size `\(n\)` etc.)?"
+
+---
+class: middle
+background-image: url(lecture_5_files/img/nuts-and-bolts.jpg)
+
+.br3.pa2.bg-white-80[
+# The Rest is Just Nuts and Bolts
+
+- type of measurement
+
+- relevant laws of chance
+
+- suitable estimated distribution (normal, `\(t\)`, `\(\chi^2\)`, etc.)
+
+- suitable summary statistic ( `\(z\)`, `\(t\)`, `\(\chi^2\)`, `\(r\)`, etc.)
+
+- use statistic and distribution to calculate `\(p\)` and compare to `\(\alpha\)`
+
+- rinse, repeat
+
+]
+---
+# The Most Useful Tool
+
+.pull-left[
+![:scale 70%](lecture_5_files/img/playmo_spanner.jpg)
+]
+.pull-right[
+- `\(t\)` (or `\(z\)`) statistics are really ubiquitous
+
+- formally, mean difference divided by standard error
+
+- conceptually:
+
+  + what is the difference?
+  + what is the range of differences I would get by chance?
+  + how extreme is this difference compared to the range?
+  
+- expressed in terms of _numbers of standard errors_ from the most likely difference (usually, by hypothesis, zero)
+]
+---
+class: inverse, center, middle
+# Part N: Nirvana
+
+.center[
+![:scale 45%](lecture_5_files/img/nirvana.png)
+]
+
+---
+# .red[Announcement]
+
+.flex.items-center[
+.w-50.pa2[
+- no lecture or lab released in week 6 (25-29 October)
+
+- quiz 2 due on Friday 29th
+
+- after the break: linear models
+
+- in the meantime, have a good break and a Happy Halloween
+]
+.w-50.pa2[
+![:scale 70%](lecture_5_files/img/playmo_hallow.jpg)
+]]
+---
+class: inverse, center, middle, animated, bounceInUp
+
+# End
+
+---
+# Acknowledgements
+
+- the [papaja package](https://github.com/crsh/papaja) helps with the preparation of APA-ready manuscripts
+
+- icons by Diego Lavecchia from the [Noun Project](https://thenounproject.com/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

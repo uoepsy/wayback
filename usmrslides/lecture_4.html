@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 4: More Tests</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Corley" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="mc_libs/tweaks.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <b>Week 4: More Tests</b>
+## Univariate Statistics and Methodology using R
+### Martin Corley
+### Department of Psychology<br/>The University of Edinburgh
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+class: inverse, center, middle
+
+.pull-left[
+![:scale 94%](lecture_4_files/img/milk_tea.jpg)
+]
+.pull-right[
+.center[
+# Part 1
+
+## Statistics for Categories
+]]
+
+---
+
+
+.flex.items-top[
+.w-70.pa2[
+![:scale 35%](lecture_4_files/img/50p_ht.jpg)
+
+- what's the probability of getting 2 heads or more in 5 tosses?
+
+- `\(2^5=32\)` possible sequences
+
+- `\(26\)` of which include `\(\ge 2\)` heads
+
+- `\(p = 26/32 = .8125\)`
+]
+.w-20.pa2.f7[
+<div id="zjxayfckda" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#zjxayfckda .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zjxayfckda .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zjxayfckda .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zjxayfckda .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zjxayfckda .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zjxayfckda .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zjxayfckda .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zjxayfckda .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zjxayfckda .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zjxayfckda .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zjxayfckda .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zjxayfckda .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zjxayfckda .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#zjxayfckda .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjxayfckda .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zjxayfckda .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zjxayfckda .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#zjxayfckda .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zjxayfckda .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#zjxayfckda .gt_left {
+  text-align: left;
+}
+
+#zjxayfckda .gt_center {
+  text-align: center;
+}
+
+#zjxayfckda .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zjxayfckda .gt_font_normal {
+  font-weight: normal;
+}
+
+#zjxayfckda .gt_font_bold {
+  font-weight: bold;
+}
+
+#zjxayfckda .gt_font_italic {
+  font-style: italic;
+}
+
+#zjxayfckda .gt_super {
+  font-size: 65%;
+}
+
+#zjxayfckda .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">t1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">t2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">t3</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">t4</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">t5</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">HEADS</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">5</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">4</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">4</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">4</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">4</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_right">1</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">4</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">1</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">3</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">1</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">2</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">1</td></tr>
+    <tr><td class="gt_row gt_center">H</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">1</td></tr>
+    <tr><td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_center">T</td>
+<td class="gt_row gt_right">0</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+]]
+???
+- I can't fit them all onto the slide but you can see the combinations spelled out
+---
+# Binomial Test
+
+
+```r
+binom.test(2, 5, 0.5, alternative="greater")
+```
+
+```
+## 
+## 	Exact binomial test
+## 
+## data:  2 and 5
+*## number of successes = 2, number of trials = 5, p-value = 0.8125
+## alternative hypothesis: true probability of success is greater than 0.5
+## 95 percent confidence interval:
+##  0.07644039 1.00000000
+## sample estimates:
+## probability of success 
+##                    0.4
+```
+
+- don't be fooled by _probability of success_ (which is just 2/5 here)
+
+---
+# Eyes
+
+- here are the eye colours returned for USMR (two ways)
+
+
+```r
+statsClasses %&gt;% filter(course=='usmr') %&gt;% pull(eyecolour) %&gt;% table()
+```
+
+```
+## .
+##  blue brown green hazel other 
+##    20    34     8     6     2
+```
+
+```r
+table(statsClasses$eyecolour[statsClasses$course=='usmr'])
+```
+
+```
+## 
+##  blue brown green hazel other 
+##    20    34     8     6     2
+```
+
+- let's take the second one and save it for later
+
+
+```r
+eyes &lt;- table(statsClasses$eyecolour[statsClasses$course=='usmr'])
+```
+
+---
+# Binomial Test
+
+- we can use this test to test a sample against a known population
+
+- approx. [9% of the world's population have blue eyes](https://www.worldatlas.com/articles/which-eye-color-is-the-most-common-in-the-world.html); are USMR a representative sample?
+
+
+```r
+binom.test(eyes['blue'],sum(eyes),0.09,alternative="two.sided")
+```
+
+```
+## 
+## 	Exact binomial test
+## 
+## data:  eyes["blue"] and sum(eyes)
+*## number of successes = 20, number of trials = 70, p-value = 2e-06
+## alternative hypothesis: true probability of success is not equal to 0.09
+## 95 percent confidence interval:
+##  0.1840 0.4062
+## sample estimates:
+## probability of success 
+##                 0.2857
+```
+???
+- here, we're very confident that the USMR poll sample is not typical of the world's population
+
+- there are 20 out of 70 people with blue eyes, or around 28.5714%
+
+---
+# The Birth of NHST
+
+.flex.items-center[
+.w-40.pa2[
+.center[
+### Muriel Bristol
+
+![:scale 50%](lecture_4_files/img/muriel_bristol.png)
+]
+- claimed she could tell milk-first from tea-first tea
+]
+.w-60.pa2[
+- Fisher devised the notion of the null hypothesis (H&lt;sub&gt;0&lt;/sub&gt;)
+
+  + NB H&lt;sub&gt;1&lt;/sub&gt; was due to Neyman and Pearson
+
+.pt2[
+&amp;nbsp;
+]
+
+.br3.pt1.pa2.bg-gray.white.f4.tc[
+assume chance governs Muriel's judgements
+]
+]]
+
+---
+# Combinations
+
+.flex.items-center[
+.w-40.pa2[
+.center[
+![:scale 70%](lecture_4_files/img/eight_tea.png)
+]
+
+- eight cups of tea, 4 milk-first, 4 tea-first
+
+- which four are milk-first?
+]
+.w-60.pa2[
+| successes | patterns                           |            |
+|-----------|------------------------------------|-----------:|
+|         0 | oooo                               |  1 x 1 = 1 |
+|         1 | ooox, ooxo, oxoo, xooo             | 4 x 4 = 16 |
+|         2 | ooxx, oxox, oxxo, xoxo, xoox, xxoo | 6 x 6 = 36 |
+|         3 | oxxx, xoxx, xxox, xxxo             | 4 x 4 = 16 |
+|         4 | xxxx                               |  1 x 1 = 1 |
+| **total**     |                                    |         **70** |
+]]
+
+???
+- it's 4x4 because there are four ways of getting one right, and, independently, four ways of picking three wrong
+---
+# Picking Tea
+
+- 70 ways of picking four cups of tea by chance
+
+- **all right**: probability = `\(1/70 = .0142\)`
+  
+- **up to one wrong**: probability = `\((1 + 16)/70 = .2428\)`
+
+- Fisher concludes that he won't believe in Mrs Bristol's tea tasting powers unless she correctly discriminates all 8 cups&lt;sup&gt;1&lt;/sup&gt;
+
+.pt2[
+- this is an example of the **hypergeometric** distribution
+]
+
+.footnote[
+[1] in the original experiment, all 8 cups were guessed correctly
+]
+
+---
+# Hypergeometric Distribution
+
+- the probability of `\(k\)` successes in sampling _without replacement_ from a population of size `\(N\)` where `\(K\)` items have that feature
+
+- the probability of **4** successes in sampling _without replacement_ from a population of size **8** where **4** items have that feature
+.pull-left[
+
+```r
+# NB lower.tail=FALSE calculates p[X &gt; x]
+phyper(3.9,4,4,4,lower.tail=FALSE)
+```
+
+```
+## [1] 0.01429
+```
+]
+.pull-right[
+![](lecture_4_files/figure-html/dhyper-1.svg)&lt;!-- --&gt;
+]
+???
+- this is a distribution of _discrete values_
+
+- so technically, there is no "area under the curve"
+
+- and we need to add up the relevant densities (which are also
+  probabilities, because the events are unique)
+---
+# Hypergeometric Distributions
+
+- we have 20 people with blue eyes in our 70 survey responses
+
+- what is the probability of getting 9% (or fewer) blue-eyed people if I sample 30 people from the class?
+
+  + `\(30 \times .09 = 2.7\)`; the hypergeometric distribution isn't continuous, so round up to `\(3\)`
+
+```r
+phyper(3, 20, 50, 30) 
+```
+  
+
+```
+## [1] 0.002555
+```
+- useful to check, for example, whether a sample matches the population
+
+- in this case it would be pretty unlikely that the sample of 30 came from the 70 people surveyed
+
+---
+# Let's Take Stock
+
+- these are useful tests to know about, but they have quite specific applications
+
+- in particular they are _discrete_ (only deal with whole numbers)
+
+- a more general distribution is the `\(\chi^2\)` distribution
+
+- used in many statistics: two cardinal examples coming up
+
+---
+class: inverse, center, middle, animated, rollIn
+
+# End of Part 1
+
+---
+class: inverse, center, middle
+
+# Part 2
+
+### The `\(\chi^2\)` Distribution
+
+---
+# Goodness-of-Fit Test
+
+.left-column[
+![](lecture_4_files/img/one_red_die.svg)
+]
+.right-column[
+- using one die for simplicity...
+
+- we have already talked about the sides being categories
+
+- we know that in a fair die, the probability of getting each number is `\(\frac{1}{6}\)`
+
+  + our **H&lt;sub&gt;0&lt;/sub&gt;**
+  
+- can we look at the proportions of throws and assess the probability of finding that distribution if H&lt;sub&gt;0&lt;/sub&gt; is true?
+
+- _if the probability is low enough_ ( `\(&lt;.05\)` ) we can assert that the die is biased
+]
+
+---
+# Calculating `\(\chi^2\)`
+
+
+
+- let's assume we throw the die 600 times
+
+- if everything worked out _perfectly_ for an unbiased die, our **expected values** would be:
+
+```r
+ev &lt;- 600 * c(1/6,1/6,1/6,1/6,1/6,1/6)
+ev
+```
+
+```
+## [1] 100 100 100 100 100 100
+```
+
+- and we can calculate a `\(\chi^2\)` statistic using the formula
+$$ \chi^2 = \sum{\frac{(O_i-E_i)^2}{E_i}} $$ 
+where `\(O_i\)` is the `\(i\textrm{th}\)` observed value and `\(E_i\)` is the `\(i\textrm{th}\)` expected value
+
+---
+# Calculating `\(\chi^2\)`
+
+- we don't have to do this calculation by hand
+
+- we can do it piece-by-piece
+
+
+```r
+# "throw a die 600 times"
+dice &lt;- tibble(ov=sample(1:6, 600, replace=TRUE))
+
+# create a tibble of counts
+chiTab &lt;- dice %&gt;% count(ov)
+chiTab &lt;- chiTab %&gt;% mutate(ev=ev) # from our earlier calculation
+chiTab
+```
+
+```
+## # A tibble: 6 x 3
+##      ov     n    ev
+##   &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1    90   100
+## 2     2   120   100
+## 3     3   110   100
+## 4     4   104   100
+## 5     5    91   100
+## 6     6    85   100
+```
+???
+- note that I'm using the tidyverse way of doing things here, so the scary-sounding `mutate()` function is a way of adding columns to a tibble or dataframe (or of changing existing columns)
+---
+# Calculating `\(\chi^2\)`
+
+
+```r
+# calculate (O-E)^2 / E
+chiTab &lt;- chiTab %&gt;% mutate(sq_diff = (n-ev)^2, std_sq_diff=sq_diff/ev)
+chiTab
+```
+
+```
+## # A tibble: 6 x 5
+##      ov     n    ev sq_diff std_sq_diff
+##   &lt;int&gt; &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;
+## 1     1    90   100     100        1   
+## 2     2   120   100     400        4   
+## 3     3   110   100     100        1   
+## 4     4   104   100      16        0.16
+## 5     5    91   100      81        0.81
+## 6     6    85   100     225        2.25
+```
+
+```r
+# chisq value
+sum(chiTab$std_sq_diff)
+```
+
+```
+## [1] 9.22
+```
+---
+# Calculating `\(\chi^2\)`
+
+- so for the particular random throws we did `\(\chi^2=9.22\)`
+
+- what we want to know is how probable that value is in a world where chance governs dice throws
+
+--
+
+- we already know two important things
+
+  + we're going to have to work out the distribution of `\(\chi^2\)` and work out the probability of getting that value _or more_
+  
+  + the reason we're calling the value we've calculated ** `\(\chi^2\)` ** is because we're going to compare it to the `\(\chi^2\)` distribution
+  
+  + the calculation is actually "Pearson's goodness-of-fit calculation"
+  
+- in R, there are `pchisq(), dchisq(), rchisq(), qchisq()`
+
+---
+# Why do Things the Easy Way?
+
+- build a general function to calculate chisq for lots of dice throws
+
+.pull-left[
+
+```r
+# compact function to calculate chi-squared
+# for n dice throws
+diceChi &lt;- function(n) {
+  dice &lt;- sample(1:6, n, replace=TRUE)
+  chisq.test(table(dice))$statistic
+}
+
+chiDist &lt;- replicate(10000,diceChi(600))
+
+plot(density(chiDist),
+     main="chisq(5)")
+```
+]
+.pull-right[
+![](lecture_4_files/figure-html/chisqfun-1.svg)
+]
+.flex.items-center[
+.w-5.pa1[
+![:scale 70%](lecture_4_files/img/danger.svg)
+]
+.w-95.pa1[
+for more on `chisq.test(...)$statistic`, start with `str(chisq.test(...))`
+]]
+
+???
+- here I'm using a cheat's way to calculate the `\(\chi^2\)` value, by relying on the R function to calculate it
+
+- note that the `density()` function isn't perfect here -- `\(\chi^2\)` can never actually go below zero, because the numerators in the sum are squared 
+
+---
+# The `\(\chi^2\)` Distribution
+
+.center[
+![](lecture_4_files/figure-html/biggraph-1.svg)&lt;!-- --&gt;
+]
+.flex.items-center[
+.w-5.pa1[
+![:scale 70%](lecture_4_files/img/danger.svg)
+]
+.w-95.pa1[
+the "squared" in `\(\chi^2\)` is because `\(\chi^2\)` is derived from squared normal distributions
+]]
+---
+
+# `\(\chi^2\)` probability
+
+.pull-left[
+- for our random 600 dice throws a couple of slides back
+
+  + `\(\chi^2=9.22\)`, `\(\textrm{df} = 5\)`
+
+- we can use `pchisq()` to find `\(p\)`
+
+
+```r
+pchisq(9.22, 5, lower.tail=FALSE) 
+```
+
+
+```
+## [1] 0.1006
+```
+
+- looks like we can conclude that our die is likely to be fair
+
+]
+
+.pull-right[
+![](lecture_4_files/figure-html/chisqf2-1.svg)&lt;!-- --&gt;
+]
+
+---
+
+class: animated, bounceInLeft
+# How Many Throws?
+
+.pull-left[
+- I give you a die, and you suspect it's biased
+
+- you decide to go away and throw the die lots of times
+
+- how many times should you throw it before you're satisfied you have an answer?
+]
+.pull-right[
+.center[
+![:scale 60%](lecture_4_files/img/playmo_dice.jpg)
+]
+]
+---
+# Type 1 and Type 2 Errors again
+
+### Type 1 Errors
+
+- we falsely reject H&lt;sub&gt;0&lt;/sub&gt; (and accept H&lt;sub&gt;1&lt;/sub&gt;) although H&lt;sub&gt;0&lt;/sub&gt; is true
+
+- by convention, we accept a 5% probability of this happening ( `\(\alpha=.05\)` )
+
+### Type 2 Errors
+
+- we falsely _accept_ H&lt;sub&gt;0&lt;/sub&gt; (and reject H&lt;sub&gt;1&lt;/sub&gt;) although H&lt;sub&gt;1&lt;/sub&gt; is true
+
+  + this is less "dangerous", so we can be more conservative
+  
+  + a typical value for the probability we accept is 20%
+
+- expressed as _the probability of correctly detecting H&lt;sub&gt;1&lt;/sub&gt; when true_, or ** `\(\beta=.80\)` **
+
+---
+# So, How Many Throws?
+
+- reformulated: How many throws to detect a _genuine bias_ with 80% accuracy?
+
+- first, let's set up a "genuinely unfair" die
+
+```r
+# return a p-value representing chi^2 compared to fair dice
+unfairDie &lt;- function(throws) {
+* d &lt;- sample(1:6,throws,replace=TRUE,prob=c(1,1,1,1,1,2))
+  chisq.test(table(d))$p.value
+}
+```
+???
+- see the "prob" in the sample?  I've basically told the sampling function to be twice as likely to select the sixth value (OK, 6) as any other value for the dice.  So our dice is genuinely biased, compared to the default which is that all numbers would be chosen with equal probability.
+
+- in this function we've directly calculated the `\(\chi^2\)` value, and are simply recording the p value
+
+--
+
+- next, repeat the experiment with 30 dice and count up how many times `\(p&lt;.05\)`
+
+```r
+pValues &lt;- replicate(1000,unfairDie(30))
+sum(pValues &lt; .05)/1000
+```
+
+```
+## [1] 0.225
+```
+- (by simulation), there is a 0.225 probability of detecting that the die is biased
+???
+- so here we're throwing the biased die 30 times, and recording the `\(p\)` value from the `\(\chi^2\)` test.  We're doing that 1,000 times to create a vector of `\(p\)` values.
+
+- in the final line which begins with `sum()` we're working out the proportion out of 1000 times that we found a `\(p\)` value of less than .05
+
+- that number is well below 0.8, which is the criterion we set.  So on the next slide, we're going to try it with higher and higher numbers
+---
+# How Many?
+
+.center[
+![](lecture_4_files/figure-html/dicey3-1.svg)&lt;!-- --&gt;
+]
+
+- would have to throw die around 140 times to be reasonably sure it was biased
+- (but this obviously depends on _how biased_ it is in the first place)
+???
+- we're not going to delve further into statistical power just now.
+
+- we've seen that we can estimate power by simulation; for simple designs such as `\(\chi^2\)` there are also straightforward mathematical ways of doing it.
+
+---
+# A Very Biased Die
+
+- the important thing to remember is that the **effect size** and the **sample size** interact to affect the probability you have of finding an effect if it's there.
+
+.flex.items-top[.w-30[
+- for this die, 6 is _3_ times as likely as the other values
+
+- would take around _50 throws_ to reliably detect bias
+]
+.w-70.pa2[
+.center[
+![](lecture_4_files/figure-html/diceyn-1.svg)&lt;!-- --&gt;
+]]]
+
+---
+class: inverse, center, middle, animated, rollIn
+
+# End of Part 2
+
+---
+
+class: animated, center, middle
+background-image: url(lecture_4_files/img/playmo_world.jpg)
+.br3.pa2.bg-white-80[
+# Part 3
+
+## Where Are You All?
+]
+
+
+
+
+---
+# Where Are You?
+
+- data from all of the stats modules in Psychology
+
+
+```r
+statsClasses %&gt;% select(course,in_uk) %&gt;% table()
+```
+
+```
+##        in_uk
+## course  Elsewhere UK
+##   dapr1         9 49
+##   dapr2         5 21
+##   rms2          9 29
+##   usmr         17 27
+```
+
+```r
+statsClasses %&gt;% select(course,in_uk) %&gt;% table() %&gt;% addmargins()
+```
+
+```
+##        in_uk
+## course  Elsewhere  UK Sum
+##   dapr1         9  49  58
+##   dapr2         5  21  26
+##   rms2          9  29  38
+##   usmr         17  27  44
+##   Sum          40 126 166
+```
+
+???
+- in the second version, I've added the `addmargins()` function to give useful summary statistics.  I can also use functions like `rowSums()` which I'll show you in the next slide
+---
+# Under the Null Hypothesis:
+
+.flex.items-top[
+.w-60.pa2.pt3[
+- students on each module would be _equally likely_ to come from the UK (or "Elsewhere")
+
+- in other words, of the 58 students on dapr1, `\(\frac{40}{166}\times{}58\)`, or approx 13.98 students should come from Elsewhere under H&lt;sub&gt;0&lt;/sub&gt;
+
+]
+.w-40.pa5[
+
+```
+##        in_uk
+## course  Elsewhere  UK Sum
+##   dapr1         9  49  58
+##   dapr2         5  21  26
+##   rms2          9  29  38
+##   usmr         17  27  44
+##   Sum          40 126 166
+```
+
+]]
+---
+count: false
+# Under the Null Hypothesis:
+
+.flex.items-top[
+.w-60.pa2.pt3[
+- students on each module would be _equally likely_ to come from the UK (or "Elsewhere")
+
+- in other words, of the 58 students on dapr1, ** `\(\frac{40\times{}58}{166}\)` **, or approx 13.98 students should come from Elsewhere under H&lt;sub&gt;0&lt;/sub&gt;
+
+- we can repeat this calculation for each cell of the table, to give "expected values"
+
+  + like the probability-based values for dice
+
+]
+.w-40.pa5[
+
+```
+##        in_uk
+## course  Elsewhere  UK Sum
+##   dapr1         9  49  58
+##   dapr2         5  21  26
+##   rms2          9  29  38
+##   usmr         17  27  44
+##   Sum          40 126 166
+```
+]]
+---
+# Expected Values
+
+- repeating the calculation is easy using the "outer product ( `\(\otimes\)` )" operator `%o%` in R (this takes two vectors and multiplies them out into a matrix)
+.pt4[
+$$
+(a,b) \otimes (y, z) = 
+`\begin{bmatrix}
+a \times y &amp; b \times y \\
+a \times z &amp; b \times z \\
+\end{bmatrix}`
+$$
+]
+---
+count: false
+# Expected Values
+
+- repeating the calculation is easy using the "outer product" operator `%o%` in R (this takes two vectors and multiplies them out into a matrix)
+
+.pull-left[
+
+```r
+t &lt;- statsClasses %&gt;%
+  select(course,in_uk) %&gt;% table()
+t
+```
+
+```
+##        in_uk
+## course  Elsewhere UK
+##   dapr1         9 49
+##   dapr2         5 21
+##   rms2          9 29
+##   usmr         17 27
+```
+]
+.pull-right[
+
+```r
+# expected values
+e &lt;- rowSums(t) %o% colSums(t) / sum(t)
+e
+```
+
+```
+##       Elsewhere    UK
+## dapr1    13.976 44.02
+## dapr2     6.265 19.73
+## rms2      9.157 28.84
+## usmr     10.602 33.40
+```
+]
+
+---
+# Restating the Null Hypothesis
+
+.flex.items-top[
+.w-60.pa2[
+- under H&lt;sub&gt;0&lt;/sub&gt;:
+
+  + knowing which class people are in gives no additional information about where they come from
+  
+  + knowing where they're from gives no additional information about which class they're in
+  
+- ** `\(\chi^2\)` test of independence ** (of the two variables)
+
+$$ \chi^2 = \sum{\frac{(O_i-E_i)^2}{E_i}} $$
+
+]
+.w-40.pa5[
+observed
+
+```
+##        in_uk
+## course  Elsewhere UK
+##   dapr1         9 49
+##   dapr2         5 21
+##   rms2          9 29
+##   usmr         17 27
+```
+
+expected
+
+```
+##       Elsewhere    UK
+## dapr1    13.976 44.02
+## dapr2     6.265 19.73
+## rms2      9.157 28.84
+## usmr     10.602 33.40
+```
+
+]]
+
+---
+# We Can Illustate our Tables Using `plot()`
+
+.pull-left[
+
+```r
+plot(t)
+```
+
+![](lecture_4_files/figure-html/p1-1.svg)&lt;!-- --&gt;
+]
+.pull-right[
+
+```r
+plot(as.table(e))
+```
+
+![](lecture_4_files/figure-html/p2-1.svg)&lt;!-- --&gt;
+
+]
+.flex.items-center[
+.w-5.pa1[
+![:scale 70%](lecture_4_files/img/danger.svg)
+]
+.w-95.pa1[
+`e` was actually created as a `matrix` (using `%o%`) but here we tell R to treat it as a table
+]]
+???
+here we're feeding tables to `plot()`.  It's looking at its arguments and choosing an appropriate way to plot them:  This is an example of the _object-oriented_ nature of R.
+---
+# Are There Differences Between Courses?
+
+.pull-left[
+
+```r
+chisq.test(t)
+```
+
+```
+## 
+## 	Pearson's Chi-squared test
+## 
+## data:  t
+## X-squared = 7.8, df = 3, p-value = 0.05
+```
+- might need to look more closely
+
+```r
+chisq.test(t)$p.value
+```
+
+```
+## [1] 0.05124
+```
+- no difference between classes
+]
+.pull-right[
+![](lecture_4_files/figure-html/uk2-1.svg)&lt;!-- --&gt;
+]
+???
+- before you get too excited by these results, remember that there are well over 800 students on our stats courses, but only 166 identifiable responses about where people are.
+---
+class: inverse, center, middle, animated, rollIn
+
+# End
+
+---
+# Acknowledgements
+
+- icons by Diego Lavecchia from the [Noun Project](https://thenounproject.com/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="mc_libs/macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
